@@ -264,7 +264,7 @@ class ComponentDataForm {
         this.button = $(`<a href="javascript:void(0)" class="btn btn-primary">Submit</a>`);
         this.resultLabel = $(`<span class="parse-result-label"></span>`);
 
-        this._initFileDragEndDrop(this.fieldName, this.textArea, this.typeSelect);
+        this._initFileDragAndDrop(this.fieldName, this.textArea, this.typeSelect);
         this.textArea.tooltip();
 
         this.button.on("click", (e) => {
@@ -285,7 +285,7 @@ class ComponentDataForm {
             .append(this.resultLabel);
     }
 
-    _initFileDragEndDrop(nameField, area, select) {
+    _initFileDragAndDrop(nameField, area, select) {
         let upload = (files) => {
             let file = files[0];
 

@@ -1,5 +1,5 @@
-import { Dataset } from "./Dataset.js";
-import { DataManager } from "./DataManager.js";
+import { Dataset } from "../Dataset.js";
+import { DataManager } from "../DataManager.js";
 import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
 
 /**

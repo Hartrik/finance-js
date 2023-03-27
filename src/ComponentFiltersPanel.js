@@ -33,7 +33,7 @@ export class ComponentFiltersPanel {
 
         return $(`<div class="alert alert-info alert-dismissible fade show" role="alert"></div>`)
             .append($(`<strong>Filter definition: </strong>`))
-            .append($(`<a href="/resources/app/finance/_example-filters.json" target="_blank">[example]</a>`))
+            .append($(`<a href="https://files.harag.cz/www/app/finance-js/prod/_example-filters.json" target="_blank">[example]</a>`))
             .append($(`<ul></ul>`)
                 .append($(`<li><code>name</code> (string)</li>`))
                 .append($(`<li><code>color</code> (string) [optional] &#8211; label CSS color</li>`))

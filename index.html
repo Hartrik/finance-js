@@ -4,26 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Finance</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+          integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
   <link href="style.css" rel="stylesheet" type="text/css" />
-  <script src="./src/lib/chart.min.js"></script>
-  <script type="module">
-      import { ComponentMain } from "./src/ComponentMain.js";
-      import { DataManager } from "./src/DataManager.js";
-      import { Context } from "./src/Context.js";
-
-      let context = new Context('#dialog-anchor', '_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad');
-      let dataManager = DataManager.createForPublicUse('./_example-filters.json', './_example-data.csv', 'dataset_1', 'csv-simple');
-      let componentMain = new ComponentMain(context, dataManager);
-      componentMain.setUrlDatasetsEnabled(true);
-
+  <script src="dist/finance-js.umd.js"></script>
+  <script>
       $(() => {
-          let node = componentMain.createNode();
+          let node = FinanceJS.builder()
+              .setDialogAnchor('#dialog-anchor')
+              .setCsrf('_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad')
+              .initDataManagerDefault()
+              .build();
+
           $('#finance-top-component').append(node);
       })
   </script>
