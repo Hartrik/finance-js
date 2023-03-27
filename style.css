@@ -1,0 +1,154 @@
+
+#finance-top-component {
+    padding-top: 10pt;
+}
+
+/* every tab */
+
+.tab-content > .tab-pane {
+    margin: 10pt 0 0 0;
+}
+
+/* tab panel data */
+
+.panel-data h2 {
+    padding-top: 6pt;
+    font-size: 1.2rem;
+}
+
+.panel-data table {
+    margin-bottom: 1rem;
+}
+
+.panel-data table thead {
+    font-weight: 500;
+}
+
+.panel-data .under-table-box {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.panel-data .under-table-box .custom-switch {
+    width: min-content;
+}
+
+.panel-data textarea {
+    font-family: monospace;
+}
+
+.panel-data .parse-result-label,
+.panel-data .save-result-label {
+    margin-left: 12pt;
+    color: lightgray;
+}
+
+/* tab panel filters */
+
+.panel-filters textarea {
+    font-family: monospace;
+}
+
+.panel-filters .under-editor-box {
+    display: flex;
+}
+
+.panel-filters .under-editor-box .custom-switch {
+    margin-left: 12pt;
+    margin-top: 6pt;
+}
+
+.panel-filters .under-editor-box .parse-result-label {
+    margin-left: 12pt;
+    margin-top: 6pt;
+    color: lightgray;
+}
+
+.panel-filters .alert {
+    margin: 0 0 16pt 0;
+}
+
+/* options bar */
+
+.options-bar .grouping-component,
+.options-bar .filter-component select,
+.options-bar .filter-component input {
+    margin-bottom: 4pt;
+    margin-right: 6pt;
+    vertical-align: top;
+}
+
+.options-bar .filter-component {
+    display: inline;
+}
+
+.options-bar .filter-component select {
+    margin-right: 6pt;
+}
+
+.options-bar .filter-component select.btn {
+    text-align: left;
+}
+
+.options-bar .filter-component input {
+    width: 20em;
+}
+
+/* table */
+
+.table td, .table th {
+    padding: 0.25rem 0.75rem;
+}
+
+.table td.value-cell {
+    text-align: right;
+}
+
+.table td.negative {
+    color: darkred;
+}
+
+.table td.positive {
+    color: darkgreen;
+}
+
+.table td.result {
+    font-weight: bold;
+}
+
+.table td.options-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table td.options-cell .fa {
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    margin-left: 0.5em;
+}
+
+.table td.options-cell .fa:hover {
+    opacity: 0.7;
+    color: gray;
+    text-decoration: none;
+}
+
+/* charts */
+
+.chart-panel canvas {
+    margin: 3em 0;
+}
+
+/* modal */
+
+.modal-header span {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+/* actions */
+
+.actions-bar .btn {
+    margin-bottom: 4pt;
+}

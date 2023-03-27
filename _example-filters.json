@@ -1,0 +1,131 @@
+[
+  {
+    "hideInTable": true,
+    "name": "<no filter>"
+  },
+  {
+    "hideInTable": true,
+    "name": "<all but transfer>",
+    "negFilter": "Transfer"
+  },
+  {
+    "name": "Income/Salary",
+    "color": "green",
+    "query": {
+      "value": {
+        "$gt": 0
+      },
+      "description": "Mzda"
+    }
+  },
+  {
+    "name": "Income/School",
+    "color": "green",
+    "query": {
+      "value": {
+        "$gt": 0
+      },
+      "description": {
+        "$and": [
+          "stipendium"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Income/Others",
+    "color": "green",
+    "query": {
+      "value": {
+        "$gt": 0
+      },
+      "description": {
+        "$or": [
+          "[D]",
+          "[P]",
+          "Vrácení přeplatku daně z příjmu FO"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Housing costs",
+    "color": "orange",
+    "query": {
+      "value": {
+        "$lt": 0
+      },
+      "description": {
+        "$or": [
+          "Nájem",
+          "Záloha na elektřinu",
+          "Záloha na plyn"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Transport/Fuel",
+    "color": "red",
+    "query": {
+      "description": {
+        "$regex": "(benzín|nafta|benzina)"
+      }
+    }
+  },
+  {
+    "name": "Transport/Public",
+    "color": "red",
+    "query": {
+      "description": {
+        "$and": [
+          "PMDP"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Lunches",
+    "color": "purple",
+    "query": {
+      "value": {
+        "$lt": 0
+      },
+      "description": {
+        "$or": [
+          "oběd",
+          "restaurace"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Clothes",
+    "color": "blue",
+    "query": {
+      "description": {
+        "$or": [
+          "NEW YORKER",
+          "H & M",
+          "Deichmann-Obuv",
+          "CCC",
+          "Sportisimo",
+          "DECATHLON"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Transfer",
+    "color": "black",
+    "query": {
+      "description": {
+        "$or": [
+          "převod -",
+          "vklad -",
+          "binance"
+        ]
+      }
+    }
+  }
+]
