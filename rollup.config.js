@@ -4,6 +4,18 @@ import { string } from "rollup-plugin-string";
 import pkg from './package.json';
 
 export default [
+
+    // parsers lib
+    {
+        input: 'src/lib-parsers/main.js',
+        output: {
+            name: 'Parsers',
+            file: pkg.lib_parsers,
+            format: 'umd'
+        },
+        plugins: []
+    },
+
     // browser-friendly UMD build - for public use
     {
         input: 'src/public/main.js',

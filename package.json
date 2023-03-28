@@ -3,6 +3,7 @@
   "version": "1.0.0-SNAPSHOT",
   "browser_public": "dist/finance-js.umd.js",
   "browser_private": "dist/finance-js.private.umd.js",
+  "lib_parsers": "dist/lib-parsers.umd.js",
   "dependencies": {
     "chart.js": "^4.2.1",
     "codemirror": "^6.0.1",
@@ -17,7 +18,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "node test/test.js",
+    "test": "node test/CSVReaderTest.js",
     "pretest": "npm run build"
   },
   "files": [
