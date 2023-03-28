@@ -1,6 +1,6 @@
 import { Statements } from  "./Statements.js"
 import { Filters } from  "./Filters.js"
-import { esc, formatValue } from  "./utils.js"
+import { Utils } from "./Utils.js"
 
 /**
  * @version 2021-11-21
@@ -26,7 +26,7 @@ export class DialogDetails {
         let dialog = $(`<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
             .append($(`<div class="modal-dialog modal-dialog-centered modal-lg"></div>`)
                 .append($(`<div class="modal-content"></div>`)
-                    .append($(`<div class="modal-header"><span>${esc(this.groupName)}</span></div>`))
+                    .append($(`<div class="modal-header"><span>${Utils.esc(this.groupName)}</span></div>`))
                     .append($(`<div class="modal-body"></div>`).append(this._buildBody()))
                     .append($(`<div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -45,10 +45,10 @@ export class DialogDetails {
 
         this.statements.sort(Statements.comparator).forEach(statement => {
             let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${esc(statement.date)}</span></td>`));
-            let descriptionCell = $(`<td><span>${esc(statement.description)}</span></td>`);
+            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(statement.date)}</span></td>`));
+            let descriptionCell = $(`<td><span>${Utils.esc(statement.description)}</span></td>`);
             row.append(descriptionCell);
-            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${esc(formatValue(statement.value))}</td>`));
+            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(statement.value))}</td>`));
             tableBody.append(row);
 
             // filter labels

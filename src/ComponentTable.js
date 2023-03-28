@@ -2,7 +2,7 @@ import { Statements } from  "./Statements.js"
 import { Filters } from  "./Filters.js"
 import { DialogDetails } from  "./DialogDetails.js"
 import { DialogStats } from  "./DialogStats.js"
-import { esc, formatValue } from  "./utils.js"
+import { Utils } from "./Utils.js"
 
 /**
  *
@@ -45,11 +45,11 @@ export class ComponentTable {
             sum += statement.value;
 
             let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${esc(statement.date)}</span></td>`));
-            let descriptionCell = $(`<td><span>${esc(statement.description)}</span></td>`);
+            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(statement.date)}</span></td>`));
+            let descriptionCell = $(`<td><span>${Utils.esc(statement.description)}</span></td>`);
             row.append(descriptionCell);
-            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${esc(formatValue(statement.value))}</td>`));
-            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${esc(formatValue(sum))}</td>`));
+            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(statement.value))}</td>`));
+            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(sum))}</td>`));
 
             // filter labels
             for (const f of filters.values()) {
@@ -84,11 +84,11 @@ export class ComponentTable {
             sum += result;
 
             let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${esc(group.key)}</span></td>`));
-            row.append($(`<td class="value-cell positive">${esc(formatValue(receipts))}</td>`));
-            row.append($(`<td class="value-cell negative">${esc(formatValue(expenses))}</td>`));
-            row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${esc(formatValue(result))}</td>`));
-            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${esc(formatValue(sum))}</td>`));
+            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(group.key)}</span></td>`));
+            row.append($(`<td class="value-cell positive">${Utils.esc(Utils.formatValue(receipts))}</td>`));
+            row.append($(`<td class="value-cell negative">${Utils.esc(Utils.formatValue(expenses))}</td>`));
+            row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(result))}</td>`));
+            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(sum))}</td>`));
 
             // details
             let detailsButton = $(`<a href="javascript:void(0)" class="fa fa-eye"></a>`);

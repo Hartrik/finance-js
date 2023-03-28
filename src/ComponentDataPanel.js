@@ -1,7 +1,7 @@
 import { DomBuilder } from "./DomBuilder.js";
 import { Dataset } from "./Dataset.js";
 import { Parsers } from "./Parsers.js";
-import { esc } from "./utils.js";
+import { Utils } from "./Utils.js";
 import { EditorView, basicSetup } from "codemirror"
 
 /**
@@ -201,10 +201,10 @@ class ComponentDataTable {
 
         datasets.forEach(dataset => {
             let row = $(`<tr></tr>`);
-            row.append($(`<td>${ esc(dataset.name) }</td>`));
-            row.append($(`<td>${ esc(dataset.dataType) }</td>`));
+            row.append($(`<td>${ Utils.esc(dataset.name) }</td>`));
+            row.append($(`<td>${ Utils.esc(dataset.dataType) }</td>`));
             if (dataset.exception === undefined) {
-                row.append($(`<td>${ esc(dataset.statements.length) }</td>`));
+                row.append($(`<td>${ Utils.esc(dataset.statements.length) }</td>`));
             } else {
                 let span = DomBuilder.span("ERROR");
                 DomBuilder.Bootstrap.initTooltip(dataset.exception, span);

@@ -1,6 +1,6 @@
 import { Filters } from  "./Filters.js"
 import { DialogDetails } from  "./DialogDetails.js"
-import { esc, formatValue } from  "./utils.js"
+import { Utils } from "./Utils.js"
 
 /**
  * @version 2021-11-21
@@ -24,7 +24,7 @@ export class DialogStats {
         let dialog = $(`<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
             .append($(`<div class="modal-dialog modal-dialog-centered modal-lg"></div>`)
                 .append($(`<div class="modal-content"></div>`)
-                    .append($(`<div class="modal-header"><span>${esc(this.groupName)} Summary</span></div>`))
+                    .append($(`<div class="modal-header"><span>${Utils.esc(this.groupName)} Summary</span></div>`))
                     .append($(`<div class="modal-body"></div>`).append(this._buildBody()))
                     .append($(`<div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -94,11 +94,11 @@ export class DialogStats {
 
             let row = $(`<tr></tr>`);
             row.append($(`<td></td>`).append((filterGroup.filter.name === othersFilter.name)
-                    ? $(`<span>${esc(filterGroup.filter.name)}</span>`)
+                    ? $(`<span>${Utils.esc(filterGroup.filter.name)}</span>`)
                     : Filters.createFilterLabel(filterGroup.filter)));
-            row.append($(`<td class="value-cell positive">${esc(formatValue(receipts))}</td>`));
-            row.append($(`<td class="value-cell negative">${esc(formatValue(expenses))}</td>`));
-            row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${esc(formatValue(result))}</td>`));
+            row.append($(`<td class="value-cell positive">${Utils.esc(Utils.formatValue(receipts))}</td>`));
+            row.append($(`<td class="value-cell negative">${Utils.esc(Utils.formatValue(expenses))}</td>`));
+            row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(result))}</td>`));
 
             let detailsButton = $(`<a href="javascript:void(0)" class="fa fa-eye"></a>`);
             detailsButton.on("click", (e) => {
@@ -114,9 +114,9 @@ export class DialogStats {
         let result = totalReceipts + totalExpenses;
         let row = $(`<tr></tr>`);
         row.append($(`<td class="result">&sum;</td>`));
-        row.append($(`<td class="value-cell result positive">${esc(formatValue(totalReceipts))}</td>`));
-        row.append($(`<td class="value-cell result negative">${esc(formatValue(totalExpenses))}</td>`));
-        row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${esc(formatValue(result))}</td>`));
+        row.append($(`<td class="value-cell result positive">${Utils.esc(Utils.formatValue(totalReceipts))}</td>`));
+        row.append($(`<td class="value-cell result negative">${Utils.esc(Utils.formatValue(totalExpenses))}</td>`));
+        row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(result))}</td>`));
         row.append($(`<td></td>`));
         tableBody.append(row);
 

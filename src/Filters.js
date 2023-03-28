@@ -1,4 +1,4 @@
-import { esc } from  "./utils.js"
+import { Utils } from "./Utils.js"
 
 /**
  * Functions related to filters.
@@ -250,7 +250,7 @@ export class Filters {
     }
 
     static createFilterLabel(f) {
-        let color = f.color != null ? `style="background-color: ${esc(f.color)};"` : '';
-        return $(`<span class="badge badge-info" ${color}>${esc(f.name)}</span>`);
+        let color = f.color != null ? `style="background-color: ${Utils.esc(f.color)};"` : '';
+        return $(`<span class="badge badge-info" ${color}>${Utils.esc(f.name)}</span>`);
     }
 }

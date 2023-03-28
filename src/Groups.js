@@ -1,4 +1,4 @@
-import { weekNumber, fromIso8601 } from  "./utils.js"
+import { Utils } from "./Utils.js"
 
 /**
  * @version 2022-05-22
@@ -92,7 +92,7 @@ export class Grouping {
  */
 class WeekGrouping extends Grouping {
     _keyFunc(statement) {
-        return weekNumber(fromIso8601(statement.date))
+        return Utils.weekNumber(Utils.fromIso8601(statement.date))
     }
 
     _follows(key) {
