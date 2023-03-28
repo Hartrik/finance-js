@@ -3,8 +3,8 @@ import { ComponentMain } from "../ComponentMain.js";
 import { Context } from "../Context.js";
 import { DataManagerForPublicUse } from "./DataManagerForPublicUse.js";
 
-import EXAMPLE_DATA from "../../_example-data.csv";
-import EXAMPLE_FILTER from "../../_example-filters.json";
+import EXAMPLE_DATA from "../../examples/data_simple.csv";
+import EXAMPLE_FILTER from "../../examples/filters.json";
 
 
 export function builder() {

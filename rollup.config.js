@@ -16,7 +16,7 @@ export default [
             resolve(), // so Rollup can find libraries
             commonjs(), // so Rollup can convert libraries to an ES modules
             string({
-                include: "_example*.*",
+                include: "examples/*.*",
                 exclude: []
             })
         ]
