@@ -2,6 +2,7 @@ import { DomBuilder } from "./DomBuilder.js";
 import { Dataset } from "./Dataset.js";
 import { Parsers } from "./Parsers.js";
 import { esc } from "./utils.js";
+import { EditorView, basicSetup } from "codemirror"
 
 /**
  *
@@ -222,7 +223,7 @@ class ComponentDataTable {
 
 /**
  *
- * @version 2022-05-22
+ * @version 2023-03-28
  * @author Patrik Harag
  */
 class ComponentDataForm {
@@ -232,7 +233,7 @@ class ComponentDataForm {
     enableUrlDatasets = false;
 
     fieldName;
-    textArea;
+    editor;
     typeSelect;
     button;
     resultLabel;
@@ -250,8 +251,9 @@ class ComponentDataForm {
     }
 
     createNode() {
-        this.textArea = $(`<textarea class="form-control" id="dataTextArea" rows="15"></textarea>`);
-        DomBuilder.Bootstrap.initTooltip('Enter data or drop a file here', this.textArea);
+        this.editor = new EditorView({
+            extensions: [basicSetup],
+        })
 
         this.fieldName = $(`<input class="form-control" id="dataFieldName">`);
 
@@ -264,8 +266,7 @@ class ComponentDataForm {
         this.button = $(`<a href="javascript:void(0)" class="btn btn-primary">Submit</a>`);
         this.resultLabel = $(`<span class="parse-result-label"></span>`);
 
-        this._initFileDragAndDrop(this.fieldName, this.textArea, this.typeSelect);
-        this.textArea.tooltip();
+        this._initFileDragAndDrop(this.fieldName, $(this.editor.dom), this.typeSelect);
 
         this.button.on("click", (e) => {
             this.submit();
@@ -276,8 +277,8 @@ class ComponentDataForm {
                 .append($(`<label for="dataFieldName">Dataset name</label>`))
                 .append(this.fieldName))
             .append($(`<div class="form-group"></div>`)
-                .append($(`<label for="dataTextArea">Data</label>`))
-                .append(this.textArea))
+                .append($(`<label>Data</label>`))
+                .append(this.editor.dom))
             .append($(`<div class="form-group"></div>`)
                 .append($(`<label for="dataTypeSelect">Data type</label>`))
                 .append(this.typeSelect))
@@ -292,7 +293,10 @@ class ComponentDataForm {
             let reader = new FileReader();
             reader.onload = (e) => {
                 nameField.val(file.name);
-                area.val(e.target.result);
+
+                this.editor.dispatch({
+                    changes: {from: 0, to: this.editor.state.doc.length, insert: e.target.result}
+                });
 
                 // select data type automatically
                 let ext = file.name.split('.').pop();  // this doesn't need to be precise
@@ -343,10 +347,12 @@ class ComponentDataForm {
     setRawData(name, data, parserKey) {
         this.fieldName.val(name);
         this.typeSelect.val(parserKey);
-        this.textArea.val(data);
+        this.editor.dispatch({
+            changes: {from: 0, to: this.editor.state.doc.length, insert: data}
+        });
     }
 
     getRawData() {
-        return this.textArea.val();
+        return this.editor.state.doc.toString();
     }
 }

@@ -1,8 +1,10 @@
 import { Filters } from  "./Filters.js"
+import { EditorView, basicSetup } from "codemirror"
+import { json } from "@codemirror/lang-json"
 
 /**
  *
- * @version 2022-05-21
+ * @version 2023-03-28
  * @author Patrik Harag
  */
 export class ComponentFiltersPanel {
@@ -11,7 +13,7 @@ export class ComponentFiltersPanel {
     dataManager;
     filtersUpdatedHandler;
 
-    textArea;
+    editor;
     resultLabel;
 
     /**
@@ -84,7 +86,9 @@ export class ComponentFiltersPanel {
     }
 
     _createForm() {
-        this.textArea = $(`<textarea class="form-control" id="filtersTextArea" rows="15"></textarea>`);
+        this.editor = new EditorView({
+            extensions: [basicSetup, json()],
+        })
         this.resultLabel = $(`<span class="parse-result-label"></span>`);
         let button = $(`<a href="javascript:void(0)" class="btn btn-primary">Update</a>`);
         let saveSwitch = this._createSaveSwitchInput();
@@ -98,8 +102,8 @@ export class ComponentFiltersPanel {
 
         return $(`<form class="" action="javascript:void(0);"></form>`)
             .append($(`<div class="form-group"></div>`)
-                .append($(`<label for="filtersTextArea">Filter definitions</label>`))
-                .append(this.textArea))
+                .append($(`<label>Filter definitions</label>`))
+                .append(this.editor.dom))
             .append($(`<div class="under-editor-box"></div>`)
                 .append(button)
                 .append(this._createSwitch(saveSwitch))
@@ -165,10 +169,12 @@ export class ComponentFiltersPanel {
     }
 
     setRawData(data) {
-        this.textArea.val(data);
+        this.editor.dispatch({
+            changes: {from: 0, to: this.editor.state.doc.length, insert: data}
+        });
     }
 
     getRawData() {
-        return this.textArea.val();
+        return this.editor.state.doc.toString();
     }
 }

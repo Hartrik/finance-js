@@ -33,8 +33,12 @@
     width: min-content;
 }
 
-.panel-data textarea {
-    font-family: monospace;
+.panel-data .cm-editor {
+    height: 350pt;
+}
+
+.panel-data .cm-scroller {
+    overflow: auto;
 }
 
 .panel-data .parse-result-label,
@@ -45,8 +49,12 @@
 
 /* tab panel filters */
 
-.panel-filters textarea {
-    font-family: monospace;
+.panel-filters .cm-editor {
+    height: 350pt;
+}
+
+.panel-filters .cm-scroller {
+    overflow: auto;
 }
 
 .panel-filters .under-editor-box {
