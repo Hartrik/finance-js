@@ -76,7 +76,7 @@ export class ComponentDataPanel {
             .append($(`<div class="under-table-box"></div>`)
                 .append(this._createSwitch(this.saveSwitch))
                 .append(this.resultLabel))
-            .append($(`<h2>Add dataset</h2>`))
+            .append($(`<h2>Add/Replace dataset</h2>`))
             .append(this.formComponent.createNode());
 
         this._initializeData();
@@ -214,7 +214,11 @@ class ComponentDataTable {
                 .append($(`<a href="javascript:void(0)" class="fa fa-edit"></a>`)
                     .on("click", (e) => this.onEdit(dataset)))
                 .append($(`<a href="javascript:void(0)" class="fa fa-trash"></a>`)
-                    .on("click", (e) => this.onDelete(dataset)))
+                    .on("click", (e) => {
+                        if (confirm("Delete dataset?")) {
+                            this.onDelete(dataset);
+                        }
+                    }))
             );
             this.tableBody.append(row);
         });
