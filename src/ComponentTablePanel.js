@@ -90,9 +90,11 @@ class ComponentGroupingOptions {
         let yearButton;
         let allButton;
 
+        const short = window.innerWidth < 800;
+
         let dom = $(`<div class="grouping-component btn-group btn-group-toggle" data-toggle="buttons"></div>`)
             .append($(`<label class="btn btn-secondary"></label>`)
-                .text("No grouping").append(noGroupingButton = $(`<input type="radio" name="options" id="grouping-off">`)))
+                .text(short ? "Ø" : "No grouping").append(noGroupingButton = $(`<input type="radio" name="options" id="grouping-off">`)))
             .append($(`<label class="btn btn-secondary"></label>`)
                 .text("Week").append(weekButton = $(`<input type="radio" name="options" id="grouping-week">`)))
             .append($(`<label class="btn btn-secondary active"></label>`)

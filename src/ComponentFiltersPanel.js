@@ -1,10 +1,11 @@
 import { Filters } from  "./Filters.js"
 import { EditorView, basicSetup } from "codemirror"
 import { json } from "@codemirror/lang-json"
+import { DomBuilder } from "./DomBuilder.js";
 
 /**
  *
- * @version 2023-03-28
+ * @version 2023-03-29
  * @author Patrik Harag
  */
 export class ComponentFiltersPanel {
@@ -34,15 +35,16 @@ export class ComponentFiltersPanel {
         }
 
         return $(`<div class="alert alert-info alert-dismissible fade show" role="alert"></div>`)
-            .append($(`<strong>Filter definition:</strong>`))
+            .append($(`<p><strong>Filter</strong> is a way how to define a category of transactions.</p>`))
+            .append("Filter definition:")
             .append($(`<ul></ul>`)
                 .append($(`<li><code>name</code> (string)</li>`))
                 .append($(`<li><code>color</code> (string) [optional] &#8211; label CSS color</li>`))
                 .append($(`<li><code>query</code> (object) [optional, matches all if not set]</li>`)
                     .append($(`<br>`))
-                    .append($(`<strong>Queries</strong>`))
+                    .append($(`<strong>Query:</strong>`))
                     .append($(`<ul></ul>`)
-                        .append($(`<li>Queries are inspired by MongoDB queries.</li>`))
+                        .append($(`<li>The syntax is inspired by MongoDB queries.</li>`))
                         .append($(`<li>Fields: ${ Filters.QUERY_FIELDS.map(asCode).join(', ') }. Default: <code>description</code>.</li>`))
                         .append($(`<li>Operators: ${ Filters.QUERY_OPERATORS.map(asCode).join(', ') }. Default: <code>$contains</code> (string) / <code>$eq</code> (number).</li>`))
                     )
@@ -101,7 +103,6 @@ export class ComponentFiltersPanel {
 
         return $(`<form class="" action="javascript:void(0);"></form>`)
             .append($(`<div class="form-group"></div>`)
-                .append($(`<label>Filter definitions</label>`))
                 .append(this.editor.dom))
             .append($(`<div class="under-editor-box"></div>`)
                 .append(button)
@@ -112,6 +113,7 @@ export class ComponentFiltersPanel {
     createNode() {
         let dom = $(`<div class="panel-filters"></div>`)
             .append(this._createHelp())
+            .append(DomBuilder.par(null, "Filter definitions:"))
             .append(this._createForm());
 
         this._initializeData();

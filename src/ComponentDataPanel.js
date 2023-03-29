@@ -6,7 +6,7 @@ import { EditorView, basicSetup } from "codemirror"
 
 /**
  *
- * @version 2022-05-22
+ * @version 2023-03-29
  * @author Patrik Harag
  */
 export class ComponentDataPanel {
@@ -37,6 +37,22 @@ export class ComponentDataPanel {
 
     setUrlDatasetsEnabled(enable) {
         this.formComponent.setUrlDatasetsEnabled(enable);
+    }
+
+    _createHelp() {
+        let sources = DomBuilder.element("ul");
+        for (let k in Parsers.AVAILABLE) {
+            let parser = Parsers.AVAILABLE[k];
+            sources.append(DomBuilder.element("li", null, parser.name));
+        }
+
+        return $(`<div class="alert alert-info alert-dismissible fade show" role="alert"></div>`)
+            .append(DomBuilder.par(null, [DomBuilder.element("strong", null, "Dataset"),
+                    " is a collection of financial transactions. There can be multiple datasets – bank statements," +
+                    " savings account statements, manually created list of cash expenses, etc."]))
+            .append("Supported sources:")
+            .append(sources)
+            .append($(`<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`));
     }
 
     _createSaveSwitchInput() {
@@ -70,8 +86,8 @@ export class ComponentDataPanel {
         this.saveSwitch = this._createSaveSwitchInput();
 
         let node = $(`<div class="panel-data"></div>`)
-            .append($(`<h2>Datasets</h2>`))
-            .append($(`<p>Table below shows loaded datasets.</p>`))
+            .append(this._createHelp())
+            .append($(`<p>Loaded datasets:</p>`))
             .append(this.formTable.createNode())
             .append($(`<div class="under-table-box"></div>`)
                 .append(this._createSwitch(this.saveSwitch))

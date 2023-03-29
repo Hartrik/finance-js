@@ -31,7 +31,7 @@ export class Parsers {
         },
         'json-sodexo': {
             extension: 'json',
-            name: 'JSON - Sodexo API',
+            name: 'JSON – Sodexo API',
             parse: Parsers.parseSodexo
         },
         'ofx': {
