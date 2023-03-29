@@ -1,12 +1,12 @@
 [
   {
-    "hideInTable": true,
-    "name": "<no filter>"
+    "name": "<no filter>",
+    "hideInTable": true
   },
   {
-    "hideInTable": true,
     "name": "<all but transfer>",
-    "negFilter": "Transfer"
+    "negFilter": "Transfer",
+    "hideInTable": true
   },
   {
     "name": "Income/Salary",

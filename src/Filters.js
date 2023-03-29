@@ -14,8 +14,8 @@ export class Filters {
 
     static DEFAULT = [
         {
-            "hideInTable": true,
             "name": "<no filter>",
+            "hideInTable": true,
         },
     ];
 

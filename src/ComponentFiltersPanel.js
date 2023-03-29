@@ -49,8 +49,8 @@ export class ComponentFiltersPanel {
                         .append($(`<li>Operators: ${ Filters.QUERY_OPERATORS.map(asCode).join(', ') }. Default: <code>$contains</code> (string) / <code>$eq</code> (number).</li>`))
                     )
                 )
-                .append($(`<li><code>negFilter</code> (string) [optional, alternative to query] &#8211; create filter by negating other filter</li>`))
-                .append($(`<li><code>hideInTable</code> (boolean) [optional, default = true] &#8211; hide this filter in the table view</li>`))
+                .append($(`<li><code>negFilter</code> (string) [optional, alternative to <code>query</code>] &#8211; create filter by negating other filter</li>`))
+                .append($(`<li><code>hideInTable</code> (boolean) [optional, default = false] &#8211; hide this filter in tables (for very generic, negated or overlapping filters)</li>`))
             )
             .append($(`<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`));
     }
