@@ -6,10 +6,6 @@
  */
 export class DataProvider {
 
-    getSaveTooltip() {
-        return '';
-    }
-
     // filters
 
     hasStoredFilters() {
@@ -18,7 +14,7 @@ export class DataProvider {
 
     /**
      *
-     * @return Promise
+     * @return Promise<string>
      */
     fetchFilters() {
         throw 'Unsupported operation: not implemented';
@@ -43,7 +39,7 @@ export class DataProvider {
     }
 
     /**
-     * @returns Promise
+     * @returns Promise<Map<Dataset>>
      */
     fetchDatasets() {
         throw 'Unsupported operation: not implemented';

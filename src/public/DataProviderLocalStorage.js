@@ -10,21 +10,13 @@ export class DataProviderLocalStorage extends DataProvider {
     static FILTERS_DATA_KEY = 'finance.filters.data';
     static DATASETS_DATA_KEY = 'finance.datasets.data';
 
-    defaultFilter;
-    defaultDataset;
-    defaultDatasetName;
-    defaultDatasetDataType;
+    #defaultFilter;
+    #defaultDatasets;
 
-    constructor(defaultFilter, defaultDataset, defaultDatasetName, defaultDatasetDataType) {
+    constructor(defaultFilter, defaultDatasets) {
         super();
-        this.defaultFilter = defaultFilter;
-        this.defaultDataset = defaultDataset;
-        this.defaultDatasetName = defaultDatasetName;
-        this.defaultDatasetDataType = defaultDatasetDataType;
-    }
-
-    getSaveTooltip() {
-        return 'Store into browser storage (local storage)'
+        this.#defaultFilter = defaultFilter;
+        this.#defaultDatasets = defaultDatasets;
     }
 
     // filters
@@ -32,7 +24,7 @@ export class DataProviderLocalStorage extends DataProvider {
     hasStoredFilters() {
         if (window.localStorage) {
             let data = window.localStorage.getItem(DataProviderLocalStorage.FILTERS_DATA_KEY);
-            return data !== null;
+            return data != null;
         }
         return false;
     }
@@ -40,7 +32,7 @@ export class DataProviderLocalStorage extends DataProvider {
     fetchFilters() {
         if (window.localStorage) {
             let data = window.localStorage.getItem(DataProviderLocalStorage.FILTERS_DATA_KEY);
-            if (data !== null) {
+            if (data) {
                 return new Promise((resolve, reject) => {
                     resolve(data);
                 });
@@ -49,7 +41,7 @@ export class DataProviderLocalStorage extends DataProvider {
 
         // fetch default filters
         return new Promise((resolve, reject) => {
-            resolve(this.defaultFilter);
+            resolve(this.#defaultFilter);
         });
     }
 
@@ -75,7 +67,7 @@ export class DataProviderLocalStorage extends DataProvider {
     hasStoredDatasets() {
         if (window.localStorage) {
             let data = window.localStorage.getItem(DataProviderLocalStorage.DATASETS_DATA_KEY);
-            return data !== null;
+            return data != null;
         }
         return false;
     }
@@ -83,7 +75,7 @@ export class DataProviderLocalStorage extends DataProvider {
     fetchDatasets() {
         if (window.localStorage) {
             let rawDatasets = window.localStorage.getItem(DataProviderLocalStorage.DATASETS_DATA_KEY);
-            if (rawDatasets !== null) {
+            if (rawDatasets) {
                 return new Promise((resolve, reject) => {
                     let datasets;
                     try {
@@ -99,10 +91,7 @@ export class DataProviderLocalStorage extends DataProvider {
 
         // fetch example
         return new Promise((resolve, reject) => {
-            let dataset = new Dataset(this.defaultDatasetName, this.defaultDatasetDataType, this.defaultDataset);
-            let datasets = new Map();
-            datasets.set(this.defaultDatasetName, dataset);
-            resolve(datasets);
+            resolve(this.#defaultDatasets);
         });
     }
 

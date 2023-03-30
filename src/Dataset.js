@@ -2,7 +2,7 @@ import { Parsers } from "./Parsers.js";
 
 /**
  *
- * @version 2022-05-22
+ * @version 2023-03-30
  * @author Patrik Harag
  */
 export class Dataset {
@@ -149,5 +149,18 @@ export class Dataset {
             };
         });
         return JSON.stringify(copy);
+    }
+
+    /**
+     *
+     * @param datasets {Map<Dataset>}
+     * @returns {Map<Dataset>} deep copy
+     */
+    static copyDatasets(datasets) {
+        let copy = new Map();
+        datasets.forEach(d => {
+            copy.set(d.name, new Dataset(d.name, d.dataType, d.data));
+        });
+        return copy;
     }
 }

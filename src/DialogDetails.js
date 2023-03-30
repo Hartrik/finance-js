@@ -33,7 +33,7 @@ export class DialogDetails {
                         </div>`))
                 ));
 
-        $(this.context.dialogAnchorSelector).append(dialog);
+        this.context.dialogAnchor.append(dialog);
         dialog.modal('show');
     }
 

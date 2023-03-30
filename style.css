@@ -20,52 +20,38 @@
     font-weight: 500;
 }
 
-.panel-data .under-table-box {
-    display: flex;
-    margin-bottom: 2rem;
+.panel-data .drag-and-drop-hint {
+    font-style: italic;
+    font-size: small;
+    color: gray;
 }
 
-.panel-data .under-table-box .custom-switch {
-    width: min-content;
+.panel-data.drag-and-drop-highlight {
+    outline: rgba(0, 129, 255, 0.76) dashed thick;
+    outline-offset: 2px;
 }
 
-.panel-data .cm-editor {
+.panel-data .chart-panel {
+    max-height: 200pt;
+}
+
+.dataset-form .cm-editor {
     height: 350pt;
 }
 
-.panel-data .cm-scroller {
+.dataset-form .cm-scroller {
     overflow: auto;
-}
-
-.panel-data .parse-result-label,
-.panel-data .save-result-label {
-    margin-left: 12pt;
-    color: lightgray;
 }
 
 /* tab panel filters */
 
 .panel-filters .cm-editor {
     height: 350pt;
+    margin-bottom: 1em;
 }
 
 .panel-filters .cm-scroller {
     overflow: auto;
-}
-
-.panel-filters .under-editor-box {
-    display: flex;
-}
-
-.panel-filters .under-editor-box .custom-switch {
-    margin-left: 12pt;
-    margin-top: 6pt;
-}
-
-.panel-filters .under-editor-box .parse-result-label {
-    margin-left: 12pt;
-    margin-top: 6pt;
-    color: lightgray;
 }
 
 .panel-filters .alert {

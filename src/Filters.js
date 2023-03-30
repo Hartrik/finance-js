@@ -1,6 +1,12 @@
 import { Utils } from "./Utils.js"
 
 /**
+ * @typedef {Object} Filter
+ * @property {string} query
+ * @property {function} filterFunc
+ */
+
+/**
  * Functions related to filters.
  * Filter query language is inspired by MongoDB query language.
  *
@@ -141,8 +147,13 @@ export class Filters {
         }
     }
 
+    /**
+     *
+     * @param json
+     * @returns {Map<string, Filter>}
+     */
     static load(json) {
-        let loadedFilters = new Map()
+        let loadedFilters = new Map();
         json.forEach((value) => {
             if (value.query != null) {
                 value.filterFunc = Filters.compile(value.query);

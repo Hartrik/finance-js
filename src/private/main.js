@@ -1,8 +1,13 @@
 
-import { ComponentMain } from "../ComponentMain.js";
 import { Context } from "../Context.js";
 import { DataProviderAPI } from "./DataProviderAPI.js";
-import { ComponentServerPanel } from "./ComponentServerPanel.js";
+import { DataManager } from "../DataManager.js";
+import { ComponentTabbedPanel } from "../ComponentTabbedPanel.js";
+import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
+import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
+import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
+import { ComponentPanelPersistenceAPI } from "./ComponentPanelPersistenceAPI.js";
+
 
 // for logged users
 
@@ -41,14 +46,19 @@ class Builder {
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let context = new Context(this.#dialogAnchorSelector, this.#csrfParameterName, this.#csrfToken);
+        let context = new Context($(this.#dialogAnchorSelector), this.#csrfParameterName, this.#csrfToken);
 
-        let componentMain = new ComponentMain(context, new DataProviderAPI(context));
-        componentMain.setUrlDatasetsEnabled(true);
+        let dataProvider = new DataProviderAPI(context);
+        let dataManager = new DataManager(context, dataProvider, true);
 
-        let componentServerPanel = new ComponentServerPanel(context, (data) => componentMain.updateData(data));
-        componentMain.addPanelComponent(componentServerPanel);
+        let componentTabbedPanel = new ComponentTabbedPanel();
+        componentTabbedPanel.addPanel(new ComponentPanelDatasets(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelFilters(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelPersistenceAPI(context, dataManager));
 
-        return componentMain.createNode();
+        let node = componentTabbedPanel.createNode();
+        setTimeout(() => dataManager.load());
+        return node;
     }
 }

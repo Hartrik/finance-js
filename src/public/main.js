@@ -1,7 +1,13 @@
 
-import { ComponentMain } from "../ComponentMain.js";
 import { Context } from "../Context.js";
+import { Dataset } from "../Dataset.js";
 import { DataProviderLocalStorage } from "./DataProviderLocalStorage.js";
+import { DataManager } from "../DataManager.js";
+import { ComponentTabbedPanel } from "../ComponentTabbedPanel.js";
+import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
+import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
+import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
+import { ComponentPanelPersistenceLS } from "./ComponentPanelPersistenceLS.js";
 
 import EXAMPLE_DATA from "../../examples/data_simple.csv";
 import EXAMPLE_FILTER from "../../examples/filters.json";
@@ -13,7 +19,7 @@ export function builder() {
 
 /**
  *
- * @version 2023-03-27
+ * @version 2023-03-30
  * @author Patrik Harag
  */
 class Builder {
@@ -21,8 +27,6 @@ class Builder {
     #dialogAnchorSelector;
     #csrfParameterName;
     #csrfToken;
-
-    #dataProvider;
 
     setDialogAnchor(dialogAnchorSelector) {
         this.#dialogAnchorSelector = dialogAnchorSelector;
@@ -32,16 +36,6 @@ class Builder {
     setCsrf(csrfParameterName, csrfToken) {
         this.#csrfParameterName = csrfParameterName;
         this.#csrfToken = csrfToken;
-        return this;
-    }
-
-    initDataProvider(defaultFilter, defaultDataset, defaultDatasetName, defaultDatasetDataType) {
-        this.#dataProvider = new DataProviderLocalStorage(defaultFilter, defaultDataset, defaultDatasetName, defaultDatasetDataType);
-        return this;
-    }
-
-    initDataProviderDefault() {
-        this.#dataProvider = new DataProviderLocalStorage(EXAMPLE_FILTER, EXAMPLE_DATA, 'dataset_1', 'csv-simple');
         return this;
     }
 
@@ -55,13 +49,23 @@ class Builder {
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let context = new Context(this.#dialogAnchorSelector, this.#csrfParameterName, this.#csrfToken);
+        let context = new Context($(this.#dialogAnchorSelector), this.#csrfParameterName, this.#csrfToken);
 
-        if (!this.#dataProvider) {
-            throw 'Data provider not initialized';
-        }
-        let componentMain = new ComponentMain(context, this.#dataProvider);
+        let datasets = new Map();
+        datasets.set('example', new Dataset('example', 'csv-simple', EXAMPLE_DATA));
 
-        return componentMain.createNode();
+        let dataProvider = new DataProviderLocalStorage(EXAMPLE_FILTER, datasets);
+
+        let dataManager = new DataManager(context, dataProvider, false);
+
+        let componentTabbedPanel = new ComponentTabbedPanel();
+        componentTabbedPanel.addPanel(new ComponentPanelDatasets(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelFilters(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelPersistenceLS(context, dataManager));
+
+        let node = componentTabbedPanel.createNode();
+        setTimeout(() => dataManager.load());
+        return node;
     }
 }

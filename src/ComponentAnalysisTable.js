@@ -9,7 +9,7 @@ import { Utils } from "./Utils.js"
  * @version 2022-02-15
  * @author Patrik Harag
  */
-export class ComponentTable {
+export class ComponentAnalysisTable {
 
     context;
 

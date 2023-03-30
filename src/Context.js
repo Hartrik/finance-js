@@ -1,21 +1,18 @@
 /**
  *
- * @version 2021-10-31
+ * @version 2023-03-30
  * @author Patrik Harag
  */
 export class Context {
 
-    dialogAnchorSelector;
+    dialogAnchor;
 
     csrfParameterName;
     csrfToken;
 
-    timeZoneOffset;
-
-    constructor(dialogAnchorSelector, csrfParameterName, csrfToken) {
-        this.dialogAnchorSelector = dialogAnchorSelector;
+    constructor(dialogAnchor, csrfParameterName, csrfToken) {
+        this.dialogAnchor = dialogAnchor;
         this.csrfParameterName = csrfParameterName;
         this.csrfToken = csrfToken;
-        this.timeZoneOffset = new Date().getTimezoneOffset();
     }
 }

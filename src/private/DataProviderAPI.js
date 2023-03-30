@@ -8,15 +8,11 @@ import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
  * @author Patrik Harag
  */
 export class DataProviderAPI extends DataProvider {
-    _context;
+    #context;
 
     constructor(context) {
         super();
-        this._context = context;
-    }
-
-    getSaveTooltip() {
-        return 'Send to server'
+        this.#context = context;
     }
 
     // filters
@@ -28,7 +24,7 @@ export class DataProviderAPI extends DataProvider {
     fetchFilters() {
         return new Promise((resolve, reject) => {
             return ServerPrivateAPI.fetchSettings().then(data => {
-                resolve(data.filters);
+                resolve(data['filters']);
             }).catch(e => {
                 reject(e);
             })
@@ -39,7 +35,7 @@ export class DataProviderAPI extends DataProvider {
         let dataToSend = {
             filters: rawFilters
         };
-        return ServerPrivateAPI.postSettings(this._context, dataToSend);
+        return ServerPrivateAPI.postSettings(this.#context, dataToSend);
     }
 
     discardFilters() {
@@ -55,14 +51,14 @@ export class DataProviderAPI extends DataProvider {
     fetchDatasets() {
         return new Promise((resolve, reject) => {
             return ServerPrivateAPI.fetchData().then(rawDatasets => {
-                if (rawDatasets.datasets === null) {
+                if (rawDatasets['datasets'] === null) {
                     resolve(new Map());
                     return;
                 }
 
                 let datasets;
                 try {
-                    datasets = Dataset.parseDatasets(rawDatasets.datasets);
+                    datasets = Dataset.parseDatasets(rawDatasets['datasets']);
                 } catch (e) {
                     reject(e);
                     return;
@@ -78,7 +74,7 @@ export class DataProviderAPI extends DataProvider {
         let dataToSend = {
             datasets: Dataset.serializeDatasets(datasets)
         };
-        return ServerPrivateAPI.postData(this._context, dataToSend);
+        return ServerPrivateAPI.postData(this.#context, dataToSend);
     }
 
     discardDatasets() {

@@ -6,7 +6,7 @@ import Chart from 'chart.js/auto';
  * @version 2022-02-15
  * @author Patrik Harag
  */
-export class ComponentChart {
+export class ComponentAnalysisChart {
 
     context;
 
