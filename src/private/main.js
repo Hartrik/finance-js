@@ -1,7 +1,7 @@
 
 import { ComponentMain } from "../ComponentMain.js";
 import { Context } from "../Context.js";
-import { DataManagerForPrivateUse } from "./DataManagerForPrivateUse.js";
+import { DataProviderAPI } from "./DataProviderAPI.js";
 import { ComponentServerPanel } from "./ComponentServerPanel.js";
 
 // for logged users
@@ -43,7 +43,7 @@ class Builder {
         }
         let context = new Context(this.#dialogAnchorSelector, this.#csrfParameterName, this.#csrfToken);
 
-        let componentMain = new ComponentMain(context, new DataManagerForPrivateUse(context));
+        let componentMain = new ComponentMain(context, new DataProviderAPI(context));
         componentMain.setUrlDatasetsEnabled(true);
 
         let componentServerPanel = new ComponentServerPanel(context, (data) => componentMain.updateData(data));

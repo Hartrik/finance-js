@@ -1,10 +1,10 @@
 
 /**
  *
- * @version 2022-05-21
+ * @version 2023-03-30
  * @author Patrik Harag
  */
-export class DataManager {
+export class DataProvider {
 
     getSaveTooltip() {
         return '';

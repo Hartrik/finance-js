@@ -1,12 +1,12 @@
 import { Dataset } from "../Dataset.js";
-import { DataManager } from "../DataManager.js";
+import { DataProvider } from "../DataProvider.js";
 
 /**
  *
- * @version 2023-03-28
+ * @version 2023-03-30
  * @author Patrik Harag
  */
-export class DataManagerForPublicUse extends DataManager {
+export class DataProviderLocalStorage extends DataProvider {
     static FILTERS_DATA_KEY = 'finance.filters.data';
     static DATASETS_DATA_KEY = 'finance.datasets.data';
 
@@ -31,7 +31,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     hasStoredFilters() {
         if (window.localStorage) {
-            let data = window.localStorage.getItem(DataManagerForPublicUse.FILTERS_DATA_KEY);
+            let data = window.localStorage.getItem(DataProviderLocalStorage.FILTERS_DATA_KEY);
             return data !== null;
         }
         return false;
@@ -39,7 +39,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     fetchFilters() {
         if (window.localStorage) {
-            let data = window.localStorage.getItem(DataManagerForPublicUse.FILTERS_DATA_KEY);
+            let data = window.localStorage.getItem(DataProviderLocalStorage.FILTERS_DATA_KEY);
             if (data !== null) {
                 return new Promise((resolve, reject) => {
                     resolve(data);
@@ -56,7 +56,7 @@ export class DataManagerForPublicUse extends DataManager {
     storeFilters(rawFilters) {
         return new Promise((resolve, reject) => {
             if (window.localStorage) {
-                window.localStorage.setItem(DataManagerForPublicUse.FILTERS_DATA_KEY, rawFilters);
+                window.localStorage.setItem(DataProviderLocalStorage.FILTERS_DATA_KEY, rawFilters);
                 resolve(null);
             } else {
                 reject("Local storage not supported");
@@ -66,7 +66,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     discardFilters() {
         if (window.localStorage) {
-            window.localStorage.removeItem(DataManagerForPublicUse.FILTERS_DATA_KEY);
+            window.localStorage.removeItem(DataProviderLocalStorage.FILTERS_DATA_KEY);
         }
     }
 
@@ -74,7 +74,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     hasStoredDatasets() {
         if (window.localStorage) {
-            let data = window.localStorage.getItem(DataManagerForPublicUse.DATASETS_DATA_KEY);
+            let data = window.localStorage.getItem(DataProviderLocalStorage.DATASETS_DATA_KEY);
             return data !== null;
         }
         return false;
@@ -82,7 +82,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     fetchDatasets() {
         if (window.localStorage) {
-            let rawDatasets = window.localStorage.getItem(DataManagerForPublicUse.DATASETS_DATA_KEY);
+            let rawDatasets = window.localStorage.getItem(DataProviderLocalStorage.DATASETS_DATA_KEY);
             if (rawDatasets !== null) {
                 return new Promise((resolve, reject) => {
                     let datasets;
@@ -110,7 +110,7 @@ export class DataManagerForPublicUse extends DataManager {
         return new Promise((resolve, reject) => {
             if (window.localStorage) {
                 let rawDatasets = Dataset.serializeDatasets(datasets);
-                window.localStorage.setItem(DataManagerForPublicUse.DATASETS_DATA_KEY, rawDatasets);
+                window.localStorage.setItem(DataProviderLocalStorage.DATASETS_DATA_KEY, rawDatasets);
                 resolve(null);
             } else {
                 reject("Local storage not supported");
@@ -120,7 +120,7 @@ export class DataManagerForPublicUse extends DataManager {
 
     discardDatasets() {
         if (window.localStorage) {
-            window.localStorage.removeItem(DataManagerForPublicUse.DATASETS_DATA_KEY);
+            window.localStorage.removeItem(DataProviderLocalStorage.DATASETS_DATA_KEY);
         }
     }
 }

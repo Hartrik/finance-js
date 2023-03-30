@@ -1,13 +1,13 @@
 import { Dataset } from "../Dataset.js";
-import { DataManager } from "../DataManager.js";
+import { DataProvider } from "../DataProvider.js";
 import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
 
 /**
  *
- * @version 2022-05-22
+ * @version 2023-03-30
  * @author Patrik Harag
  */
-export class DataManagerForPrivateUse extends DataManager {
+export class DataProviderAPI extends DataProvider {
     _context;
 
     constructor(context) {
