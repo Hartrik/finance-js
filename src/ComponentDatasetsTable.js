@@ -3,7 +3,7 @@ import {DomBuilder} from "./DomBuilder";
 
 /**
  *
- * @version 2022-05-22
+ * @version 2023-03-31
  * @author Patrik Harag
  */
 export class ComponentDatasetsTable {
@@ -53,7 +53,11 @@ export class ComponentDatasetsTable {
             this.#tableBody.append(row);
         });
 
-        let lastRow = DomBuilder.element('tr', null, [
+        this.#tableBody.append(this.#createLastRow());
+    }
+
+    #createLastRow() {
+        return DomBuilder.element('tr', null, [
             DomBuilder.element('td'),
             DomBuilder.element('td'),
             DomBuilder.element('td'),
@@ -63,6 +67,5 @@ export class ComponentDatasetsTable {
                 })
             ])
         ]);
-        this.#tableBody.append(lastRow);
     }
 }

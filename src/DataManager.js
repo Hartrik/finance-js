@@ -45,12 +45,22 @@ export class DataManager {
             this.updateFilters(rawJson, false, false);
         }).catch(e => {
             this.#handleError('Filters fetch failed', e);
+
+            const filters = Filters.load(Filters.DEFAULT);
+            for (let handler of this.#onFiltersUpdated) {
+                handler(filters);
+            }
         });
 
         this.#dataProvider.fetchDatasets().then((datasets) => {
             this.updateDatasets(datasets, false, false);
         }).catch(e => {
             this.#handleError('Datasets fetch failed', e);
+
+            const datasets = new Map();
+            for (let handler of this.#onDatasetsLoaded) {
+                handler(datasets);
+            }
         });
     }
 
