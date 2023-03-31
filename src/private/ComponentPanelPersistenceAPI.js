@@ -33,11 +33,12 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
             DomBuilder.Bootstrap.infoBlock([
                 DomBuilder.par(null, "Datasets and filters are saved automatically.")
             ]),
-            this._createForceUpdateButton()
+            this.#createForceUpdateButton(),
+            this.#createExportButton()
         ]);
     }
 
-    _createForceUpdateButton() {
+    #createForceUpdateButton() {
         return DomBuilder.button('Fetch statements from FIO', { class: "btn btn-secondary" }, (e) => {
             ServerPrivateAPI.updateServerData(this.#context).then(d => {
                 let dialog = new DomBuilder.BootstrapDialog();
@@ -59,5 +60,11 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
                 dialog.show(this.#context.dialogAnchor);
             });
         });
+    }
+
+    #createExportButton() {
+        return DomBuilder.button('Export', { class: 'btn btn-secondary' }, e => {
+            this.#dataManager.exportAll();
+        })
     }
 }

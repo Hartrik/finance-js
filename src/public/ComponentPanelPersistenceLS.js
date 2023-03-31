@@ -38,6 +38,9 @@ export class ComponentPanelPersistenceLS extends ComponentPanel {
             ]),
             DomBuilder.Bootstrap.switchButton('Save', this.#dataManager.isSavingEnabled(), checked => {
                 this.#dataManager.enableSaving(checked);
+            }),
+            DomBuilder.button('Export', { class: 'btn btn-secondary' }, e => {
+                this.#dataManager.exportAll();
             })
         ]);
     }

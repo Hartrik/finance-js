@@ -1,10 +1,11 @@
 import {Filters} from "./Filters.js";
 import {Dataset} from "./Dataset.js";
 import {DomBuilder} from "./DomBuilder.js";
+import FileSaver from 'file-saver';
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-03-31
  * @author Patrik Harag
  */
 export class DataManager {
@@ -21,8 +22,10 @@ export class DataManager {
     /** @type function(Map<string,Dataset>)[] */
     #onDatasetsLoaded = [];
 
+    /** @type Map<string,Dataset>|null */
     #lastDatasets = null;
-    #lastFilters = null;
+    /** @type string|null */
+    #lastRawFilters = null;
 
     #urlDatasetsEnabled;
     #savingEnabled;
@@ -82,8 +85,8 @@ export class DataManager {
     async enableSaving(enabled) {
         this.#savingEnabled = enabled;
         if (enabled) {
-            if (this.#lastFilters) {
-                await this.#dataProvider.storeFilters(this.#lastFilters).catch(e => {
+            if (this.#lastRawFilters) {
+                await this.#dataProvider.storeFilters(this.#lastRawFilters).catch(e => {
                     this.#handleError('Error while saving filters', e);
                 });
                 await this.#dataProvider.storeDatasets(this.#lastDatasets).catch(e => {
@@ -97,6 +100,12 @@ export class DataManager {
         }
     }
 
+    /**
+     *
+     * @param rawJson {string}
+     * @param showSuccessMessage {boolean}
+     * @param save {boolean}
+     */
     updateFilters(rawJson, showSuccessMessage, save) {
         function parseUnchecked(string) {
             let filtersJson;
@@ -135,7 +144,7 @@ export class DataManager {
             this.#handleError('Error while applying filters', e);
             return;
         }
-        this.#lastFilters = rawJson;
+        this.#lastRawFilters = rawJson;
 
         // save filters
         if (this.#savingEnabled && save) {
@@ -185,6 +194,25 @@ export class DataManager {
                     this.#handleInfo('Datasets updated', 'Datasets updated successfully');
                 }
             }
+        }
+    }
+
+    exportAll() {
+        try {
+            const json = {};
+            if (this.#lastRawFilters) {
+                json['filters'] = JSON.parse(this.#lastRawFilters);
+            }
+            if (this.#lastDatasets) {
+                json['datasets'] = JSON.parse(Dataset.serializeDatasets(this.#lastDatasets));
+            }
+            const jsonAsString = JSON.stringify(json, null, '  ');
+
+            const fileName = 'finance-js.json';
+            const blob = new Blob([ jsonAsString ], { type: "application/json;charset=utf-8" });
+            FileSaver.saveAs(blob, fileName);
+        } catch (e) {
+            this.#handleError('Export failed', e);
         }
     }
 
