@@ -35,10 +35,6 @@ export class ComponentAnalysisTable {
 
         let sum = 0;
         statements.sort(reversedComparator).forEach(statement => {
-            if (filter.filterFunc != null && !filter.filterFunc(statement)) {
-                return;
-            }
-
             sum += statement.value;
 
             let row = $(`<tr></tr>`);

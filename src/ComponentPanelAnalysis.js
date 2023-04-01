@@ -54,7 +54,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
     }
 
     createNode() {
-        return DomBuilder.div({ class: 'tab-analysis' }, [
+        return DomBuilder.div({ class: 'panel-analysis' }, [
             DomBuilder.div({ class: 'options-bar' }, [
                 this.componentGroupingOptions.createNode(),
                 this.componentFilterOptions.createNode()
@@ -71,17 +71,28 @@ export class ComponentPanelAnalysis extends ComponentPanel {
             let selectedFilter = this.componentFilterOptions.getFilter();
             let allFilters = this.componentFilterOptions.getAllFilters();
 
+            let filteredStatements = (selectedFilter.filterFunc != null)
+                    ? this.statements.filter(s => selectedFilter.filterFunc(s)) : this.statements;
+
             if (grouping !== null) {
-                let groupedStatements = grouping.createGroups(this.statements, selectedFilter);
+                let groupedStatements = grouping.createGroups(filteredStatements);
 
                 let tableComponent = new ComponentAnalysisTableGrouped(this.context, groupedStatements, allFilters, selectedFilter);
                 this.contentNode.append(tableComponent.createNode());
 
+                this.contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
+                    DomBuilder.span("transactions: " + filteredStatements.length + ", groups: " + groupedStatements.size)
+                ]));
+
                 let chartComponent = new ComponentAnalysisChartGrouped(this.context, groupedStatements, allFilters, selectedFilter);
                 this.contentNode.append(chartComponent.createNode());
             } else {
-                let tableComponent = new ComponentAnalysisTable(this.context, this.statements, allFilters, selectedFilter);
+                let tableComponent = new ComponentAnalysisTable(this.context, filteredStatements, allFilters, selectedFilter);
                 this.contentNode.append(tableComponent.createNode());
+
+                this.contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
+                    DomBuilder.span("transactions: " + filteredStatements.length)
+                ]));
             }
         }
     }

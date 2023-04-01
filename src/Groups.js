@@ -26,13 +26,9 @@ export class Grouping {
         throw 'Unsupported operation: not implemented';
     }
 
-    createGroups(statements, filter) {
+    createGroups(statements) {
         let groups = new Map()
         statements.forEach(statement => {
-            if (filter.filterFunc != null && !filter.filterFunc(statement)) {
-                return;
-            }
-
             let key = this._keyFunc(statement);
             let current = groups.get(key)
             if (current === undefined) {

@@ -35,6 +35,10 @@
     max-height: 200pt;
 }
 
+.panel-data .chart-panel canvas {
+    margin: 3em 0;
+}
+
 .dataset-form .cm-editor {
     height: 350pt;
 }
@@ -58,29 +62,37 @@
     margin: 0 0 16pt 0;
 }
 
+/* tab panel analysis */
+
+.panel-analysis .summary-panel {
+    font-size: small;
+    color: gray;
+    float: right;
+}
+
 /* options bar */
 
-.options-bar .grouping-component,
-.options-bar .filter-component select,
-.options-bar .filter-component input {
+.panel-analysis .options-bar .grouping-component,
+.panel-analysis .options-bar .filter-component select,
+.panel-analysis .options-bar .filter-component input {
     margin-bottom: 4pt;
     margin-right: 6pt;
     vertical-align: top;
 }
 
-.options-bar .filter-component {
+.panel-analysis .options-bar .filter-component {
     display: inline;
 }
 
-.options-bar .filter-component select {
+.panel-analysis .options-bar .filter-component select {
     margin-right: 6pt;
 }
 
-.options-bar .filter-component select.btn {
+.panel-analysis .options-bar .filter-component select.btn {
     text-align: left;
 }
 
-.options-bar .filter-component input {
+.panel-analysis .options-bar .filter-component input {
     width: 20em;
 }
 
@@ -126,7 +138,7 @@
 
 /* charts */
 
-.chart-panel canvas {
+.panel-analysis .chart-panel canvas {
     margin: 3em 0;
 }
 
