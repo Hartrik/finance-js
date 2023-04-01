@@ -1,47 +1,36 @@
-
+import { DomBuilder } from "./DomBuilder";
 import Chart from 'chart.js/auto';
 
 /**
  *
- * @version 2022-02-15
+ * @version 2023-04-01
  * @author Patrik Harag
  */
-export class ComponentAnalysisChart {
+export class ComponentAnalysisChartGrouped {
 
-    context;
+    #context;
 
-    panel = $(`<div class="chart-panel"></div>`);
+    #groupedStatements;
+    #selectedFilter;
+    #allFilters;
 
-    constructor(context) {
-        this.context = context;
+    constructor(context, groupedStatements, allFilters, selectedFilter) {
+        this.#context = context;
+        this.#groupedStatements = groupedStatements;
+        this.#allFilters = allFilters;
+        this.#selectedFilter = selectedFilter;
     }
 
     createNode() {
-        return this.panel;
-    }
-
-    refresh(statements, allFilters, filter) {
-        this.panel.empty();
-        this._build(statements, allFilters, filter);
-    }
-
-    refreshWithGrouping(groupedStatements, allFilters, filter) {
-        this.panel.empty();
-        if (groupedStatements.size > 3 && groupedStatements.size < 100) {
-            this._buildWithGroups(groupedStatements, allFilters, filter);
+        let container = DomBuilder.div({class: 'chart-panel'});
+        if (this.#groupedStatements.size > 3 && this.#groupedStatements.size < 100) {
+            this.#buildCashFlowChart(this.#groupedStatements, container);
+            this.#buildCashFlowAccChart(this.#groupedStatements, container);
         }
+        return container;
     }
 
-    _build(statements, filters, filter) {
-        // nothing
-    }
-
-    _buildWithGroups(groupedStatements, filters, filter) {
-        this._buildCashFlowChart(groupedStatements);
-        this._buildCashFlowAccChart(groupedStatements);
-    }
-
-    _buildCashFlowChart(groupedStatements) {
+    #buildCashFlowChart(groupedStatements, parent) {
         let expensesDataset = {
             label: "expenses",
             data: [],
@@ -119,11 +108,11 @@ export class ComponentAnalysisChart {
         };
 
         let canvas = $(`<canvas width="400" height="150"></canvas>`);
-        this.panel.append(canvas);
+        parent.append(canvas);
         const chart = new Chart(canvas, config);
     }
 
-    _buildCashFlowAccChart(groupedStatements) {
+    #buildCashFlowAccChart(groupedStatements, parent) {
         let valueDataset = {
             label: "value",
             data: [],
@@ -187,7 +176,7 @@ export class ComponentAnalysisChart {
         };
 
         let canvas = $(`<canvas width="400" height="150"></canvas>`);
-        this.panel.append(canvas);
+        parent.append(canvas);
         const chart = new Chart(canvas, config);
     }
 }

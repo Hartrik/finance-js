@@ -1,12 +1,14 @@
 import {ComponentPanel} from "./ComponentPanel.js";
 import {ComponentAnalysisTable} from "./ComponentAnalysisTable.js"
-import {ComponentAnalysisChart} from "./ComponentAnalysisChart.js";
+import {ComponentAnalysisTableGrouped} from "./ComponentAnalysisTableGrouped.js"
+import {ComponentAnalysisChartGrouped} from "./ComponentAnalysisChartGrouped.js";
 import {ComponentGroupingOptions} from "./ComponentGroupingOptions";
 import {ComponentFilterOptions} from "./ComponentFilterOptions";
+import {DomBuilder} from "./DomBuilder.js";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-04-01
  * @author Patrik Harag
  */
 export class ComponentPanelAnalysis extends ComponentPanel {
@@ -18,16 +20,13 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
     componentGroupingOptions;
     componentFilterOptions;
-    componentTable;
-    componentChart;
+    contentNode = DomBuilder.div();
 
     constructor(context, dataManager) {
         super();
         this.context = context;
         this.componentGroupingOptions = new ComponentGroupingOptions(context, () => this.refreshTable())
         this.componentFilterOptions = new ComponentFilterOptions(context, () => this.refreshTable())
-        this.componentTable = new ComponentAnalysisTable(context);
-        this.componentChart = new ComponentAnalysisChart(context);
 
         dataManager.addOnFiltersUpdated(filters => {
             this.componentFilterOptions.setFilters(filters);
@@ -55,27 +54,34 @@ export class ComponentPanelAnalysis extends ComponentPanel {
     }
 
     createNode() {
-        return $(`<div></div>`)
-            .append($(`<div class="options-bar"></div>`)
-                .append(this.componentGroupingOptions.createNode())
-                .append(this.componentFilterOptions.createNode()))
-            .append(this.componentTable.createNode())
-            .append(this.componentChart.createNode());
+        return DomBuilder.div({ class: 'tab-analysis' }, [
+            DomBuilder.div({ class: 'options-bar' }, [
+                this.componentGroupingOptions.createNode(),
+                this.componentFilterOptions.createNode()
+            ]),
+            this.contentNode
+        ]);
     }
 
     refreshTable() {
+        this.contentNode.empty();
+
         if (this.statements !== null && this.filters !== null) {
             let grouping = this.componentGroupingOptions.getGrouping();
-            let filter = this.componentFilterOptions.getFilter();
+            let selectedFilter = this.componentFilterOptions.getFilter();
             let allFilters = this.componentFilterOptions.getAllFilters();
 
             if (grouping !== null) {
-                let groupedStatements = grouping.createGroups(this.statements, filter);
-                this.componentTable.refreshWithGrouping(groupedStatements, allFilters, filter)
-                this.componentChart.refreshWithGrouping(groupedStatements, allFilters, filter)
+                let groupedStatements = grouping.createGroups(this.statements, selectedFilter);
+
+                let tableComponent = new ComponentAnalysisTableGrouped(this.context, groupedStatements, allFilters, selectedFilter);
+                this.contentNode.append(tableComponent.createNode());
+
+                let chartComponent = new ComponentAnalysisChartGrouped(this.context, groupedStatements, allFilters, selectedFilter);
+                this.contentNode.append(chartComponent.createNode());
             } else {
-                this.componentTable.refresh(this.statements, allFilters, filter)
-                this.componentChart.refresh(this.statements, allFilters, filter)
+                let tableComponent = new ComponentAnalysisTable(this.context, this.statements, allFilters, selectedFilter);
+                this.contentNode.append(tableComponent.createNode());
             }
         }
     }
