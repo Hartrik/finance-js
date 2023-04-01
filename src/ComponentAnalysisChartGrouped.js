@@ -14,6 +14,8 @@ export class ComponentAnalysisChartGrouped {
     #selectedFilter;
     #allFilters;
 
+    #container = DomBuilder.div({ class: 'chart-panel' });
+
     constructor(context, groupedStatements, allFilters, selectedFilter) {
         this.#context = context;
         this.#groupedStatements = groupedStatements;
@@ -22,12 +24,15 @@ export class ComponentAnalysisChartGrouped {
     }
 
     createNode() {
-        let container = DomBuilder.div({class: 'chart-panel'});
+        return this.#container;
+    }
+
+    // chart's parent needs to be in the dom
+    refresh() {
         if (this.#groupedStatements.size > 3 && this.#groupedStatements.size < 100) {
-            this.#buildCashFlowChart(this.#groupedStatements, container);
-            this.#buildCashFlowAccChart(this.#groupedStatements, container);
+            this.#buildCashFlowChart(this.#groupedStatements, this.#container);
+            this.#buildCashFlowAccChart(this.#groupedStatements, this.#container);
         }
-        return container;
     }
 
     #buildCashFlowChart(groupedStatements, parent) {

@@ -86,6 +86,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
                 let chartComponent = new ComponentAnalysisChartGrouped(this.context, groupedStatements, allFilters, selectedFilter);
                 this.contentNode.append(chartComponent.createNode());
+                chartComponent.refresh();
             } else {
                 let tableComponent = new ComponentAnalysisTable(this.context, filteredStatements, allFilters, selectedFilter);
                 this.contentNode.append(tableComponent.createNode());
