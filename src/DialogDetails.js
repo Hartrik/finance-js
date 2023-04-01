@@ -1,9 +1,10 @@
 import { Statements } from  "./Statements.js"
 import { Filters } from  "./Filters.js"
 import { Utils } from "./Utils.js"
+import { DomBuilder } from "./DomBuilder";
 
 /**
- * @version 2021-11-21
+ * @version 2023-04-01
  * @author Patrik Harag
  */
 export class DialogDetails {
@@ -23,18 +24,12 @@ export class DialogDetails {
     }
 
     show() {
-        let dialog = $(`<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
-            .append($(`<div class="modal-dialog modal-dialog-centered modal-lg"></div>`)
-                .append($(`<div class="modal-content"></div>`)
-                    .append($(`<div class="modal-header"><span>${Utils.esc(this.groupName)}</span></div>`))
-                    .append($(`<div class="modal-body"></div>`).append(this._buildBody()))
-                    .append($(`<div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>`))
-                ));
-
-        this.context.dialogAnchor.append(dialog);
-        dialog.modal('show');
+        let dialog = new DomBuilder.BootstrapDialog();
+        dialog.setHeaderContent(this.groupName);
+        dialog.setBodyContent(this._buildBody());
+        dialog.addCloseButton('Close');
+        dialog.setSizeLarge();
+        dialog.show(this.context.dialogAnchor);
     }
 
     _buildBody() {

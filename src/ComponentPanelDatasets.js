@@ -124,7 +124,8 @@ export class ComponentPanelDatasets extends ComponentPanel {
         if (dataset) {
             formComponent.setRawData(dataset.name, dataset.data, dataset.dataType);
         }
-        dialog.show(this.#context.dialogAnchor, 'modal-xl');
+        dialog.setSizeExtraLarge();
+        dialog.show(this.#context.dialogAnchor);
     }
 
     #onDatasetChanged(old, dataset) {

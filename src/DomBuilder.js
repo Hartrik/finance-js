@@ -238,13 +238,15 @@ DomBuilder.BootstrapTable = class {
 
 /**
  *
- * @version 2023-02-20
+ * @version 2023-04-01
  * @author Patrik Harag
  */
 DomBuilder.BootstrapDialog = class {
 
     // will be removed after close
     #persistent = false;
+
+    #additionalStyle = '';
 
     #headerNode = null;
     #bodyNode = null;
@@ -255,6 +257,14 @@ DomBuilder.BootstrapDialog = class {
 
     setPersistent(persistent) {
         this.#persistent = persistent;
+    }
+
+    setSizeLarge() {
+        this.#additionalStyle = 'modal-lg';
+    }
+
+    setSizeExtraLarge() {
+        this.#additionalStyle = 'modal-xl';
     }
 
     setHeaderContent(headerNode) {
@@ -287,10 +297,10 @@ DomBuilder.BootstrapDialog = class {
         this.#footerNodeChildren.push(button);
     }
 
-    show(dialogAnchor, additionalStyle='') {
+    show(dialogAnchor) {
         if (this.#dialog === null) {
             this.#dialog = $(`<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>`)
-                .append($(`<div class="modal-dialog modal-dialog-centered ${additionalStyle}"></div>`)
+                .append($(`<div class="modal-dialog modal-dialog-centered ${this.#additionalStyle}"></div>`)
                     .append($(`<div class="modal-content"></div>`)
                         .append($(`<div class="modal-header"></div>`).append(this.#headerNode))
                         .append($(`<div class="modal-body"></div>`).append(this.#bodyNode))
