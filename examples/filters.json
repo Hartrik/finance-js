@@ -19,20 +19,6 @@
     }
   },
   {
-    "name": "Income/School",
-    "color": "green",
-    "query": {
-      "value": {
-        "$gt": 0
-      },
-      "description": {
-        "$and": [
-          "stipendium"
-        ]
-      }
-    }
-  },
-  {
     "name": "Income/Others",
     "color": "green",
     "query": {
@@ -49,7 +35,7 @@
     }
   },
   {
-    "name": "Housing costs",
+    "name": "Housing",
     "color": "orange",
     "query": {
       "value": {
@@ -65,7 +51,7 @@
     }
   },
   {
-    "name": "Transport/Fuel",
+    "name": "Transp./Car",
     "color": "red",
     "query": {
       "description": {
@@ -74,7 +60,7 @@
     }
   },
   {
-    "name": "Transport/Public",
+    "name": "Transp./Public",
     "color": "red",
     "query": {
       "description": {

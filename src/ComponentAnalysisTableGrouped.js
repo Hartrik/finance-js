@@ -5,7 +5,7 @@ import { DomBuilder } from "./DomBuilder";
 
 /**
  *
- * @version 2023-04-01
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 export class ComponentAnalysisTableGrouped {
@@ -33,38 +33,35 @@ export class ComponentAnalysisTableGrouped {
 
     #build(groupedStatements, filters, filter) {
         let sum = 0;
-        Array.from(groupedStatements.keys()).sort().reverse().forEach(k => {
+        Array.from(groupedStatements.keys()).sort().forEach(k => {
             let group = groupedStatements.get(k);
             let expenses = group.statements.filter(s => s.value < 0).reduce((sum, s) => sum + s.value, 0);
             let receipts = group.statements.filter(s => s.value > 0).reduce((sum, s) => sum + s.value, 0);
             let result = receipts + expenses;
             sum += result;
 
-            let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(group.key)}</span></td>`));
-            row.append($(`<td class="value-cell positive">${Utils.esc(Utils.formatValue(receipts))}</td>`));
-            row.append($(`<td class="value-cell negative">${Utils.esc(Utils.formatValue(expenses))}</td>`));
-            row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(result))}</td>`));
-            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(sum))}</td>`));
+            let row = DomBuilder.element('tr');
+            row.append(DomBuilder.element('td', { class: 'group-key-cell' }, DomBuilder.span(group.key)));
+            row.append(DomBuilder.element('td', { class: `value-cell positive` }, Utils.createValue(receipts)));
+            row.append(DomBuilder.element('td', { class: `value-cell negative` }, Utils.createValue(expenses)));
+            row.append(DomBuilder.element('td', { class: `value-cell result ${result < 0 ? 'negative' : 'positive'}` },
+                    Utils.createValue(result)));
+            row.append(DomBuilder.element('td', { class: `value-cell result ${sum < 0 ? 'negative' : 'positive'}` },
+                    Utils.createValue(sum)));
 
             // details
-            let detailsButton = $(`<a href="javascript:void(0)" class="fa fa-eye"></a>`);
-            detailsButton.on("click", (e) => {
-                let dialog = new DialogDetails(this.#context, group.key, group.statements, filter, filters);
-                dialog.show();
-            });
+            row.append(DomBuilder.element('td', { class: 'options-cell' }, [
+                DomBuilder.link('', { class: 'fa fa-eye' }, () => {
+                    let dialog = new DialogDetails(this.#context, group.key, group.statements, filter, filters);
+                    dialog.show();
+                }),
+                DomBuilder.link('', { class: 'fa fa-pie-chart' }, () => {
+                    let dialog = new DialogStats(this.#context, group.key, group.statements, filters);
+                    dialog.show();
+                })
+            ]));
 
-            let statsButton = $(`<a href="javascript:void(0)" class="fa fa-pie-chart"></a>`);
-            statsButton.on("click", (e) => {
-                let dialog = new DialogStats(this.#context, group.key, group.statements, filters);
-                dialog.show();
-            });
-
-            row.append($(`<td class="options-cell"></td>`)
-                .append(detailsButton)
-                .append(statsButton));
-
-            this.#tableBuilder.addRow(row);
+            this.#tableBuilder.addRowBefore(row);
         })
     }
 }

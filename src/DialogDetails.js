@@ -1,5 +1,4 @@
 import { Statements } from  "./Statements.js"
-import { Filters } from  "./Filters.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
@@ -61,7 +60,7 @@ export class DialogDetails {
                 }
                 if (f.filterFunc != null && f.filterFunc(statement)) {
                     descriptionCell.prepend($(`<span> </span>`));
-                    descriptionCell.prepend(Filters.createFilterLabel(f));
+                    descriptionCell.prepend(Utils.createFilterLabel(f));
                 }
             }
         })

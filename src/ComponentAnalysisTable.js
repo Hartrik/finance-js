@@ -1,11 +1,10 @@
 import { Statements } from  "./Statements.js"
-import { Filters } from  "./Filters.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
 /**
  *
- * @version 2023-04-01
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 export class ComponentAnalysisTable {
@@ -31,18 +30,19 @@ export class ComponentAnalysisTable {
     }
 
     #build(statements, filters, filter) {
-        const reversedComparator = (a, b) => Statements.comparator(b, a);
-
         let sum = 0;
-        statements.sort(reversedComparator).forEach(statement => {
+        statements.sort(Statements.comparator).forEach(statement => {
             sum += statement.value;
 
-            let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(statement.date)}</span></td>`));
-            let descriptionCell = $(`<td><span>${Utils.esc(statement.description)}</span></td>`);
-            row.append(descriptionCell);
-            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(statement.value))}</td>`));
-            row.append($(`<td class="value-cell result ${sum < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(sum))}</td>`));
+            let descriptionCell;
+
+            let row = DomBuilder.element('tr');
+            row.append(DomBuilder.element('td', { class: 'group-key-cell' }, DomBuilder.span(statement.date)));
+            row.append(descriptionCell = DomBuilder.element('td', null, DomBuilder.span(statement.description)));
+            row.append(DomBuilder.element('td', { class: `value-cell ${statement.value < 0 ? 'negative' : 'positive'}` },
+                    Utils.createValue(statement.value)));
+            row.append(DomBuilder.element('td', { class: `value-cell result ${sum < 0 ? 'negative' : 'positive'}` },
+                    Utils.createValue(sum)));
 
             // filter labels
             for (const f of filters.values()) {
@@ -58,12 +58,12 @@ export class ComponentAnalysisTable {
                     continue;
                 }
                 if (f.filterFunc != null && f.filterFunc(statement)) {
-                    descriptionCell.prepend($(`<span> </span>`));
-                    descriptionCell.prepend(Filters.createFilterLabel(f));
+                    descriptionCell.prepend(DomBuilder.span(' '));
+                    descriptionCell.prepend(Utils.createFilterLabel(f));
                 }
             }
 
-            this.#tableBuilder.addRow(row);
+            this.#tableBuilder.addRowBefore(row);
         });
     }
 }

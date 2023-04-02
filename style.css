@@ -73,6 +73,7 @@
 /* options bar */
 
 .panel-analysis .options-bar .grouping-component,
+.panel-analysis .options-bar .ceil-component,
 .panel-analysis .options-bar .categories-component,
 .panel-analysis .options-bar .filter-component select,
 .panel-analysis .options-bar .filter-component input {
@@ -82,6 +83,7 @@
 }
 
 .panel-analysis .options-bar .filter-component,
+.panel-analysis .options-bar .ceil-component,
 .panel-analysis .options-bar .categories-component {
     display: inline;
 }
@@ -99,6 +101,10 @@
 }
 
 /* table */
+
+.panel-analysis .hide-value-floating-part .value-floating-part {
+    display: none;
+}
 
 .table td, .table th {
     padding: 0.25rem 0.75rem;

@@ -77,15 +77,15 @@ export class ComponentAnalysisTableCategories {
                 groupSum += categorySum;
 
                 row.append(DomBuilder.element('td', { class: `value-cell ${categorySum < 0 ? 'negative' : 'positive'}` },
-                        Utils.formatValue(categorySum)));
+                        Utils.createValue(categorySum)));
             });
 
             sum += groupSum;
 
             row.append(DomBuilder.element('td', { class: `value-cell result ${groupSum < 0 ? 'negative' : 'positive'}` },
-                    Utils.formatValue(groupSum)));
+                    Utils.createValue(groupSum)));
             row.append(DomBuilder.element('td', { class: `value-cell result ${sum < 0 ? 'negative' : 'positive'}` },
-                    Utils.formatValue(sum)));
+                    Utils.createValue(sum)));
 
             // details
             row.append(DomBuilder.element('td', { class: 'options-cell' }, [
@@ -120,7 +120,7 @@ export class ComponentAnalysisTableCategories {
         headerRow.append(DomBuilder.element('td'));
         Filters.groupByFilters([], filters, "Others").forEach((value, key) => {
             if (categoriesSums.has(key)) {
-                let label = (!value.others) ? Filters.createFilterLabel(value.filter) : value.filter.name;
+                let label = (!value.others) ? Utils.createFilterLabel(value.filter) : value.filter.name;
                 headerRow.append(DomBuilder.element('td', { class: 'label-cell' }, label));
             }
         });
@@ -137,7 +137,7 @@ export class ComponentAnalysisTableCategories {
             let v = categoriesSums.get(key);
             if (v !== undefined) {
                 footerRow.append(DomBuilder.element('td', {class: `value-cell result ${v < 0 ? 'negative' : 'positive'}`},
-                    Utils.formatValue(v)));
+                    Utils.createValue(v)));
             }
         });
         footerRow.append(DomBuilder.element('td'));

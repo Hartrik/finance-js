@@ -56,7 +56,7 @@ export class DialogStats {
             let row = $(`<tr></tr>`);
             row.append($(`<td></td>`).append((filterGroup.others)
                     ? $(`<span>${Utils.esc(filterGroup.filter.name)}</span>`)
-                    : Filters.createFilterLabel(filterGroup.filter)));
+                    : Utils.createFilterLabel(filterGroup.filter)));
             row.append($(`<td class="value-cell positive">${Utils.esc(Utils.formatValue(receipts))}</td>`));
             row.append($(`<td class="value-cell negative">${Utils.esc(Utils.formatValue(expenses))}</td>`));
             row.append($(`<td class="value-cell result ${result < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(result))}</td>`));

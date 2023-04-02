@@ -300,9 +300,4 @@ export class Filters {
         }
         return filterGroups;
     }
-
-    static createFilterLabel(f) {
-        let color = f.color != null ? `style="background-color: ${Utils.esc(f.color)};"` : '';
-        return $(`<span class="badge badge-info" ${color}>${Utils.esc(f.name)}</span>`);
-    }
 }

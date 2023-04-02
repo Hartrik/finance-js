@@ -5,6 +5,7 @@ import {ComponentAnalysisTableCategories} from "./ComponentAnalysisTableCategori
 import {ComponentAnalysisChartGrouped} from "./ComponentAnalysisChartGrouped.js";
 import {ComponentOptionsGrouping} from "./ComponentOptionsGrouping";
 import {ComponentOptionsCategories} from "./ComponentOptionsCategories";
+import {ComponentOptionsCeil} from "./ComponentOptionsCeil";
 import {ComponentOptionsFilter} from "./ComponentOptionsFilter";
 import {DomBuilder} from "./DomBuilder.js";
 
@@ -22,6 +23,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
     #componentGroupingOptions;
     #componentCategoriesOptions;
+    #componentCeilOptions;
     #componentFilterOptions;
     #contentNode = DomBuilder.div();
 
@@ -32,8 +34,9 @@ export class ComponentPanelAnalysis extends ComponentPanel {
             this.#componentCategoriesOptions.setDisabled(this.#componentGroupingOptions.getGrouping() === null);
             this.refreshTable();
         })
-        this.#componentCategoriesOptions = new ComponentOptionsCategories((selected) => this.refreshTable())
-        this.#componentFilterOptions = new ComponentOptionsFilter(() => this.refreshTable())
+        this.#componentCategoriesOptions = new ComponentOptionsCategories((selected) => this.refreshTable());
+        this.#componentCeilOptions = new ComponentOptionsCeil(() => this.#refreshCeiling());
+        this.#componentFilterOptions = new ComponentOptionsFilter(() => this.refreshTable());
 
         dataManager.addOnFiltersUpdated(filters => {
             this.#componentFilterOptions.setFilters(filters);
@@ -65,6 +68,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
             DomBuilder.div({ class: 'options-bar' }, [
                 this.#componentGroupingOptions.createNode(),
                 this.#componentCategoriesOptions.createNode(),
+                this.#componentCeilOptions.createNode(),
                 this.#componentFilterOptions.createNode()
             ]),
             this.#contentNode
@@ -72,6 +76,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
     }
 
     refreshTable() {
+        this.#refreshCeiling();
         this.#contentNode.empty();
 
         if (this.#statements !== null && this.#filters !== null) {
@@ -106,6 +111,15 @@ export class ComponentPanelAnalysis extends ComponentPanel {
                     DomBuilder.span("transactions: " + filteredStatements.length)
                 ]));
             }
+        }
+    }
+
+    #refreshCeiling() {
+        let selected = this.#componentCeilOptions.isSelected();
+        if (selected) {
+            this.#contentNode.removeClass('hide-value-floating-part');
+        } else {
+            this.#contentNode.addClass('hide-value-floating-part');
         }
     }
 }
