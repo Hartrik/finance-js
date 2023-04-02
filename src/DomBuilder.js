@@ -218,7 +218,7 @@ DomBuilder.Bootstrap = class {
 
 /**
  *
- * @version 2022-03-18
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 DomBuilder.BootstrapTable = class {
@@ -227,6 +227,10 @@ DomBuilder.BootstrapTable = class {
 
     addRow(row) {
         this.#tableBody.append(row);
+    }
+
+    addRowBefore(row) {
+        this.#tableBody.prepend(row);
     }
 
     createNode() {

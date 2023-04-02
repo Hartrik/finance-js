@@ -100,17 +100,17 @@
 
 /* table */
 
-.table th {
-    font-weight: normal;
-    text-align: right;
-}
-
 .table td, .table th {
     padding: 0.25rem 0.75rem;
 }
 
 .table td.group-key-cell span {
     white-space: nowrap;
+}
+
+.table td.label-cell {
+    font-weight: normal;
+    text-align: right;
 }
 
 .table td.value-cell {

@@ -34,7 +34,7 @@ export class ComponentAnalysisTableCategories {
 
     #build(groupedStatements, filters, filter) {
         // prepare row data
-        let rowData = Array.from(groupedStatements.keys()).sort().reverse().map(k => {
+        let rowData = Array.from(groupedStatements.keys()).sort().map(k => {
             let group = groupedStatements.get(k);
             let categories = Filters.groupByFilters(group.statements, filters, "Others");
             return {
@@ -54,20 +54,6 @@ export class ComponentAnalysisTableCategories {
                 }
             });
         });
-
-        // render table header
-        let headerRow = DomBuilder.element('tr');
-        headerRow.append(DomBuilder.element('th'));
-        Filters.groupByFilters([], filters, "Others").forEach((value, key) => {
-            if (categoriesSums.has(key)) {
-                let label = (!value.others) ? Filters.createFilterLabel(value.filter) : value.filter.name;
-                headerRow.append(DomBuilder.element('th', null, label));
-            }
-        });
-        headerRow.append(DomBuilder.element('th'));
-        headerRow.append(DomBuilder.element('th'));
-        headerRow.append(DomBuilder.element('th'));
-        this.#tableBuilder.addRow(headerRow);
 
         // render table rows
         let sum = 0;
@@ -90,7 +76,7 @@ export class ComponentAnalysisTableCategories {
                 });
                 groupSum += categorySum;
 
-                row.append(DomBuilder.element('td', { class: `value-cell result ${categorySum < 0 ? 'negative' : 'positive'}` },
+                row.append(DomBuilder.element('td', { class: `value-cell ${categorySum < 0 ? 'negative' : 'positive'}` },
                         Utils.formatValue(categorySum)));
             });
 
@@ -113,22 +99,50 @@ export class ComponentAnalysisTableCategories {
                 })
             ]));
 
-            this.#tableBuilder.addRow(row);
+            this.#tableBuilder.addRowBefore(row);
         });
 
+        // render table header
+        let headerRow = this.#createTableRowWithLabels(filters, categoriesSums);
+        this.#tableBuilder.addRowBefore(headerRow);
+
         // render table footer
+        if (groupedStatements.size > 10) {
+            let footerRow = this.#createTableRowWithLabels(filters, categoriesSums);
+            this.#tableBuilder.addRow(footerRow);
+        }
+        let footerRow = this.#createTableRowWithSums(filters, categoriesSums);
+        this.#tableBuilder.addRow(footerRow);
+    }
+
+    #createTableRowWithLabels(filters, categoriesSums) {
+        let headerRow = DomBuilder.element('tr');
+        headerRow.append(DomBuilder.element('td'));
+        Filters.groupByFilters([], filters, "Others").forEach((value, key) => {
+            if (categoriesSums.has(key)) {
+                let label = (!value.others) ? Filters.createFilterLabel(value.filter) : value.filter.name;
+                headerRow.append(DomBuilder.element('td', { class: 'label-cell' }, label));
+            }
+        });
+        headerRow.append(DomBuilder.element('td'));
+        headerRow.append(DomBuilder.element('td'));
+        headerRow.append(DomBuilder.element('td'));
+        return headerRow;
+    }
+
+    #createTableRowWithSums(filters, categoriesSums) {
         let footerRow = DomBuilder.element('tr');
         footerRow.append(DomBuilder.element('td'));
         Filters.groupByFilters([], filters, "Others").forEach((value, key) => {
             let v = categoriesSums.get(key);
             if (v !== undefined) {
-                footerRow.append(DomBuilder.element('td', { class: `value-cell result ${v < 0 ? 'negative' : 'positive'}` },
-                        Utils.formatValue(v)));
+                footerRow.append(DomBuilder.element('td', {class: `value-cell result ${v < 0 ? 'negative' : 'positive'}`},
+                    Utils.formatValue(v)));
             }
         });
         footerRow.append(DomBuilder.element('td'));
         footerRow.append(DomBuilder.element('td'));
         footerRow.append(DomBuilder.element('td'));
-        this.#tableBuilder.addRow(footerRow);
+        return footerRow;
     }
 }
