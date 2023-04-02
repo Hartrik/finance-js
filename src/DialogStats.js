@@ -4,7 +4,7 @@ import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
 /**
- * @version 2023-04-01
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 export class DialogStats {
@@ -31,41 +31,7 @@ export class DialogStats {
     }
 
     _buildBody() {
-        // pre-populate groups - because of order...
-        let filterGroups = new Map();
-        const othersFilter = {
-            name: "Others"
-        };
-        for (let filter of this.filters.values()) {
-            filterGroups.set(filter.name, {
-                filter: filter,
-                statements: []
-            });
-        }
-        filterGroups.set(othersFilter.name, {
-            filter: othersFilter,
-            statements: []
-        });
-
-        // fill groups
-        for (let statement of this.statements) {
-            let matchedFilterName = null;
-            for (let filter of this.filters.values()) {
-                if (filter.hideInTable != null && filter.hideInTable) {
-                    continue;
-                }
-                if (filter.subFilters != null) {
-                    continue;
-                }
-                if (filter.filterFunc != null && filter.filterFunc(statement)) {
-                    matchedFilterName = filter.name;
-                    break;
-                }
-            }
-
-            let current = filterGroups.get((matchedFilterName != null) ? matchedFilterName : othersFilter.name)
-            current.statements.push(statement);
-        }
+        let filterGroups = Filters.groupByFilters(this.statements, this.filters, "Others");
 
         // build table
         let tableBody;
@@ -88,7 +54,7 @@ export class DialogStats {
             totalReceipts += receipts;
 
             let row = $(`<tr></tr>`);
-            row.append($(`<td></td>`).append((filterGroup.filter.name === othersFilter.name)
+            row.append($(`<td></td>`).append((filterGroup.others)
                     ? $(`<span>${Utils.esc(filterGroup.filter.name)}</span>`)
                     : Filters.createFilterLabel(filterGroup.filter)));
             row.append($(`<td class="value-cell positive">${Utils.esc(Utils.formatValue(receipts))}</td>`));

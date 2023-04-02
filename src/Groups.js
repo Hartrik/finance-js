@@ -1,6 +1,12 @@
 import { Utils } from "./Utils.js"
 
 /**
+ * @typedef {Object} GroupedStatements
+ * @property {string} key
+ * @property {Statement[]} statements
+ */
+
+/**
  * @version 2022-05-22
  * @author Patrik Harag
  */
@@ -26,6 +32,11 @@ export class Grouping {
         throw 'Unsupported operation: not implemented';
     }
 
+    /**
+     *
+     * @param statements {Statement[]}
+     * @returns {Map<string, GroupedStatements>}
+     */
     createGroups(statements) {
         let groups = new Map()
         statements.forEach(statement => {

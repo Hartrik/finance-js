@@ -2,19 +2,17 @@ import {Groups} from "./Groups";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-04-02
  * @author Patrik Harag
  */
-export class ComponentGroupingOptions {
+export class ComponentOptionsGrouping {
 
-    context;
-    refreshFunction;
-    grouping;
+    #refreshFunction;
+    #grouping;
 
-    constructor(context, refreshFunction) {
-        this.context = context;
-        this.refreshFunction = refreshFunction;
-        this.grouping = Groups.GROUP_BY_MONTH;
+    constructor(refreshFunction) {
+        this.#refreshFunction = refreshFunction;
+        this.#grouping = Groups.GROUP_BY_MONTH;
     }
 
     createNode() {
@@ -39,30 +37,30 @@ export class ComponentGroupingOptions {
                 .text("Σ").append(allButton = $(`<input type="radio" name="options" id="grouping-all">`)));
 
         noGroupingButton.change(() => {
-            this.grouping = Groups.NO_GROUPING;
-            this.refreshFunction();
+            this.#grouping = Groups.NO_GROUPING;
+            this.#refreshFunction();
         });
         weekButton.change(() => {
-            this.grouping = Groups.GROUP_BY_WEEK;
-            this.refreshFunction();
+            this.#grouping = Groups.GROUP_BY_WEEK;
+            this.#refreshFunction();
         });
         monthButton.change(() => {
-            this.grouping = Groups.GROUP_BY_MONTH;
-            this.refreshFunction();
+            this.#grouping = Groups.GROUP_BY_MONTH;
+            this.#refreshFunction();
         });
         yearButton.change(() => {
-            this.grouping = Groups.GROUP_BY_YEAR;
-            this.refreshFunction();
+            this.#grouping = Groups.GROUP_BY_YEAR;
+            this.#refreshFunction();
         });
         allButton.change(() => {
-            this.grouping = Groups.GROUP_ALL;
-            this.refreshFunction();
+            this.#grouping = Groups.GROUP_ALL;
+            this.#refreshFunction();
         });
 
         return dom;
     }
 
     getGrouping() {
-        return this.grouping;
+        return this.#grouping;
     }
 }

@@ -1,5 +1,12 @@
 
 /**
+ * @typedef {Object} Statement
+ * @property {string} date
+ * @property {string} description
+ * @property {number} value
+ */
+
+/**
  *
  * @version 2022-02-19
  * @author Patrik Harag

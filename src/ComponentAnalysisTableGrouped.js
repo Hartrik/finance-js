@@ -12,6 +12,7 @@ export class ComponentAnalysisTableGrouped {
 
     #context;
 
+    /** @typedef Map<string,GroupedStatements> */
     #groupedStatements;
     #selectedFilter;
     #allFilters;

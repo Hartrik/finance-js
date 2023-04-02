@@ -73,6 +73,7 @@
 /* options bar */
 
 .panel-analysis .options-bar .grouping-component,
+.panel-analysis .options-bar .categories-component,
 .panel-analysis .options-bar .filter-component select,
 .panel-analysis .options-bar .filter-component input {
     margin-bottom: 4pt;
@@ -80,7 +81,8 @@
     vertical-align: top;
 }
 
-.panel-analysis .options-bar .filter-component {
+.panel-analysis .options-bar .filter-component,
+.panel-analysis .options-bar .categories-component {
     display: inline;
 }
 
@@ -98,8 +100,17 @@
 
 /* table */
 
+.table th {
+    font-weight: normal;
+    text-align: right;
+}
+
 .table td, .table th {
     padding: 0.25rem 0.75rem;
+}
+
+.table td.group-key-cell span {
+    white-space: nowrap;
 }
 
 .table td.value-cell {

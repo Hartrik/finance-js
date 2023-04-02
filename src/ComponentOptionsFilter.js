@@ -2,31 +2,29 @@ import {Filters} from "./Filters";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-04-02
  * @author Patrik Harag
  */
-export class ComponentFilterOptions {
+export class ComponentOptionsFilter {
 
-    context;
-    refreshFunction;
+    #refreshFunction;
 
-    filters;
+    #filters;
 
-    select;
-    input;
-    handlers;
+    #inputSelect;
+    #inputSearch;
+    #handlers;
 
-    constructor(context, refreshFunction) {
-        this.context = context;
-        this.refreshFunction = refreshFunction;
-        this.handlers = [];
+    constructor(refreshFunction) {
+        this.#refreshFunction = refreshFunction;
+        this.#handlers = [];
     }
 
     _createSelect() {
         let select = $(`<select class="btn btn-secondary"></select>`);
 
         select.on('change', () => {
-            this.refreshFunction();
+            this.#refreshFunction();
         });
 
         return select;
@@ -39,14 +37,14 @@ export class ComponentFilterOptions {
         input.on('keydown', (e) => {
             if (e.key === "Escape") {
                 clearTimeout(keyupTimeoutID);
-                this.input.val('');
-                this.refreshFunction();
+                this.#inputSearch.val('');
+                this.#refreshFunction();
             }
         });
         input.on('input', (e) => {
             clearTimeout(keyupTimeoutID);
             keyupTimeoutID = setTimeout(() => {
-                this.refreshFunction();
+                this.#refreshFunction();
             }, 500);
         });
 
@@ -54,37 +52,37 @@ export class ComponentFilterOptions {
     }
 
     createNode() {
-        this.select = this._createSelect();
-        this.input = this._createSearchBox();
+        this.#inputSelect = this._createSelect();
+        this.#inputSearch = this._createSearchBox();
         return $(`<form class="filter-component form-inline" action="javascript:void(0);"></form>`)
-            .append(this.select)
-            .append(this.input);
+            .append(this.#inputSelect)
+            .append(this.#inputSearch);
     }
 
     setFilters(filters) {
-        this.filters = filters;
-        this.select.empty();
-        this.handlers = [];
+        this.#filters = filters;
+        this.#inputSelect.empty();
+        this.#handlers = [];
 
         filters.forEach((filter, name) => {
-            this._addHandler(this.select, name, filter)
+            this.#addHandler(this.#inputSelect, name, filter)
         });
     }
 
-    _addHandler(select, name, filter) {
-        select.append($(`<option></option>`).text(name).val(this.handlers.length));
-        this.handlers.push(filter);
+    #addHandler(select, name, filter) {
+        select.append($(`<option></option>`).text(name).val(this.#handlers.length));
+        this.#handlers.push(filter);
     }
 
     getAllFilters() {
-        return this.filters;
+        return this.#filters;
     }
 
     getFilter() {
-        let selected = this.select.val();
-        let filter = this.handlers[selected];
+        let selected = this.#inputSelect.val();
+        let filter = this.#handlers[selected];
 
-        let search = this.input.val();
+        let search = this.#inputSearch.val();
         if (search === '') {
             return filter;
         } else {

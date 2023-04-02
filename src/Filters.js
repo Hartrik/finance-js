@@ -10,7 +10,7 @@ import { Utils } from "./Utils.js"
  * Functions related to filters.
  * Filter query language is inspired by MongoDB query language.
  *
- * @version 2022-11-30
+ * @version 2023-04-02
  * @author Patrik Harag
  */
 export class Filters {
@@ -258,6 +258,47 @@ export class Filters {
                 f.filterFunc(testStatement);
             }
         });
+    }
+
+    static groupByFilters(statements, filters, noFilterGroupName) {
+        // pre-populate groups - because of order...
+        let filterGroups = new Map();
+        const othersFilter = {
+            name: noFilterGroupName
+        };
+        for (let filter of filters.values()) {
+            filterGroups.set(filter.name, {
+                filter: filter,
+                others: false,
+                statements: []
+            });
+        }
+        filterGroups.set(othersFilter.name, {
+            filter: othersFilter,
+            others: true,
+            statements: []
+        });
+
+        // fill groups
+        for (let statement of statements) {
+            let matchedFilterName = null;
+            for (let filter of filters.values()) {
+                if (filter.hideInTable != null && filter.hideInTable) {
+                    continue;
+                }
+                if (filter.subFilters != null) {
+                    continue;
+                }
+                if (filter.filterFunc != null && filter.filterFunc(statement)) {
+                    matchedFilterName = filter.name;
+                    break;
+                }
+            }
+
+            let current = filterGroups.get((matchedFilterName != null) ? matchedFilterName : othersFilter.name)
+            current.statements.push(statement);
+        }
+        return filterGroups;
     }
 
     static createFilterLabel(f) {
