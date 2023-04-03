@@ -55,7 +55,7 @@ export class ComponentAnalysisTableGrouped {
                     let dialog = new DialogDetails(this.#context, group.key, group.statements, filter, filters);
                     dialog.show();
                 }),
-                DomBuilder.link('', { class: 'fa fa-pie-chart' }, () => {
+                DomBuilder.link('', { class: 'fa fa-th' }, () => {
                     let dialog = new DialogStats(this.#context, group.key, group.statements, filters);
                     dialog.show();
                 })
