@@ -88,13 +88,14 @@ export class ComponentAnalysisTableCategories {
                     Utils.createValue(sum)));
 
             // details
+            let path = (filter.filterFunc === undefined) ? '' : filter.name + ' / ';
             row.append(DomBuilder.element('td', { class: 'options-cell' }, [
                 DomBuilder.link('', { class: 'fa fa-eye' }, () => {
-                    let dialog = new DialogDetails(this.#context, group.key, group.statements, filter, filters);
+                    let dialog = new DialogDetails(this.#context, path + group.key, group.statements, filter, filters);
                     dialog.show();
                 }),
                 DomBuilder.link('', { class: 'fa fa-th' }, () => {
-                    let dialog = new DialogStats(this.#context, group.key, group.statements, filters);
+                    let dialog = new DialogStats(this.#context, path + group.key, group.statements, filters);
                     dialog.show();
                 })
             ]));
