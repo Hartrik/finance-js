@@ -2,23 +2,30 @@ import {DomBuilder} from "./DomBuilder";
 
 /**
  *
- * @version 2023-04-02
+ * @version 2023-04-03
  * @author Patrik Harag
  */
 export class ComponentOptionsCategories {
 
     #refreshFunction;
+    #initialEnableCategories;
+
     #inputCheckBox;
     #node;
 
-    constructor(refreshFunction) {
+    constructor(enableCategories, refreshFunction) {
+        this.#initialEnableCategories = enableCategories;
         this.#refreshFunction = refreshFunction;
     }
 
     createNode() {
         this.#node = DomBuilder.div({ class: 'categories-component btn-group-toggle', 'data-toggle': 'buttons' }, [
             DomBuilder.element('label', { class: 'btn btn-secondary' }, [
-                this.#inputCheckBox = DomBuilder.element('input', { type: 'checkbox', class: 'form-control' }),
+                this.#inputCheckBox = DomBuilder.element('input', {
+                    type: 'checkbox',
+                    checked: this.#initialEnableCategories,
+                    class: 'form-control'
+                }),
                 DomBuilder.element('i', { class: 'fa fa-th' })
             ])
         ]);

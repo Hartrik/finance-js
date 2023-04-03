@@ -27,14 +27,14 @@ export class ComponentPanelAnalysis extends ComponentPanel {
     #componentFilterOptions;
     #contentNode = DomBuilder.div();
 
-    constructor(context, dataManager) {
+    constructor(context, dataManager, enableCategories) {
         super();
         this.#context = context;
         this.#componentGroupingOptions = new ComponentOptionsGrouping(() => {
             this.#componentCategoriesOptions.setDisabled(this.#componentGroupingOptions.getGrouping() === null);
             this.refreshTable();
         })
-        this.#componentCategoriesOptions = new ComponentOptionsCategories((selected) => this.refreshTable());
+        this.#componentCategoriesOptions = new ComponentOptionsCategories(enableCategories, (selected) => this.refreshTable());
         this.#componentCeilOptions = new ComponentOptionsCeil(() => this.#refreshCeiling());
         this.#componentFilterOptions = new ComponentOptionsFilter(() => this.refreshTable());
 

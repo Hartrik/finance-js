@@ -54,7 +54,7 @@ class Builder {
         let componentTabbedPanel = new ComponentTabbedPanel();
         componentTabbedPanel.addPanel(new ComponentPanelDatasets(context, dataManager));
         componentTabbedPanel.addPanel(new ComponentPanelFilters(context, dataManager));
-        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager, false));
         componentTabbedPanel.addPanel(new ComponentPanelPersistenceAPI(context, dataManager));
 
         let node = componentTabbedPanel.createNode();

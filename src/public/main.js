@@ -61,7 +61,7 @@ class Builder {
         let componentTabbedPanel = new ComponentTabbedPanel();
         componentTabbedPanel.addPanel(new ComponentPanelDatasets(context, dataManager));
         componentTabbedPanel.addPanel(new ComponentPanelFilters(context, dataManager));
-        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager));
+        componentTabbedPanel.addPanel(new ComponentPanelAnalysis(context, dataManager, window.innerWidth >= 1200));
         componentTabbedPanel.addPanel(new ComponentPanelPersistenceLS(context, dataManager));
 
         let node = componentTabbedPanel.createNode();
