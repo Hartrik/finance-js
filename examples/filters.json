@@ -15,7 +15,7 @@
       "value": {
         "$gt": 0
       },
-      "description": "Mzda"
+      "description": "Salary"
     }
   },
   {
@@ -27,9 +27,7 @@
       },
       "description": {
         "$or": [
-          "[D]",
-          "[P]",
-          "Vrácení přeplatku daně z příjmu FO"
+          "Interest"
         ]
       }
     }
@@ -43,9 +41,11 @@
       },
       "description": {
         "$or": [
-          "Nájem",
-          "Záloha na elektřinu",
-          "Záloha na plyn"
+          "Rent",
+          "Electricity",
+          "Gas",
+          "Water",
+          "Internet"
         ]
       }
     }
@@ -55,7 +55,7 @@
     "color": "red",
     "query": {
       "description": {
-        "$regex": "(benzín|nafta|benzina)"
+        "$regex": "(oil|benzina)"
       }
     }
   },
@@ -79,24 +79,7 @@
       },
       "description": {
         "$or": [
-          "oběd",
           "restaurace"
-        ]
-      }
-    }
-  },
-  {
-    "name": "Clothes",
-    "color": "blue",
-    "query": {
-      "description": {
-        "$or": [
-          "NEW YORKER",
-          "H & M",
-          "Deichmann-Obuv",
-          "CCC",
-          "Sportisimo",
-          "DECATHLON"
         ]
       }
     }
@@ -107,8 +90,8 @@
     "query": {
       "description": {
         "$or": [
-          "převod -",
-          "vklad -",
+          "transfer",
+          "deposit",
           "binance"
         ]
       }
