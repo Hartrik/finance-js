@@ -8,10 +8,11 @@ import {ComponentOptionsCategories} from "./ComponentOptionsCategories";
 import {ComponentOptionsCeil} from "./ComponentOptionsCeil";
 import {ComponentOptionsFilter} from "./ComponentOptionsFilter";
 import {DomBuilder} from "./DomBuilder.js";
+import {Analytics} from "./Analytics";
 
 /**
  *
- * @version 2023-04-02
+ * @version 2023-04-04
  * @author Patrik Harag
  */
 export class ComponentPanelAnalysis extends ComponentPanel {
@@ -111,6 +112,8 @@ export class ComponentPanelAnalysis extends ComponentPanel {
                     DomBuilder.span("transactions: " + filteredStatements.length)
                 ]));
             }
+
+            Analytics.triggerFeatureUsed(Analytics.FEATURE_APP_INITIALIZED);
         }
     }
 
