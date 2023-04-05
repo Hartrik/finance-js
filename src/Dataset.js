@@ -2,7 +2,7 @@ import { Parsers } from "./Parsers.js";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-04-05
  * @author Patrik Harag
  */
 export class Dataset {
@@ -52,7 +52,7 @@ export class Dataset {
                     dataType: 'text',
                     success: (result) => {
                         try {
-                            this.statements = this._parse(result);
+                            this.statements = this.#parse(result);
                         } catch (e) {
                             this.exception = e;
                             this.statements = [];
@@ -68,7 +68,7 @@ export class Dataset {
             // parse only
             return new Promise((resolve, reject) => {
                 try {
-                    this.statements = this._parse(this.data);
+                    this.statements = this.#parse(this.data);
                 } catch (e) {
                     this.exception = e;
                     this.statements = [];
@@ -80,16 +80,54 @@ export class Dataset {
         }
     }
 
-    _parse(data) {
+    #parse(data) {
         let parser = Parsers.resolveParserByKey(this.dataType);
         let statements = parser.parse(data);
 
-        // append dataset parameter
-        statements.forEach(s => {
-           s.dataset = this.name;
-        });
+        let copy = [];
+        for (let statement of statements) {
+            // append dataset parameter
+           statement.dataset = this.name;
 
-        return statements;
+            if (statement.description.includes(';;;')) {
+                // process multi-statement
+                copy.push(...this.#splitMultiStatement(statement));
+            } else {
+                copy.push(statement);
+            }
+        }
+        return copy;
+    }
+
+    #splitMultiStatement(statement) {
+        // 100 - platba za zboží ;;; 200 - uplatek
+
+        let result = [];
+        for (let part of statement.description.split(';;;')) {
+            part = part.trim();
+            if (part) {
+                let separatorPos = part.indexOf('-');
+                if (separatorPos && separatorPos + 1 < part.length) {
+                    const numberPart = part.substring(0, separatorPos).trim();
+                    const descriptionPart = part.substring(separatorPos + 1).trim();
+                    let subStatement = Object.assign({}, statement);
+                    subStatement.description = descriptionPart;
+                    subStatement.value = Number.parseFloat(numberPart);
+                    subStatement.origin = statement;
+                    result.push(subStatement);
+                } else {
+                    return statement;  // wrong format
+                }
+            }
+        }
+
+        // test
+        let sum = result.reduce((sum, s) => sum + s.value, 0);
+        if (sum !== statement.value) {
+            throw 'Multi statement checksum failed: ' + JSON.stringify(statement);
+        }
+
+        return result;
     }
 
     static #isValidHttpUrl(string) {

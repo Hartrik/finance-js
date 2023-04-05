@@ -92,7 +92,7 @@ export class Parsers {
     }
 
     static parseCSV_fio(csv) {
-        csv = csv.trimLeft();
+        csv = csv.trimStart();
         if (csv.startsWith('"accountId";') || csv.startsWith('accountId;')) {
             // note: there are also some minor differences between CSV obtained
             //   from internet banking and from bank API

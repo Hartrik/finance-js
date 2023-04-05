@@ -4,6 +4,7 @@
  * @property {string} date
  * @property {string} description
  * @property {number} value
+ * @property {Statement} origin
  */
 
 /**
