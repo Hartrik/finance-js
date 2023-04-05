@@ -3,6 +3,7 @@ import {ComponentAnalysisTable} from "./ComponentAnalysisTable.js"
 import {ComponentAnalysisTableGrouped} from "./ComponentAnalysisTableGrouped.js"
 import {ComponentAnalysisTableCategories} from "./ComponentAnalysisTableCategories.js";
 import {ComponentAnalysisChartGrouped} from "./ComponentAnalysisChartGrouped.js";
+import {ComponentAnalysisChartCategories} from "./ComponentAnalysisChartCategories";
 import {ComponentOptionsGrouping} from "./ComponentOptionsGrouping";
 import {ComponentOptionsCategories} from "./ComponentOptionsCategories";
 import {ComponentOptionsCeil} from "./ComponentOptionsCeil";
@@ -100,6 +101,12 @@ export class ComponentPanelAnalysis extends ComponentPanel {
                 this.#contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
                     DomBuilder.span("transactions: " + filteredStatements.length + ", groups: " + groupedStatements.size)
                 ]));
+
+                if (showCategories) {
+                    let chartComponent = new ComponentAnalysisChartCategories(this.#context, groupedStatements, allFilters, selectedFilter);
+                    this.#contentNode.append(chartComponent.createNode());
+                    chartComponent.refresh();
+                }
 
                 let chartComponent = new ComponentAnalysisChartGrouped(this.#context, groupedStatements, allFilters, selectedFilter);
                 this.#contentNode.append(chartComponent.createNode());

@@ -2,15 +2,16 @@ import { Utils } from "./Utils.js"
 
 /**
  * @typedef {Object} Filter
- * @property {string} query
- * @property {function} filterFunc
+ * @property {string} query query DSL
+ * @property {string|undefined} color hex color
+ * @property {function} filterFunc filtering function (processed query)
  */
 
 /**
  * Functions related to filters.
  * Filter query language is inspired by MongoDB query language.
  *
- * @version 2023-04-02
+ * @version 2023-04-04
  * @author Patrik Harag
  */
 export class Filters {
@@ -158,7 +159,13 @@ export class Filters {
             if (value.query != null) {
                 value.filterFunc = Filters.compile(value.query);
             }
-            loadedFilters.set(value.name, value)
+            if (value.color != null) {
+                value.color = Utils.colourNameToHex(value.color);
+                if (!Utils.isHexColor(value.color)) {
+                    throw 'Color format not supported: ' + value.color
+                }
+            }
+            loadedFilters.set(value.name, value);
         })
 
         // generate negated filters
