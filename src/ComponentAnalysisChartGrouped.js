@@ -10,15 +10,15 @@ export class ComponentAnalysisChartGrouped {
 
     #context;
 
-    #groupedStatements;
+    #groupedTransactions;
     #selectedFilter;
     #allFilters;
 
     #container = DomBuilder.div({ class: 'chart-panel' });
 
-    constructor(context, groupedStatements, allFilters, selectedFilter) {
+    constructor(context, groupedTransactions, allFilters, selectedFilter) {
         this.#context = context;
-        this.#groupedStatements = groupedStatements;
+        this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
     }
@@ -29,13 +29,13 @@ export class ComponentAnalysisChartGrouped {
 
     // chart's parent needs to be in the dom
     refresh() {
-        if (this.#groupedStatements.size > 3 && this.#groupedStatements.size < 100) {
-            this.#buildCashFlowChart(this.#groupedStatements, this.#container);
-            this.#buildCashFlowAccChart(this.#groupedStatements, this.#container);
+        if (this.#groupedTransactions.size > 3 && this.#groupedTransactions.size < 100) {
+            this.#buildCashFlowChart(this.#groupedTransactions, this.#container);
+            this.#buildCashFlowAccChart(this.#groupedTransactions, this.#container);
         }
     }
 
-    #buildCashFlowChart(groupedStatements, parent) {
+    #buildCashFlowChart(groupedTransactions, parent) {
         let expensesDataset = {
             label: "expenses",
             data: [],
@@ -57,10 +57,10 @@ export class ComponentAnalysisChartGrouped {
             fill: false
         };
 
-        Array.from(groupedStatements.keys()).sort().forEach(k => {
-            let group = groupedStatements.get(k);
-            let expenses = group.statements.filter(s => s.value < 0).reduce((sum, s) => sum + s.value, 0);
-            let receipts = group.statements.filter(s => s.value > 0).reduce((sum, s) => sum + s.value, 0);
+        Array.from(groupedTransactions.keys()).sort().forEach(k => {
+            let group = groupedTransactions.get(k);
+            let expenses = group.transactions.filter(t => t.value < 0).reduce((sum, t) => sum + t.value, 0);
+            let receipts = group.transactions.filter(t => t.value > 0).reduce((sum, t) => sum + t.value, 0);
             expensesDataset.data.push(expenses);
             receiptsDataset.data.push(receipts);
             resultsDataset.data.push(expenses + receipts);
@@ -75,7 +75,7 @@ export class ComponentAnalysisChartGrouped {
         const config = {
             type: 'line',
             data: {
-                labels: Array.from(groupedStatements.keys()).sort(),
+                labels: Array.from(groupedTransactions.keys()).sort(),
                 datasets: datasets
             },
             options: {
@@ -117,7 +117,7 @@ export class ComponentAnalysisChartGrouped {
         const chart = new Chart(canvas, config);
     }
 
-    #buildCashFlowAccChart(groupedStatements, parent) {
+    #buildCashFlowAccChart(groupedTransactions, parent) {
         let valueDataset = {
             label: "value",
             data: [],
@@ -127,10 +127,10 @@ export class ComponentAnalysisChartGrouped {
         };
 
         let sum = 0;
-        Array.from(groupedStatements.keys()).sort().forEach(k => {
-            let group = groupedStatements.get(k);
-            let expenses = group.statements.filter(s => s.value < 0).reduce((sum, s) => sum + s.value, 0);
-            let receipts = group.statements.filter(s => s.value > 0).reduce((sum, s) => sum + s.value, 0);
+        Array.from(groupedTransactions.keys()).sort().forEach(k => {
+            let group = groupedTransactions.get(k);
+            let expenses = group.transactions.filter(t => t.value < 0).reduce((sum, t) => sum + t.value, 0);
+            let receipts = group.transactions.filter(t => t.value > 0).reduce((sum, t) => sum + t.value, 0);
 
             sum += expenses + receipts;
             valueDataset.data.push(sum);
@@ -143,7 +143,7 @@ export class ComponentAnalysisChartGrouped {
         const config = {
             type: 'line',
             data: {
-                labels: Array.from(groupedStatements.keys()).sort(),
+                labels: Array.from(groupedTransactions.keys()).sort(),
                 datasets: datasets
             },
             options: {

@@ -17,7 +17,7 @@ export class Dataset {
     data;
 
     /** @type {array|undefined} */
-    statements;
+    transactions;
 
     /** @type {object|undefined} */
     exception;
@@ -42,7 +42,7 @@ export class Dataset {
      * @param enableUrlDatasets {boolean}
      * @return {Promise<array>}
      */
-    loadStatements(enableUrlDatasets) {
+    loadTransactions(enableUrlDatasets) {
         if (enableUrlDatasets && Dataset.#isValidHttpUrl(this.data)) {
             // asynchronously fetch raw data from url and parse
             return new Promise((resolve, reject) => {
@@ -52,14 +52,14 @@ export class Dataset {
                     dataType: 'text',
                     success: (result) => {
                         try {
-                            this.statements = this.#parse(result);
+                            this.transactions = this.#parse(result);
                         } catch (e) {
                             this.exception = e;
-                            this.statements = [];
+                            this.transactions = [];
                             reject(e);
                             return;
                         }
-                        resolve(this.statements);
+                        resolve(this.transactions);
                     },
                     error: reject
                 });
@@ -68,63 +68,63 @@ export class Dataset {
             // parse only
             return new Promise((resolve, reject) => {
                 try {
-                    this.statements = this.#parse(this.data);
+                    this.transactions = this.#parse(this.data);
                 } catch (e) {
                     this.exception = e;
-                    this.statements = [];
+                    this.transactions = [];
                     reject(e);
                     return;
                 }
-                resolve(this.statements);
+                resolve(this.transactions);
             });
         }
     }
 
     #parse(data) {
         let parser = Parsers.resolveParserByKey(this.dataType);
-        let statements = parser.parse(data);
+        let transactions = parser.parse(data);
 
         let copy = [];
-        for (let statement of statements) {
+        for (let transaction of transactions) {
             // append dataset parameter
-           statement.dataset = this.name;
+           transaction.dataset = this.name;
 
-            if (statement.description.includes(';;;')) {
-                // process multi-statement
-                copy.push(...this.#splitMultiStatement(statement));
+            if (transaction.description.includes(';;;')) {
+                // process multi-transaction
+                copy.push(...this.#splitMultiTransaction(transaction));
             } else {
-                copy.push(statement);
+                copy.push(transaction);
             }
         }
         return copy;
     }
 
-    #splitMultiStatement(statement) {
+    #splitMultiTransaction(transaction) {
         // 100 - platba za zboží ;;; 200 - uplatek
 
         let result = [];
-        for (let part of statement.description.split(';;;')) {
+        for (let part of transaction.description.split(';;;')) {
             part = part.trim();
             if (part) {
                 let separatorPos = part.indexOf('-');
                 if (separatorPos && separatorPos + 1 < part.length) {
                     const numberPart = part.substring(0, separatorPos).trim();
                     const descriptionPart = part.substring(separatorPos + 1).trim();
-                    let subStatement = Object.assign({}, statement);
-                    subStatement.description = descriptionPart;
-                    subStatement.value = Number.parseFloat(numberPart);
-                    subStatement.origin = statement;
-                    result.push(subStatement);
+                    let subTransaction = Object.assign({}, transaction);
+                    subTransaction.description = descriptionPart;
+                    subTransaction.value = Number.parseFloat(numberPart);
+                    subTransaction.origin = transaction;
+                    result.push(subTransaction);
                 } else {
-                    return statement;  // wrong format
+                    return transaction;  // wrong format
                 }
             }
         }
 
         // test
-        let sum = result.reduce((sum, s) => sum + s.value, 0);
-        if (sum !== statement.value) {
-            throw 'Multi statement checksum failed: ' + JSON.stringify(statement);
+        let sum = result.reduce((sum, t) => sum + t.value, 0);
+        if (sum !== transaction.value) {
+            throw 'Multi transaction checksum failed: ' + JSON.stringify(transaction);
         }
 
         return result;
@@ -152,8 +152,8 @@ export class Dataset {
      */
     static asDataset(object) {
         let dataset = new Dataset(object.name, object.dataType, object.data);
-        if (object.statements !== undefined && object.statements !== null) {
-            dataset.statements = object.statements;
+        if (object.transactions !== undefined && object.transactions !== null) {
+            dataset.transactions = object.transactions;
         }
         return dataset;
     }

@@ -1,4 +1,4 @@
-import { Statements } from  "./Statements.js"
+import { Transactions } from "./Transactions.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
@@ -9,15 +9,15 @@ import { DomBuilder } from "./DomBuilder";
 export class DialogDetails {
 
     context;
-    statements;
+    transactions;
     groupName;
     filter;
     filters;
 
-    constructor(context, groupName, statements, activeFilter, filters) {
+    constructor(context, groupName, transactions, activeFilter, filters) {
         this.context = context;
         this.groupName = groupName;
-        this.statements = statements;
+        this.transactions = transactions;
         this.filter = activeFilter;
         this.filters = filters;
     }
@@ -37,12 +37,12 @@ export class DialogDetails {
             .append($(`<table class="table table-striped"></table>`)
                 .append(tableBody = $(`<tbody></tbody>`)))
 
-        this.statements.sort(Statements.comparator).forEach(statement => {
+        this.transactions.sort(Transactions.comparator).forEach(transaction => {
             let row = $(`<tr></tr>`);
-            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(statement.date)}</span></td>`));
-            let descriptionCell = $(`<td><span>${Utils.esc(statement.description)}</span></td>`);
+            row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(transaction.date)}</span></td>`));
+            let descriptionCell = $(`<td><span>${Utils.esc(transaction.description)}</span></td>`);
             row.append(descriptionCell);
-            row.append($(`<td class="value-cell ${statement.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(statement.value))}</td>`));
+            row.append($(`<td class="value-cell ${transaction.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(transaction.value))}</td>`));
             tableBody.append(row);
 
             // filter labels
@@ -58,7 +58,7 @@ export class DialogDetails {
                     // same as selected filter
                     continue;
                 }
-                if (f.filterFunc != null && f.filterFunc(statement)) {
+                if (f.filterFunc != null && f.filterFunc(transaction)) {
                     descriptionCell.prepend($(`<span> </span>`));
                     descriptionCell.prepend(Utils.createFilterLabel(f));
                 }

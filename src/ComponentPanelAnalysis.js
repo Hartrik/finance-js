@@ -20,7 +20,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
     #context;
 
-    #statements = null;
+    #transactions = null;
     #filters = null;
 
     #componentGroupingOptions;
@@ -46,13 +46,13 @@ export class ComponentPanelAnalysis extends ComponentPanel {
             this.refreshTable();
         });
         dataManager.addOnDatasetsLoaded(datasets => {
-            let allStatements = [];
+            let allTransactions = [];
             datasets.forEach(d => {
-                if (d.statements) {
-                    allStatements = allStatements.concat(d.statements);
+                if (d.transactions) {
+                    allTransactions = allTransactions.concat(d.transactions);
                 }
             })
-            this.#statements = allStatements;
+            this.#transactions = allTransactions;
             this.refreshTable();
         });
     }
@@ -81,42 +81,42 @@ export class ComponentPanelAnalysis extends ComponentPanel {
         this.#refreshCeiling();
         this.#contentNode.empty();
 
-        if (this.#statements !== null && this.#filters !== null) {
+        if (this.#transactions !== null && this.#filters !== null) {
             let grouping = this.#componentGroupingOptions.getGrouping();
             let selectedFilter = this.#componentFilterOptions.getFilter();
             let allFilters = this.#componentFilterOptions.getAllFilters();
 
-            let filteredStatements = (selectedFilter.filterFunc != null)
-                    ? this.#statements.filter(s => selectedFilter.filterFunc(s)) : this.#statements;
+            let filteredTransactions = (selectedFilter.filterFunc != null)
+                    ? this.#transactions.filter(t => selectedFilter.filterFunc(t)) : this.#transactions;
 
             if (grouping !== null) {
-                let groupedStatements = grouping.createGroups(filteredStatements);
+                let groupedTransactions = grouping.createGroups(filteredTransactions);
 
                 let showCategories = this.#componentCategoriesOptions.isSelected();
                 let tableComponent = (showCategories)
-                        ? new ComponentAnalysisTableCategories(this.#context, groupedStatements, allFilters, selectedFilter)
-                        : new ComponentAnalysisTableGrouped(this.#context, groupedStatements, allFilters, selectedFilter);
+                        ? new ComponentAnalysisTableCategories(this.#context, groupedTransactions, allFilters, selectedFilter)
+                        : new ComponentAnalysisTableGrouped(this.#context, groupedTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(tableComponent.createNode());
 
                 this.#contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
-                    DomBuilder.span("transactions: " + filteredStatements.length + ", groups: " + groupedStatements.size)
+                    DomBuilder.span("transactions: " + filteredTransactions.length + ", groups: " + groupedTransactions.size)
                 ]));
 
                 if (showCategories) {
-                    let chartComponent = new ComponentAnalysisChartCategories(this.#context, groupedStatements, allFilters, selectedFilter);
+                    let chartComponent = new ComponentAnalysisChartCategories(this.#context, groupedTransactions, allFilters, selectedFilter);
                     this.#contentNode.append(chartComponent.createNode());
                     chartComponent.refresh();
                 }
 
-                let chartComponent = new ComponentAnalysisChartGrouped(this.#context, groupedStatements, allFilters, selectedFilter);
+                let chartComponent = new ComponentAnalysisChartGrouped(this.#context, groupedTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(chartComponent.createNode());
                 chartComponent.refresh();
             } else {
-                let tableComponent = new ComponentAnalysisTable(this.#context, filteredStatements, allFilters, selectedFilter);
+                let tableComponent = new ComponentAnalysisTable(this.#context, filteredTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(tableComponent.createNode());
 
                 this.#contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
-                    DomBuilder.span("transactions: " + filteredStatements.length)
+                    DomBuilder.span("transactions: " + filteredTransactions.length)
                 ]));
             }
 

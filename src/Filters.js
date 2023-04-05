@@ -28,17 +28,17 @@ export class Filters {
 
 
     static compile(query) {
-        return function(statement) {
-            return Filters._matches(statement, query)
+        return function(transaction) {
+            return Filters._matches(transaction, query)
         }
     }
 
-    static _matches(statement, query) {
+    static _matches(transaction, query) {
         switch (typeof query) {
             case 'number':
             case 'string':
                 // field not specified => default field
-                return Filters._matchesField(statement.description, query);
+                return Filters._matchesField(transaction.description, query);
             case 'object':
                 for (let [key, value] of Object.entries(query)) {
                     switch (key) {
@@ -47,7 +47,7 @@ export class Filters {
                         case 'date':
                         case 'value':
                         case 'dataset':
-                            if (!Filters._matchesField(statement[key], value)) {
+                            if (!Filters._matchesField(transaction[key], value)) {
                                 return false;
                             }
                             break;
@@ -55,20 +55,20 @@ export class Filters {
                         // top level logical operations
                         case '$or':
                             for (let q of value) {
-                                if (Filters._matches(statement, q)) {
+                                if (Filters._matches(transaction, q)) {
                                     return true;
                                 }
                             }
                             return false;
                         case '$and':
                             for (let q of value) {
-                                if (!Filters._matches(statement, q)) {
+                                if (!Filters._matches(transaction, q)) {
                                     return false;
                                 }
                             }
                             return true;
                         case '$not':
-                            return !Filters._matches(statement, value);
+                            return !Filters._matches(transaction, value);
 
                         default:
                             throw 'Filter: Token not expected: ' + key
@@ -174,7 +174,7 @@ export class Filters {
             if (filter.negFilter != null) {
                 let f = loadedFilters.get(filter.negFilter);
                 if (f != null) {
-                    filter.filterFunc = (s) => !f.filterFunc(s);
+                    filter.filterFunc = (t) => !f.filterFunc(t);
                 } else {
                     throw 'Filter: filter not found: ' + filter.negFilter
                 }
@@ -210,9 +210,9 @@ export class Filters {
             }
         });
 
-        let func = function (statement) {
+        let func = function (transaction) {
             for (const filter of subFilters) {
-                if (filter.filterFunc(statement)) {
+                if (filter.filterFunc(transaction)) {
                     return true;
                 }
             }
@@ -244,9 +244,9 @@ export class Filters {
         return {
             'name': filter.name + ' & search',
             'subFilters': [ filter ],
-            'filterFunc': function (statement) {
-                if (filter.filterFunc == null || filter.filterFunc(statement)) {
-                    return searchFilter(statement);
+            'filterFunc': function (transaction) {
+                if (filter.filterFunc == null || filter.filterFunc(transaction)) {
+                    return searchFilter(transaction);
                 }
                 return false;
             }
@@ -255,19 +255,19 @@ export class Filters {
 
     static testFilters(filters) {
         // dynamic check - should throw an exception if there is a problem...
-        let testStatement = {
+        let testTransaction = {
             "description": "xxx",
             "dataset": "test",
             "value": 10
         };
         filters.forEach(f => {
             if (f.filterFunc !== undefined) {
-                f.filterFunc(testStatement);
+                f.filterFunc(testTransaction);
             }
         });
     }
 
-    static groupByFilters(statements, filters, noFilterGroupName) {
+    static groupByFilters(transactions, filters, noFilterGroupName) {
         // pre-populate groups - because of order...
         let filterGroups = new Map();
         const othersFilter = {
@@ -277,17 +277,17 @@ export class Filters {
             filterGroups.set(filter.name, {
                 filter: filter,
                 others: false,
-                statements: []
+                transactions: []
             });
         }
         filterGroups.set(othersFilter.name, {
             filter: othersFilter,
             others: true,
-            statements: []
+            transactions: []
         });
 
         // fill groups
-        for (let statement of statements) {
+        for (let transaction of transactions) {
             let matchedFilterName = null;
             for (let filter of filters.values()) {
                 if (filter.hideInTable != null && filter.hideInTable) {
@@ -296,14 +296,14 @@ export class Filters {
                 if (filter.subFilters != null) {
                     continue;
                 }
-                if (filter.filterFunc != null && filter.filterFunc(statement)) {
+                if (filter.filterFunc != null && filter.filterFunc(transaction)) {
                     matchedFilterName = filter.name;
                     break;
                 }
             }
 
             let current = filterGroups.get((matchedFilterName != null) ? matchedFilterName : othersFilter.name)
-            current.statements.push(statement);
+            current.transactions.push(transaction);
         }
         return filterGroups;
     }

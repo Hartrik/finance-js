@@ -12,31 +12,31 @@ export class ComponentAnalysisTableGrouped {
 
     #context;
 
-    /** @typedef Map<string,GroupedStatements> */
-    #groupedStatements;
+    /** @typedef Map<string,GroupedTransactions> */
+    #groupedTransactions;
     #selectedFilter;
     #allFilters;
 
     #tableBuilder = new DomBuilder.BootstrapTable();
 
-    constructor(context, groupedStatements, allFilters, selectedFilter) {
+    constructor(context, groupedTransactions, allFilters, selectedFilter) {
         this.#context = context;
-        this.#groupedStatements = groupedStatements;
+        this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
     }
 
     createNode() {
-        this.#build(this.#groupedStatements, this.#allFilters, this.#selectedFilter);
+        this.#build(this.#groupedTransactions, this.#allFilters, this.#selectedFilter);
         return this.#tableBuilder.createNode();
     }
 
-    #build(groupedStatements, filters, filter) {
+    #build(groupedTransactions, filters, filter) {
         let sum = 0;
-        Array.from(groupedStatements.keys()).sort().forEach(k => {
-            let group = groupedStatements.get(k);
-            let expenses = group.statements.filter(s => s.value < 0).reduce((sum, s) => sum + s.value, 0);
-            let receipts = group.statements.filter(s => s.value > 0).reduce((sum, s) => sum + s.value, 0);
+        Array.from(groupedTransactions.keys()).sort().forEach(k => {
+            let group = groupedTransactions.get(k);
+            let expenses = group.transactions.filter(t => t.value < 0).reduce((sum, t) => sum + t.value, 0);
+            let receipts = group.transactions.filter(t => t.value > 0).reduce((sum, t) => sum + t.value, 0);
             let result = receipts + expenses;
             sum += result;
 
@@ -53,11 +53,11 @@ export class ComponentAnalysisTableGrouped {
             let path = (filter.filterFunc === undefined) ? '' : filter.name + ' / ';
             row.append(DomBuilder.element('td', { class: 'options-cell' }, [
                 DomBuilder.link('', { class: 'fa fa-eye' }, () => {
-                    let dialog = new DialogDetails(this.#context, path + group.key, group.statements, filter, filters);
+                    let dialog = new DialogDetails(this.#context, path + group.key, group.transactions, filter, filters);
                     dialog.show();
                 }),
                 DomBuilder.link('', { class: 'fa fa-th' }, () => {
-                    let dialog = new DialogStats(this.#context, path + group.key, group.statements, filters);
+                    let dialog = new DialogStats(this.#context, path + group.key, group.transactions, filters);
                     dialog.show();
                 })
             ]));

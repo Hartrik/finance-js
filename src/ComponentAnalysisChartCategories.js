@@ -23,15 +23,15 @@ export class ComponentAnalysisChartCategories {
 
     #context;
 
-    #groupedStatements;
+    #groupedTransactions;
     #selectedFilter;
     #allFilters;
 
     #container = DomBuilder.div({ class: 'chart-panel' });
 
-    constructor(context, groupedStatements, allFilters, selectedFilter) {
+    constructor(context, groupedTransactions, allFilters, selectedFilter) {
         this.#context = context;
-        this.#groupedStatements = groupedStatements;
+        this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
     }
@@ -42,18 +42,18 @@ export class ComponentAnalysisChartCategories {
 
     // chart's parent needs to be in the dom
     refresh() {
-        if (this.#groupedStatements.size > 3 && this.#groupedStatements.size < 100) {
-            this.#buildCashFlowChart(this.#groupedStatements, this.#container);
+        if (this.#groupedTransactions.size > 3 && this.#groupedTransactions.size < 100) {
+            this.#buildCashFlowChart(this.#groupedTransactions, this.#container);
         }
     }
 
-    #buildCashFlowChart(groupedStatements, parent) {
+    #buildCashFlowChart(groupedTransactions, parent) {
         // prepare data
-        let sortedGroups = Array.from(groupedStatements.keys()).sort();
+        let sortedGroups = Array.from(groupedTransactions.keys()).sort();
 
         let data = sortedGroups.map(k => {
-            let group = groupedStatements.get(k);
-            let categories = Filters.groupByFilters(group.statements, this.#allFilters, "Others");
+            let group = groupedTransactions.get(k);
+            let categories = Filters.groupByFilters(group.transactions, this.#allFilters, "Others");
             return {
                 categories: categories,
                 group: group
@@ -65,7 +65,7 @@ export class ComponentAnalysisChartCategories {
         let uniqueColors = new Set();
         data.forEach(data => {
             data.categories.forEach((value, key) => {
-                if (value.statements.length > 0) {
+                if (value.transactions.length > 0) {
                     nonEmptyCategories.add(key);
                     uniqueColors.add((value.filter.color !== undefined) ? value.filter.color : null);
                 }
@@ -113,7 +113,7 @@ export class ComponentAnalysisChartCategories {
                     return;
                 }
 
-                let result = category.statements.reduce((sum, s) => sum + s.value, 0);
+                let result = category.transactions.reduce((sum, t) => sum + t.value, 0);
                 datasets[i].data.push(result);
 
                 sum += result;

@@ -29,7 +29,7 @@ export class ComponentDatasetsChart {
         let sizes = [];
         let labels = [];
         for (let [key, dataset] of datasets) {
-            sizes.push(dataset.statements.length);
+            sizes.push(dataset.transactions.length);
             labels.push(dataset.name);
         }
 

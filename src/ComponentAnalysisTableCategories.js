@@ -13,30 +13,30 @@ export class ComponentAnalysisTableCategories {
 
     #context;
 
-    /** @typedef Map<string,GroupedStatements> */
-    #groupedStatements;
+    /** @typedef Map<string,GroupedTransactions> */
+    #groupedTransactions;
     #selectedFilter;
     #allFilters;
 
     #tableBuilder = new DomBuilder.BootstrapTable();
 
-    constructor(context, groupedStatements, allFilters, selectedFilter) {
+    constructor(context, groupedTransactions, allFilters, selectedFilter) {
         this.#context = context;
-        this.#groupedStatements = groupedStatements;
+        this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
     }
 
     createNode() {
-        this.#build(this.#groupedStatements, this.#allFilters, this.#selectedFilter);
+        this.#build(this.#groupedTransactions, this.#allFilters, this.#selectedFilter);
         return this.#tableBuilder.createNode();
     }
 
-    #build(groupedStatements, filters, filter) {
+    #build(groupedTransactions, filters, filter) {
         // prepare row data
-        let rowData = Array.from(groupedStatements.keys()).sort().map(k => {
-            let group = groupedStatements.get(k);
-            let categories = Filters.groupByFilters(group.statements, filters, "Others");
+        let rowData = Array.from(groupedTransactions.keys()).sort().map(k => {
+            let group = groupedTransactions.get(k);
+            let categories = Filters.groupByFilters(group.transactions, filters, "Others");
             return {
                 categories: categories,
                 group: group
@@ -47,8 +47,8 @@ export class ComponentAnalysisTableCategories {
         let categoriesSums = new Map();
         rowData.forEach(data => {
             data.categories.forEach((value, key) => {
-                if (value.statements.length > 0) {
-                    let s = value.statements.reduce((sum, s) => sum + s.value, 0);
+                if (value.transactions.length > 0) {
+                    let s = value.transactions.reduce((sum, t) => sum + t.value, 0);
                     let old = categoriesSums.get(key);
                     categoriesSums.set(key, (old !== undefined) ? old + s : s);
                 }
@@ -71,8 +71,8 @@ export class ComponentAnalysisTableCategories {
                 }
 
                 let categorySum = 0;
-                value.statements.forEach(statement => {
-                    categorySum += statement.value;
+                value.transactions.forEach(transaction => {
+                    categorySum += transaction.value;
                 });
                 groupSum += categorySum;
 
@@ -91,11 +91,11 @@ export class ComponentAnalysisTableCategories {
             let path = (filter.filterFunc === undefined) ? '' : filter.name + ' / ';
             row.append(DomBuilder.element('td', { class: 'options-cell' }, [
                 DomBuilder.link('', { class: 'fa fa-eye' }, () => {
-                    let dialog = new DialogDetails(this.#context, path + group.key, group.statements, filter, filters);
+                    let dialog = new DialogDetails(this.#context, path + group.key, group.transactions, filter, filters);
                     dialog.show();
                 }),
                 DomBuilder.link('', { class: 'fa fa-th' }, () => {
-                    let dialog = new DialogStats(this.#context, path + group.key, group.statements, filters);
+                    let dialog = new DialogStats(this.#context, path + group.key, group.transactions, filters);
                     dialog.show();
                 })
             ]));
@@ -108,7 +108,7 @@ export class ComponentAnalysisTableCategories {
         this.#tableBuilder.addRowBefore(headerRow);
 
         // render table footer
-        if (groupedStatements.size > 10) {
+        if (groupedTransactions.size > 10) {
             let footerRow = this.#createTableRowWithLabels(filters, categoriesSums);
             this.#tableBuilder.addRow(footerRow);
         }

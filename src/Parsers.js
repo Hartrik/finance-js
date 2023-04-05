@@ -1,4 +1,4 @@
-import { Statements } from "./Statements.js";
+import { Transactions } from "./Transactions.js";
 import { CSVReader } from "./CSVReader.js";
 
 /**
@@ -65,7 +65,7 @@ export class Parsers {
 
 
     static parseCSV_simple(csv) {
-        let statements = [];
+        let transactions = [];
         let fistLine = true;
         let csvReader = new CSVReader(csv, ';');
         let line;
@@ -86,9 +86,9 @@ export class Parsers {
             let date = line[0];
             let value = parseFloat(line[1]);
             let description = line[2];
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseCSV_fio(csv) {
@@ -103,7 +103,7 @@ export class Parsers {
     }
 
     static parseCSV_fio_v1(csv) {
-        let statements = [];
+        let transactions = [];
         let fistLine = true;
         let csvReader = new CSVReader(csv, ';');
         let line;
@@ -124,13 +124,13 @@ export class Parsers {
             let date = line[0].slice(6, 10) + '-' + line[0].slice(3, 5) + '-' + line[0].slice(0, 2);
             let value = parseFloat(line[1].replace(',', '.'));
             let description = line[8];
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseCSV_fio_v2(csv) {
-        let statements = [];
+        let transactions = [];
         let header = true;
         let csvReader = new CSVReader(csv, ';');
         let line;
@@ -154,13 +154,13 @@ export class Parsers {
             let date = line[1].slice(6, 10) + '-' + line[1].slice(3, 5) + '-' + line[1].slice(0, 2);
             let value = parseFloat(line[2].replace(',', '.'));
             let description = line[16];
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseCSV_moneta(csv) {
-        let statements = [];
+        let transactions = [];
         let fistLine = true;
         let csvReader = new CSVReader(csv, ';');
         let line;
@@ -184,13 +184,13 @@ export class Parsers {
             if (line[12]) {
                 description = line[12]
             }
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseCSV_equa(csv) {
-        let statements = [];
+        let transactions = [];
         let fistLine = true;
         let csvReader = new CSVReader(csv, ';');
         let line;
@@ -223,9 +223,9 @@ export class Parsers {
                     description += ' - ' + line[2];
                 }
             }
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseSodexo(data) {
@@ -236,7 +236,7 @@ export class Parsers {
             parsed = parsed['Data'];
         }
 
-        let statements = [];
+        let transactions = [];
         for (let i in parsed) {
             let entry = parsed[i];
 
@@ -248,16 +248,16 @@ export class Parsers {
             let value = parseFloat(valuePar);
             let date = datePar.slice(6, 10) + '-' + datePar.slice(3, 5) + '-' + datePar.slice(0, 2);
             let description = 'Sodexo: ' + typePar + (workshopPar ? (' - ' + workshopPar) : '');
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         }
-        return statements;
+        return transactions;
     }
 
     static parseOFX(ofx) {
         let parser = new DOMParser();
         let document = parser.parseFromString(ofx, "text/xml");
 
-        let statements = [];
+        let transactions = [];
 
         let processSTMTTRN = (node) => {
             let date = null;
@@ -278,14 +278,14 @@ export class Parsers {
                         break;
                 }
             }
-            statements.push(Statements.create(date, description, value));
+            transactions.push(Transactions.create(date, description, value));
         };
 
         let walkOFX = (node) => {
             for (let k in node.children) {
                 let child = node.children[k];
                 if (child.localName === 'STMTTRN') {
-                    // statement
+                    // transaction
                     processSTMTTRN(child);
                 } else {
                     walkOFX(child);
@@ -294,6 +294,6 @@ export class Parsers {
         };
 
         walkOFX(document);
-        return statements;
+        return transactions;
     }
 }

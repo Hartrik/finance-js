@@ -1,18 +1,18 @@
 
 /**
- * @typedef {Object} Statement
+ * @typedef {Object} Transaction
  * @property {string} date
  * @property {string} description
  * @property {number} value
- * @property {Statement} origin
+ * @property {Transaction} origin
  */
 
 /**
  *
- * @version 2022-02-19
+ * @version 2023-04-05
  * @author Patrik Harag
  */
-export class Statements {
+export class Transactions {
 
     static comparator(a, b) {
         if (a.date === b.date) {

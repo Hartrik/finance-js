@@ -10,14 +10,14 @@ import { DomBuilder } from "./DomBuilder";
 export class DialogStats {
 
     context;
-    statements;
+    transactions;
     groupName;
     filters;
 
-    constructor(context, groupName, statements, filters) {
+    constructor(context, groupName, transactions, filters) {
         this.context = context;
         this.groupName = groupName;
-        this.statements = statements;
+        this.transactions = transactions;
         this.filters = filters;
     }
 
@@ -31,7 +31,7 @@ export class DialogStats {
     }
 
     _buildBody() {
-        let filterGroups = Filters.groupByFilters(this.statements, this.filters, "Others");
+        let filterGroups = Filters.groupByFilters(this.transactions, this.filters, "Others");
 
         // build table
         let tableBody;
@@ -42,12 +42,12 @@ export class DialogStats {
         let totalExpenses = 0;
         let totalReceipts = 0;
         for (let filterGroup of filterGroups.values()) {
-            if (filterGroup.statements.length === 0) {
+            if (filterGroup.transactions.length === 0) {
                 continue;
             }
 
-            let expenses = filterGroup.statements.filter(s => s.value < 0).reduce((sum, s) => sum + s.value, 0);
-            let receipts = filterGroup.statements.filter(s => s.value > 0).reduce((sum, s) => sum + s.value, 0);
+            let expenses = filterGroup.transactions.filter(t => t.value < 0).reduce((sum, t) => sum + t.value, 0);
+            let receipts = filterGroup.transactions.filter(t => t.value > 0).reduce((sum, t) => sum + t.value, 0);
             let result = receipts + expenses;
 
             totalExpenses += expenses;
@@ -64,7 +64,7 @@ export class DialogStats {
             let detailsButton = $(`<a href="javascript:void(0)" class="fa fa-eye"></a>`);
             detailsButton.on("click", (e) => {
                 let dialog = new DialogDetails(this.context, this.groupName + ' / ' + filterGroup.filter.name,
-                        filterGroup.statements, filterGroup.filter, this.filters);
+                        filterGroup.transactions, filterGroup.filter, this.filters);
                 dialog.show();
             });
             row.append($(`<td class="options-cell"></td>`).append(detailsButton));

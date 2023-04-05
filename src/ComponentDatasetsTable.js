@@ -37,7 +37,7 @@ export class ComponentDatasetsTable {
             row.append($(`<td>${ Utils.esc(dataset.name) }</td>`));
             row.append($(`<td>${ Utils.esc(dataset.dataType) }</td>`));
             if (dataset.exception === undefined) {
-                row.append($(`<td>${ Utils.esc(dataset.statements.length) }</td>`));
+                row.append($(`<td>${ Utils.esc(dataset.transactions.length) }</td>`));
             } else {
                 let span = DomBuilder.span("Error: " + dataset.exception);
                 row.append($(`<td></td>`).append(span));

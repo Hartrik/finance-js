@@ -1,9 +1,9 @@
 import { Utils } from "./Utils.js"
 
 /**
- * @typedef {Object} GroupedStatements
+ * @typedef {Object} GroupedTransactions
  * @property {string} key
- * @property {Statement[]} statements
+ * @property {Transaction[]} transactions
  */
 
 /**
@@ -14,11 +14,11 @@ export class Grouping {
 
     /**
      *
-     * @param statement
+     * @param transaction
      * @returns {string}
      * @protected
      */
-    _keyFunc(statement) {
+    _keyFunc(transaction) {
         throw 'Unsupported operation: not implemented';
     }
 
@@ -34,21 +34,21 @@ export class Grouping {
 
     /**
      *
-     * @param statements {Statement[]}
-     * @returns {Map<string, GroupedStatements>}
+     * @param transactions {Transaction[]}
+     * @returns {Map<string, GroupedTransactions>}
      */
-    createGroups(statements) {
+    createGroups(transactions) {
         let groups = new Map()
-        statements.forEach(statement => {
-            let key = this._keyFunc(statement);
+        transactions.forEach(transaction => {
+            let key = this._keyFunc(transaction);
             let current = groups.get(key)
             if (current === undefined) {
                 current = {
                     key: key,
-                    statements: []
+                    transactions: []
                 }
             }
-            current.statements.push(statement);
+            current.transactions.push(transaction);
             groups.set(key, current);
         });
 
@@ -80,7 +80,7 @@ export class Grouping {
                     if (!groups.has(expected)) {
                         groups.set(expected, {
                             key: expected,
-                            statements: []
+                            transactions: []
                         });
                         current = expected;
                     } else {
@@ -136,8 +136,8 @@ class WeekGrouping extends Grouping {
     }
 
 
-    _keyFunc(statement) {
-        return WeekGrouping.weekNumber(WeekGrouping.fromIso8601(statement.date))
+    _keyFunc(transaction) {
+        return WeekGrouping.weekNumber(WeekGrouping.fromIso8601(transaction.date))
     }
 
     _follows(key) {
@@ -158,8 +158,8 @@ class WeekGrouping extends Grouping {
  * @author Patrik Harag
  */
 class MonthGrouping extends Grouping {
-    _keyFunc(statement) {
-        return statement.date.substr(0, 7);
+    _keyFunc(transaction) {
+        return transaction.date.substr(0, 7);
     }
 
     _follows(key) {
@@ -180,8 +180,8 @@ class MonthGrouping extends Grouping {
  * @author Patrik Harag
  */
 class YearGrouping extends Grouping {
-    _keyFunc(statement) {
-        return statement.date.substr(0, 4);
+    _keyFunc(transaction) {
+        return transaction.date.substr(0, 4);
     }
 
     _follows(key) {
@@ -196,7 +196,7 @@ class YearGrouping extends Grouping {
  * @author Patrik Harag
  */
 class SumGrouping extends Grouping {
-    _keyFunc(statement) {
+    _keyFunc(transaction) {
         return 'Σ';
     }
 }

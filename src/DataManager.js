@@ -175,7 +175,7 @@ export class DataManager {
     async updateDatasets(datasets, showSuccessMessage, save) {
         let errors = 0;
         for (let [key, dataset] of datasets) {
-            await dataset.loadStatements(this.#urlDatasetsEnabled).catch(e => {
+            await dataset.loadTransactions(this.#urlDatasetsEnabled).catch(e => {
                 errors++;
                 console.log("Dataset '" + dataset.name + "' loading failed: " + (e.statusText ? e.statusText : e));
             });

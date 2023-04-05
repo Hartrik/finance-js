@@ -37,7 +37,7 @@ export class ComponentPanelDatasets extends ComponentPanel {
 
         this.#dataManager.addOnDatasetsLoaded(datasets => {
             let sorted = new Map([...datasets.entries()].sort((a, b) => {
-                return b[1].statements.length - a[1].statements.length;
+                return b[1].transactions.length - a[1].transactions.length;
             }));
             this.#datasets = sorted;
             this.#refresh(sorted);

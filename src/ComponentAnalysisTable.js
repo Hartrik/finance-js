@@ -1,4 +1,4 @@
-import { Statements } from  "./Statements.js"
+import { Transactions } from "./Transactions.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
@@ -11,36 +11,36 @@ export class ComponentAnalysisTable {
 
     #context;
 
-    #statements;
+    #transactions;
     #selectedFilter;
     #allFilters;
 
     #tableBuilder = new DomBuilder.BootstrapTable();
 
-    constructor(context, statements, allFilters, selectedFilter) {
+    constructor(context, transactions, allFilters, selectedFilter) {
         this.#context = context;
-        this.#statements = statements;
+        this.#transactions = transactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
     }
 
     createNode() {
-        this.#build(this.#statements, this.#allFilters, this.#selectedFilter);
+        this.#build(this.#transactions, this.#allFilters, this.#selectedFilter);
         return this.#tableBuilder.createNode();
     }
 
-    #build(statements, filters, filter) {
+    #build(transactions, filters, filter) {
         let sum = 0;
-        statements.sort(Statements.comparator).forEach(statement => {
-            sum += statement.value;
+        transactions.sort(Transactions.comparator).forEach(transaction => {
+            sum += transaction.value;
 
             let descriptionCell;
 
             let row = DomBuilder.element('tr');
-            row.append(DomBuilder.element('td', { class: 'group-key-cell' }, DomBuilder.span(statement.date)));
-            row.append(descriptionCell = DomBuilder.element('td', null, DomBuilder.span(statement.description)));
-            row.append(DomBuilder.element('td', { class: `value-cell ${statement.value < 0 ? 'negative' : 'positive'}` },
-                    Utils.createValue(statement.value)));
+            row.append(DomBuilder.element('td', { class: 'group-key-cell' }, DomBuilder.span(transaction.date)));
+            row.append(descriptionCell = DomBuilder.element('td', null, DomBuilder.span(transaction.description)));
+            row.append(DomBuilder.element('td', { class: `value-cell ${transaction.value < 0 ? 'negative' : 'positive'}` },
+                    Utils.createValue(transaction.value)));
             row.append(DomBuilder.element('td', { class: `value-cell result ${sum < 0 ? 'negative' : 'positive'}` },
                     Utils.createValue(sum)));
 
@@ -57,7 +57,7 @@ export class ComponentAnalysisTable {
                     // same as selected filter
                     continue;
                 }
-                if (f.filterFunc != null && f.filterFunc(statement)) {
+                if (f.filterFunc != null && f.filterFunc(transaction)) {
                     descriptionCell.prepend(DomBuilder.span(' '));
                     descriptionCell.prepend(Utils.createFilterLabel(f));
                 }
