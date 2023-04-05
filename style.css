@@ -88,6 +88,12 @@
     display: inline;
 }
 
+.panel-analysis .options-bar .ceil-component .form-control,
+.panel-analysis .options-bar .categories-component .form-control {
+    /* default bootstrap width: 100% breaks page layout */
+    width: unset;
+}
+
 .panel-analysis .options-bar .filter-component select {
     margin-right: 6pt;
 }
