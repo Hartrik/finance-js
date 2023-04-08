@@ -7,7 +7,7 @@ export default [
 
     // parsers lib
     {
-        input: 'src/lib-parsers/main.js',
+        input: 'src/dist-lib-parsers/main.js',
         output: {
             name: 'Parsers',
             file: pkg.lib_parsers,
@@ -18,7 +18,7 @@ export default [
 
     // browser-friendly UMD build - for public use
     {
-        input: 'src/public/main.js',
+        input: 'src/dist-public/main.js',
         output: {
             name: 'FinanceJS',
             file: pkg.browser_public,
@@ -36,7 +36,7 @@ export default [
 
     // browser-friendly UMD build - for private use (logged users)
     {
-        input: 'src/private/main.js',
+        input: 'src/dist-private/main.js',
         output: {
             name: 'FinanceJS',
             file: pkg.browser_private,
