@@ -3,7 +3,7 @@ import { CSVReader } from "./CSVReader.js";
 
 /**
  *
- * @version 2023-04-15
+ * @version 2023-08-05
  * @author Patrik Harag
  */
 export class Parsers {
@@ -183,12 +183,23 @@ export class Parsers {
                 continue;
             }
             fistLine = false;
+
             let date = line[6].slice(6, 10) + '-' + line[6].slice(3, 5) + '-' + line[6].slice(0, 2);
+
             let value = parseFloat(line[7].replace(',', '.'));
-            let description = line[17];
-            if (line[12]) {
-                description = line[12]
+
+            let description;
+            if (line[13]) {
+                // "Poznámka pro mě"
+                description = line[13];
+            } else if (line[12]) {
+                // "Zpráva pro příjemce"
+                description = line[12];
+            } else {
+                // "Popis platby"
+                description = line[17];
             }
+
             transactions.push(Transactions.create(date, description, value));
         }
         return transactions;
