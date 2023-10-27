@@ -67,7 +67,7 @@ export class ComponentPanelFilters extends ComponentPanel {
             return '<code>' + str + '</code>';
         }
 
-        return DomBuilder.Bootstrap.infoBlock([
+        return DomBuilder.Bootstrap.alertInfo([
             $(`<p><strong>Filter</strong> is a way how to define a category of transactions.</p>`),
             "Filter definition:",
             $(`<ul></ul>`)

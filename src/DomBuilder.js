@@ -120,7 +120,7 @@ DomBuilder.Bootstrap = class {
      * @param bodyContent {string|jQuery<HTMLElement>|jQuery<HTMLElement>[]}
      * @return {jQuery<HTMLElement>}
      */
-    static infoBlock(bodyContent) {
+    static alertInfo(bodyContent) {
         return $(`<div class="alert alert-info alert-dismissible fade show" role="alert"></div>`)
             .append(bodyContent)
             .append($(`<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`));
@@ -163,7 +163,7 @@ DomBuilder.Bootstrap = class {
 
         return DomBuilder.div({ class: 'card' }, [
             DomBuilder.div({ class: 'card-header' }, [
-                DomBuilder.element('a', { class: 'card-link', 'data-toggle': 'collapse', href: '#' + id}, title)
+                DomBuilder.element('a', { class: 'card-link', 'data-bs-toggle': 'collapse', href: '#' + id}, title)
             ]),
             DomBuilder.div({ id: id, class: (collapsed ? 'collapse' : 'collapse show') }, [
                 DomBuilder.div({ class: 'card-body' }, bodyContent)
@@ -189,10 +189,10 @@ DomBuilder.Bootstrap = class {
             }
         }
 
-        node.attr('data-toggle', 'tooltip');
-        node.attr('data-placement', 'top');
+        node.attr('data-bs-toggle', 'tooltip');
+        node.attr('data-bs-placement', 'top');
         if (typeof content === 'object') {
-            node.attr('data-html', 'true');
+            node.attr('data-bs-html', 'true');
             node.attr('title', content.html());
         } else {
             node.attr('title', content);

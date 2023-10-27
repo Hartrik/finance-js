@@ -30,7 +30,7 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
 
     createNode() {
         return DomBuilder.div({ class: 'panel-persistence' }, [
-            DomBuilder.Bootstrap.infoBlock([
+            DomBuilder.Bootstrap.alertInfo([
                 DomBuilder.par(null, "Datasets and filters are saved automatically.")
             ]),
             this.#createForceUpdateButton(),

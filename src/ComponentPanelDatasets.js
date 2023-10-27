@@ -78,7 +78,7 @@ export class ComponentPanelDatasets extends ComponentPanel {
             sources.append(DomBuilder.element("li", null, parser.name));
         }
 
-        return DomBuilder.Bootstrap.infoBlock([
+        return DomBuilder.Bootstrap.alertInfo([
             DomBuilder.par(null, [
                 DomBuilder.element("strong", null, "Dataset"),
                 " is a collection of financial transactions. There can be multiple datasets – bank statements," +

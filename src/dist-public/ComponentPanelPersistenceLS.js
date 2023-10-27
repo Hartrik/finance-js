@@ -32,7 +32,7 @@ export class ComponentPanelPersistenceLS extends ComponentPanel {
 
     createNode() {
         return DomBuilder.div({ class: 'panel-persistence' }, [
-            DomBuilder.Bootstrap.infoBlock([
+            DomBuilder.Bootstrap.alertInfo([
                 DomBuilder.par(null, 'Filters and datasets can be stored in browser storage (using the HTML Web Storage API). ' +
                     'Saved data will only be stored on this device and only until the browsing history is deleted.')
             ]),
