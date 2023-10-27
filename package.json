@@ -2,17 +2,19 @@
   "name": "finance-js",
   "version": "1.0.0-SNAPSHOT",
   "browser_public": "dist/finance-js.umd.js",
+  "browser_public_min": "dist/finance-js.umd.min.js",
   "browser_private": "dist/finance-js.private.umd.js",
   "lib_parsers": "dist/lib-parsers.umd.js",
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
     "chart.js": "^4.2.1",
     "codemirror": "^6.0.1",
-    "@codemirror/lang-json": "^6.0.1",
     "file-saver": "^2.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "rollup": "^2.79.1",
     "rollup-plugin-string": "^3.0.0"
   },
