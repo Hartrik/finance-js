@@ -72,8 +72,6 @@ export class ComponentAnalysisChartCategories {
             });
         });
 
-        console.log(uniqueColors);
-
         let datasets = [];
 
         let randomColorBuffer = [...ComponentAnalysisChartCategories.#DEFAULT_COLORS];

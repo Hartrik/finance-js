@@ -26,15 +26,15 @@ export class ComponentDatasetForm {
             this.#inputTypeSelect.append($(`<option value="${key}">${parser.name}</option>`))
         }
 
-        return $(`<form class="dataset-form" action="javascript:void(0);"></form>`)
-            .append($(`<div class="form-group"></div>`)
-                .append($(`<label for="dataFieldName">Dataset name</label>`))
+        return $(`<div class="dataset-form"></div>`)
+            .append($(`<div class="mb-3"></div>`)
+                .append($(`<label class="form-label" for="dataFieldName">Dataset name</label>`))
                 .append(this.#inputFieldName))
-            .append($(`<div class="form-group"></div>`)
-                .append($(`<label>Data</label>`))
+            .append($(`<div class="mb-3"></div>`)
+                .append($(`<label class="form-label">Data</label>`))
                 .append(this.#inputEditor.dom))
-            .append($(`<div class="form-group"></div>`)
-                .append($(`<label for="dataTypeSelect">Data type</label>`))
+            .append($(`<div class="mb-3"></div>`)
+                .append($(`<label class="form-label" for="dataTypeSelect">Data type</label>`))
                 .append(this.#inputTypeSelect));
     }
 

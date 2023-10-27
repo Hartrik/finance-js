@@ -54,7 +54,7 @@ export class ComponentOptionsFilter {
     createNode() {
         this.#inputSelect = this._createSelect();
         this.#inputSearch = this._createSearchBox();
-        return $(`<form class="filter-component form-inline" action="javascript:void(0);"></form>`)
+        return $(`<div class="filter-component"></div>`)
             .append(this.#inputSelect)
             .append(this.#inputSearch);
     }

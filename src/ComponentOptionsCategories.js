@@ -2,38 +2,29 @@ import {DomBuilder} from "./DomBuilder";
 
 /**
  *
- * @version 2023-04-03
+ * @version 2023-10-27
  * @author Patrik Harag
  */
 export class ComponentOptionsCategories {
 
     #refreshFunction;
-    #initialEnableCategories;
+    #checked;
 
-    #inputCheckBox;
     #node;
 
     constructor(enableCategories, refreshFunction) {
-        this.#initialEnableCategories = enableCategories;
+        this.#checked = enableCategories;
         this.#refreshFunction = refreshFunction;
     }
 
     createNode() {
-        this.#node = DomBuilder.div({ class: 'categories-component btn-group-toggle', 'data-toggle': 'buttons' }, [
-            DomBuilder.element('label', { class: 'btn btn-secondary' }, [
-                this.#inputCheckBox = DomBuilder.element('input', {
-                    type: 'checkbox',
-                    checked: this.#initialEnableCategories,
-                    class: 'form-control'
-                }),
-                DomBuilder.element('i', { class: 'fa fa-th' })
-            ])
-        ]);
-
-        this.#inputCheckBox.change((e) => {
-            this.#refreshFunction(this.isSelected());
+        let labelContent = DomBuilder.element('i', { class: 'fa fa-th' });
+        let toggleButton = DomBuilder.Bootstrap.toggleButton(labelContent, 'btn-secondary', this.#checked, b => {
+            this.#checked = b;
+            this.#refreshFunction(b);
         });
 
+        this.#node = DomBuilder.div({ class: 'categories-component' }, toggleButton);
         return this.#node;
     }
 
@@ -46,6 +37,6 @@ export class ComponentOptionsCategories {
     }
 
     isSelected() {
-        return this.#inputCheckBox.prop('checked');
+        return this.#checked;
     }
 }

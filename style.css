@@ -1,4 +1,9 @@
 
+/*
+ * @version 2023-10-27
+ * @author Patrik Harag
+ */
+
 /* every tab */
 
 .tab-content > .tab-pane {
@@ -83,6 +88,8 @@
 }
 
 .panel-analysis .options-bar .filter-component,
+.panel-analysis .options-bar .filter-component select,
+.panel-analysis .options-bar .filter-component input,
 .panel-analysis .options-bar .ceil-component,
 .panel-analysis .options-bar .categories-component {
     display: inline;

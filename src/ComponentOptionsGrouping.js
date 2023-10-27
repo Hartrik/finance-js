@@ -2,7 +2,7 @@ import {Groups} from "./Groups";
 
 /**
  *
- * @version 2023-04-02
+ * @version 2023-10-27
  * @author Patrik Harag
  */
 export class ComponentOptionsGrouping {
@@ -16,25 +16,26 @@ export class ComponentOptionsGrouping {
     }
 
     createNode() {
-        let noGroupingButton;
-        let weekButton;
-        let monthButton;
-        let yearButton;
-        let allButton;
-
         const short = window.innerWidth < 800;
 
-        let dom = $(`<div class="grouping-component btn-group btn-group-toggle" data-toggle="buttons"></div>`)
-            .append($(`<label class="btn btn-secondary"></label>`)
-                .text(short ? "Ø" : "No grouping").append(noGroupingButton = $(`<input type="radio" name="options" id="grouping-off">`)))
-            .append($(`<label class="btn btn-secondary"></label>`)
-                .text("Week").append(weekButton = $(`<input type="radio" name="options" id="grouping-week">`)))
-            .append($(`<label class="btn btn-secondary active"></label>`)
-                .text("Month").append(monthButton = $(`<input type="radio" name="options" id="grouping-month" checked>`)))
-            .append($(`<label class="btn btn-secondary"></label>`)
-                .text("Year").append(yearButton = $(`<input type="radio" name="options" id="grouping-year">`)))
-            .append($(`<label class="btn btn-secondary"></label>`)
-                .text("Σ").append(allButton = $(`<input type="radio" name="options" id="grouping-all">`)));
+        const noGroupingButton = $(`<input type="radio" name="options" class="btn-check" id="grouping-off">`);
+        const weekButton = $(`<input type="radio" name="options" class="btn-check" id="grouping-week">`);
+        const monthButton = $(`<input type="radio" name="options" class="btn-check" id="grouping-month" checked>`);
+        const yearButton = $(`<input type="radio" name="options" class="btn-check" id="grouping-year">`);
+        const allButton = $(`<input type="radio" name="options" class="btn-check" id="grouping-all">`);
+
+        const noGroupingLabel = $(`<label class="btn btn-secondary" for="grouping-off"></label>`).text(short ? "Ø" : "No grouping");
+        const weekLabel = $(`<label class="btn btn-secondary" for="grouping-week"></label>`).text("Week");
+        const monthLabel = $(`<label class="btn btn-secondary" for="grouping-month"></label>`).text("Month");
+        const yearLabel = $(`<label class="btn btn-secondary" for="grouping-year"></label>`).text("Year");
+        const allLabel = $(`<label class="btn btn-secondary" for="grouping-all"></label>`).text("Σ");
+
+        const dom = $(`<div class="btn-group grouping-component" role="group"></div>`)
+            .append(noGroupingButton).append(noGroupingLabel)
+            .append(weekButton).append(weekLabel)
+            .append(monthButton).append(monthLabel)
+            .append(yearButton).append(yearLabel)
+            .append(allButton).append(allLabel);
 
         noGroupingButton.change(() => {
             this.#grouping = Groups.NO_GROUPING;

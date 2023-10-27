@@ -39,8 +39,8 @@ export class ComponentTabbedPanel {
     _appendTab(tabsNav, tabsContent, id, title, selected, content) {
         let navId = id + "-nav";
 
-        tabsNav.append($(`<li class="nav-item"></li>`)
-            .append($(`<a class="nav-link ${selected ? 'active' : ''}" id="${navId}" data-toggle="tab" href="#${id}" role="tab" aria-controls="${id}" aria-selected="${selected}"></a>`)
+        tabsNav.append($(`<li class="nav-item" role="presentation"></li>`)
+            .append($(`<button type="button" class="nav-link ${selected ? 'active' : ''}" id="${navId}" data-bs-toggle="tab" data-bs-target="#${id}" role="tab" aria-controls="${id}" aria-selected="${selected}"></button>`)
                 .append(title)));
 
         tabsContent.append($(`<div class="tab-pane fade ${selected ? 'show active' : ''}" id="${id}" role="tabpanel" aria-labelledby="${navId}"></div>`)
