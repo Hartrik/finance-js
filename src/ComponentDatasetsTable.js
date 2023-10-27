@@ -1,5 +1,6 @@
 import {Utils} from "./Utils";
 import {DomBuilder} from "./DomBuilder";
+import $ from "jquery";
 
 /**
  *

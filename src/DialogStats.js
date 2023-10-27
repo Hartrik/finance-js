@@ -2,6 +2,7 @@ import { Filters } from  "./Filters.js"
 import { DialogDetails } from  "./DialogDetails.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
+import $ from "jquery";
 
 /**
  * @version 2023-04-02

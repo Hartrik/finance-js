@@ -8,6 +8,7 @@ import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
 import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
 import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
 import { ComponentPanelPersistenceLS } from "./ComponentPanelPersistenceLS.js";
+import $ from "jquery";
 
 import EXAMPLE_DATA from "../../examples/data_simple.csv";
 import EXAMPLE_FILTER from "../../examples/filters.json";
@@ -49,7 +50,8 @@ class Builder {
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let context = new Context($(this.#dialogAnchorSelector), this.#csrfParameterName, this.#csrfToken);
+        let dialogAnchorNode = $(this.#dialogAnchorSelector);
+        let context = new Context(dialogAnchorNode, this.#csrfParameterName, this.#csrfToken);
 
         let datasets = new Map();
         datasets.set('example', new Dataset('example', 'csv-simple', EXAMPLE_DATA));

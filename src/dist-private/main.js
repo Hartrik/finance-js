@@ -7,7 +7,7 @@ import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
 import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
 import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
 import { ComponentPanelPersistenceAPI } from "./ComponentPanelPersistenceAPI.js";
-
+import $ from "jquery";
 
 // for logged users
 
@@ -46,7 +46,8 @@ class Builder {
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let context = new Context($(this.#dialogAnchorSelector), this.#csrfParameterName, this.#csrfToken);
+        let dialogAnchorNode = $(this.#dialogAnchorSelector);
+        let context = new Context(dialogAnchorNode, this.#csrfParameterName, this.#csrfToken);
 
         let dataProvider = new DataProviderAPI(context);
         let dataManager = new DataManager(context, dataProvider, true);

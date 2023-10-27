@@ -3,6 +3,7 @@ import { DomBuilder } from "./DomBuilder.js";
 import { Filters } from  "./Filters.js"
 import { EditorView, basicSetup } from "codemirror"
 import { json } from "@codemirror/lang-json"
+import $ from "jquery";
 
 /**
  *

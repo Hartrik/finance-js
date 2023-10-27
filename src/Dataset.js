@@ -1,4 +1,5 @@
 import { Parsers } from "./Parsers.js";
+import $ from "jquery";
 
 /**
  *

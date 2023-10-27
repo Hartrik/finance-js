@@ -1,6 +1,7 @@
 import { Transactions } from "./Transactions.js"
 import { Utils } from "./Utils.js"
 import { DomBuilder } from "./DomBuilder";
+import $ from "jquery";
 
 /**
  * @version 2023-04-01

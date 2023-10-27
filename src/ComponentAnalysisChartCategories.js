@@ -155,7 +155,7 @@ export class ComponentAnalysisChartCategories {
             }
         };
 
-        let canvas = $(`<canvas width="400" height="150"></canvas>`);
+        let canvas = DomBuilder.element('canvas', { width: 400, height: 150 });
         parent.append(canvas);
         const chart = new Chart(canvas, config);
     }

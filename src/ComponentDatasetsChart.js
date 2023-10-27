@@ -1,5 +1,6 @@
 
 import Chart from 'chart.js/auto';
+import {DomBuilder} from "./DomBuilder";
 
 /**
  *
@@ -8,7 +9,7 @@ import Chart from 'chart.js/auto';
  */
 export class ComponentDatasetsChart {
 
-    panel = $(`<div class="chart-panel"></div>`);
+    panel = DomBuilder.div({ class: 'chart-panel' });
 
     createNode() {
         return this.panel;
@@ -64,7 +65,7 @@ export class ComponentDatasetsChart {
             }
         };
 
-        let canvas = $(`<canvas></canvas>`);
+        let canvas = DomBuilder.element('canvas');
         this.panel.append(canvas);
         const chart = new Chart(canvas, config);
     }

@@ -1,4 +1,5 @@
 import {Groups} from "./Groups";
+import $ from "jquery";
 
 /**
  *
