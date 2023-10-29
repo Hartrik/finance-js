@@ -294,7 +294,7 @@ DomBuilder.BootstrapTable = class {
 
 /**
  *
- * @version 2023-10-27
+ * @version 2023-10-29
  * @author Patrik Harag
  */
 DomBuilder.BootstrapDialog = class {
@@ -389,8 +389,6 @@ DomBuilder.BootstrapDialog = class {
     hide() {
         if (this.#dialog !== null) {
             this.#dialogBootstrap.hide();
-            this.#dialog = null;
-            this.#dialogBootstrap = null;
         }
     }
 }
