@@ -1,4 +1,5 @@
 
+import { DomBuilder } from "../DomBuilder.js";
 import { Context } from "../Context.js";
 import { Dataset } from "../Dataset.js";
 import { DataProviderLocalStorage } from "./DataProviderLocalStorage.js";
@@ -8,7 +9,6 @@ import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
 import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
 import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
 import { ComponentPanelPersistenceLS } from "./ComponentPanelPersistenceLS.js";
-import $ from "jquery";
 
 import EXAMPLE_DATA from "../../examples/data_simple.csv";
 import EXAMPLE_FILTER from "../../examples/filters.json";
@@ -20,19 +20,13 @@ export function builder() {
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 class Builder {
 
-    #dialogAnchorSelector;
     #csrfParameterName;
     #csrfToken;
-
-    setDialogAnchor(dialogAnchorSelector) {
-        this.#dialogAnchorSelector = dialogAnchorSelector;
-        return this;
-    }
 
     setCsrf(csrfParameterName, csrfToken) {
         this.#csrfParameterName = csrfParameterName;
@@ -41,23 +35,22 @@ class Builder {
     }
 
     build() {
-        if (!this.#dialogAnchorSelector) {
-            throw 'Dialog anchor not set';
-        }
         if (!this.#csrfParameterName) {
             throw 'CSRF parameter name not set';
         }
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let dialogAnchorNode = $(this.#dialogAnchorSelector);
+
+        const dialogAnchorNode = DomBuilder.div({ class: 'finance-dialog-anchor finance-component' });
+        document.body.prepend(dialogAnchorNode[0]);
+
         let context = new Context(dialogAnchorNode, this.#csrfParameterName, this.#csrfToken);
 
         let datasets = new Map();
         datasets.set('example', new Dataset('example', 'csv-simple', EXAMPLE_DATA));
 
         let dataProvider = new DataProviderLocalStorage(EXAMPLE_FILTER, datasets);
-
         let dataManager = new DataManager(context, dataProvider, false);
 
         let componentTabbedPanel = new ComponentTabbedPanel();
@@ -67,7 +60,8 @@ class Builder {
         componentTabbedPanel.addPanel(new ComponentPanelPersistenceLS(context, dataManager));
 
         let node = componentTabbedPanel.createNode();
+        node.addClass('finance-component');
         setTimeout(() => dataManager.load());
-        return node;
+        return node[0];
     }
 }

@@ -26,19 +26,17 @@
   <script>
       document.addEventListener('DOMContentLoaded', () => {
           let node = FinanceJS.builder()
-              .setDialogAnchor('#dialog-anchor')
               .setCsrf('_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad')
               .build();
 
-          document.getElementById('finance-top-component').appendChild(node[0]);
+          document.getElementById('app-wrapper').appendChild(node);
       });
   </script>
 </head>
 <body>
 <main role="main" class="container">
   <h1>Finance</h1>
-  <div id="dialog-anchor"></div>
-  <div id="finance-top-component" style="padding-top: 10pt; min-height: 400pt;"></div>
+  <div id="app-wrapper" style="padding-top: 10pt; min-height: 400pt;"></div>
 </main>
 </body>
 </html>

@@ -1,75 +1,75 @@
 
 /*
- * @version 2023-10-27
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 
 /* every tab */
 
-.tab-content > .tab-pane {
+.finance-component .tab-content > .tab-pane {
     margin: 10pt 0 0 0;
 }
 
 /* tab panel data */
 
-.panel-data h2 {
+.finance-component .panel-data h2 {
     padding-top: 6pt;
     font-size: 1.2rem;
 }
 
-.panel-data table {
+.finance-component .panel-data table {
     margin-bottom: 1rem;
 }
 
-.panel-data table thead {
+.finance-component .panel-data table thead {
     font-weight: 500;
 }
 
-.panel-data .drag-and-drop-hint {
+.finance-component .panel-data .drag-and-drop-hint {
     font-style: italic;
     font-size: small;
     color: gray;
 }
 
-.panel-data.drag-and-drop-highlight {
+.finance-component .panel-data.drag-and-drop-highlight {
     outline: rgba(0, 129, 255, 0.76) dashed thick;
     outline-offset: 2px;
 }
 
-.panel-data .chart-panel {
+.finance-component .panel-data .chart-panel {
     max-height: 200pt;
 }
 
-.panel-data .chart-panel canvas {
+.finance-component .panel-data .chart-panel canvas {
     margin: 3em 0;
 }
 
-.dataset-form .cm-editor {
+.finance-component .dataset-form .cm-editor {
     height: 350pt;
 }
 
-.dataset-form .cm-scroller {
+.finance-component .dataset-form .cm-scroller {
     overflow: auto;
 }
 
 /* tab panel filters */
 
-.panel-filters .cm-editor {
+.finance-component .panel-filters .cm-editor {
     height: 350pt;
     margin-bottom: 1em;
 }
 
-.panel-filters .cm-scroller {
+.finance-component .panel-filters .cm-scroller {
     overflow: auto;
 }
 
-.panel-filters .alert {
+.finance-component .panel-filters .alert {
     margin: 0 0 16pt 0;
 }
 
 /* tab panel analysis */
 
-.panel-analysis .summary-panel {
+.finance-component .panel-analysis .summary-panel {
     font-size: small;
     color: gray;
     float: right;
@@ -77,90 +77,89 @@
 
 /* options bar */
 
-.panel-analysis .options-bar .grouping-component,
-.panel-analysis .options-bar .ceil-component,
-.panel-analysis .options-bar .categories-component,
-.panel-analysis .options-bar .filter-component select,
-.panel-analysis .options-bar .filter-component input {
+.finance-component .panel-analysis .options-bar .grouping-component,
+.finance-component .panel-analysis .options-bar .ceil-component,
+.finance-component .panel-analysis .options-bar .categories-component,
+.finance-component .panel-analysis .options-bar .filter-component select,
+.finance-component .panel-analysis .options-bar .filter-component input {
     margin-bottom: 4pt;
     margin-right: 6pt;
     vertical-align: top;
 }
-
-.panel-analysis .options-bar .filter-component,
-.panel-analysis .options-bar .filter-component select,
-.panel-analysis .options-bar .filter-component input,
-.panel-analysis .options-bar .ceil-component,
-.panel-analysis .options-bar .categories-component {
+.finance-component .panel-analysis .options-bar .filter-component,
+.finance-component .panel-analysis .options-bar .filter-component select,
+.finance-component .panel-analysis .options-bar .filter-component input,
+.finance-component .panel-analysis .options-bar .ceil-component,
+.finance-component .panel-analysis .options-bar .categories-component {
     display: inline;
 }
 
-.panel-analysis .options-bar .ceil-component .form-control,
-.panel-analysis .options-bar .categories-component .form-control {
+.finance-component .panel-analysis .options-bar .ceil-component .form-control,
+.finance-component .panel-analysis .options-bar .categories-component .form-control {
     /* default bootstrap width: 100% breaks page layout */
     width: unset;
 }
 
-.panel-analysis .options-bar .filter-component select {
+.finance-component .panel-analysis .options-bar .filter-component select {
     margin-right: 6pt;
 }
 
-.panel-analysis .options-bar .filter-component select.btn {
+.finance-component .panel-analysis .options-bar .filter-component select.btn {
     text-align: left;
 }
 
-.panel-analysis .options-bar .filter-component input {
+.finance-component .panel-analysis .options-bar .filter-component input {
     width: 20em;
 }
 
 /* table */
 
-.panel-analysis .hide-value-floating-part .value-floating-part {
+.finance-component .panel-analysis .hide-value-floating-part .value-floating-part {
     display: none;
 }
 
-.table td, .table th {
+.finance-component .table td, .table th {
     padding: 0.25rem 0.75rem;
 }
 
-.table td.group-key-cell span {
+.finance-component .table td.group-key-cell span {
     white-space: nowrap;
 }
 
-.table td.label-cell {
+.finance-component .table td.label-cell {
     font-weight: normal;
     text-align: right;
 }
 
-.table td.value-cell {
+.finance-component .table td.value-cell {
     text-align: right;
 }
 
-.table td.negative {
+.finance-component .table td.negative {
     color: darkred;
 }
 
-.table td.positive {
+.finance-component .table td.positive {
     color: darkgreen;
 }
 
-.table td.result {
+.finance-component .table td.result {
     font-weight: bold;
 }
 
-.table td.options-cell {
+.finance-component .table td.options-cell {
     text-align: right;
     white-space: nowrap;
 }
 
-.table td.options-cell .fa {
+.finance-component .table td.options-cell .fa {
     text-align: center;
     text-decoration: none;
     color: black;
     margin-left: 0.5em;
 }
 
-.table td.options-cell .fa:hover {
+.finance-component .table td.options-cell .fa:hover {
     opacity: 0.7;
     color: gray;
     text-decoration: none;
@@ -168,19 +167,19 @@
 
 /* charts */
 
-.panel-analysis .chart-panel canvas {
+.finance-component .panel-analysis .chart-panel canvas {
     margin: 3em 0;
 }
 
 /* tab panel persistence */
 
-.panel-persistence .btn {
+.finance-component .panel-persistence .btn {
     margin-top: 2em;
     margin-right: 0.5em;
 }
 
 /* actions */
 
-.actions-bar .btn {
+.finance-component .actions-bar .btn {
     margin-bottom: 4pt;
 }

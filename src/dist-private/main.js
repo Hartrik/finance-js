@@ -1,4 +1,5 @@
 
+import { DomBuilder } from "../DomBuilder.js";
 import { Context } from "../Context.js";
 import { DataProviderAPI } from "./DataProviderAPI.js";
 import { DataManager } from "../DataManager.js";
@@ -7,7 +8,6 @@ import { ComponentPanelFilters } from "../ComponentPanelFilters.js";
 import { ComponentPanelDatasets } from "../ComponentPanelDatasets.js";
 import { ComponentPanelAnalysis } from "../ComponentPanelAnalysis.js";
 import { ComponentPanelPersistenceAPI } from "./ComponentPanelPersistenceAPI.js";
-import $ from "jquery";
 
 // for logged users
 
@@ -17,19 +17,13 @@ export function builder() {
 
 /**
  *
- * @version 2023-03-27
+ * @version 2023-10-30
  * @author Patrik Harag
  */
 class Builder {
 
-    #dialogAnchorSelector;
     #csrfParameterName;
     #csrfToken;
-
-    setDialogAnchor(dialogAnchorSelector) {
-        this.#dialogAnchorSelector = dialogAnchorSelector;
-        return this;
-    }
 
     setCsrf(csrfParameterName, csrfToken) {
         this.#csrfParameterName = csrfParameterName;
@@ -37,16 +31,16 @@ class Builder {
         return this;
     }
     build() {
-        if (!this.#dialogAnchorSelector) {
-            throw 'Dialog anchor not set';
-        }
         if (!this.#csrfParameterName) {
             throw 'CSRF parameter name not set';
         }
         if (!this.#csrfToken) {
             throw 'CSRF token not set';
         }
-        let dialogAnchorNode = $(this.#dialogAnchorSelector);
+
+        const dialogAnchorNode = DomBuilder.div({ class: 'finance-dialog-anchor finance-component' });
+        document.body.prepend(dialogAnchorNode[0]);
+
         let context = new Context(dialogAnchorNode, this.#csrfParameterName, this.#csrfToken);
 
         let dataProvider = new DataProviderAPI(context);
@@ -59,7 +53,8 @@ class Builder {
         componentTabbedPanel.addPanel(new ComponentPanelPersistenceAPI(context, dataManager));
 
         let node = componentTabbedPanel.createNode();
+        node.addClass('finance-component');
         setTimeout(() => dataManager.load());
-        return node;
+        return node[0];
     }
 }
