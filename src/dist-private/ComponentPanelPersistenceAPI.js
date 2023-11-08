@@ -4,7 +4,7 @@ import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-11-08
  * @author Patrik Harag
  */
 export class ComponentPanelPersistenceAPI extends ComponentPanel {
@@ -33,32 +33,47 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
             DomBuilder.Bootstrap.alertInfo([
                 DomBuilder.par(null, "Datasets and filters are saved automatically.")
             ]),
-            this.#createForceUpdateButton(),
+            this.#createForceUpdateButton(), DomBuilder.element('br'),
+            this.#createForceUpdateButtonIncremental(), DomBuilder.element('br'),
             this.#createExportButton()
         ]);
     }
 
     #createForceUpdateButton() {
-        return DomBuilder.button('Fetch statements from FIO', { class: "btn btn-secondary" }, (e) => {
-            ServerPrivateAPI.updateServerData(this.#context).then(d => {
-                let dialog = new DomBuilder.BootstrapDialog();
-                dialog.setHeaderContent('Info');
-                dialog.setBodyContent(DomBuilder.par(null, "Server data updated"));
-                dialog.addCloseButton('Close');
-                dialog.show(this.#context.dialogAnchor);
-            }).catch(e => {
-                let msg = e.statusText ? e.statusText : e;
-                console.log('API call failed: ' + msg)
+        return DomBuilder.button('Update server data', { class: "btn btn-secondary" }, (e) => {
+            this.updateServerData(false);
+        });
+    }
 
-                let dialog = new DomBuilder.BootstrapDialog();
-                dialog.setHeaderContent("Error");
-                dialog.setBodyContent([
-                    DomBuilder.par(null, 'API call failed: '),
-                    DomBuilder.element('code', null, msg)
-                ]);
-                dialog.addCloseButton('Close');
-                dialog.show(this.#context.dialogAnchor);
-            });
+    #createForceUpdateButtonIncremental() {
+        return DomBuilder.button('Update server data – incremental', { class: "btn btn-secondary" }, (e) => {
+            this.updateServerData(true);
+        });
+    }
+
+    updateServerData(incrementalUpdate) {
+        ServerPrivateAPI.updateServerData(this.#context, incrementalUpdate).then(d => {
+            let dialog = new DomBuilder.BootstrapDialog();
+            dialog.setHeaderContent('Info');
+            dialog.setBodyContent(DomBuilder.par(null, "Server data updated"));
+            dialog.addCloseButton('Close');
+            dialog.show(this.#context.dialogAnchor);
+
+            // load changes
+            this.#dataManager.load();
+
+        }).catch(e => {
+            let msg = e.statusText ? e.statusText : e;
+            console.log('API call failed: ' + msg)
+
+            let dialog = new DomBuilder.BootstrapDialog();
+            dialog.setHeaderContent("Error");
+            dialog.setBodyContent([
+                DomBuilder.par(null, 'API call failed: '),
+                DomBuilder.element('code', null, msg)
+            ]);
+            dialog.addCloseButton('Close');
+            dialog.show(this.#context.dialogAnchor);
         });
     }
 

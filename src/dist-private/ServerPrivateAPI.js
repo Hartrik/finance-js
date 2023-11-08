@@ -3,7 +3,7 @@ import $ from "jquery";
 
 /**
  *
- * @version 2022-05-21
+ * @version 2023-11-08
  * @author Patrik Harag
  */
 export class ServerPrivateAPI {
@@ -84,13 +84,13 @@ export class ServerPrivateAPI {
      *
      * @return Promise
      */
-    static updateServerData(context) {
+    static updateServerData(context, incremental = false) {
         return new Promise((resolve, reject) => {
             let dataToSend = {};
             dataToSend[context.csrfParameterName] = context.csrfToken;
 
             $.ajax({
-                url: '/app/finance/private/update',
+                url: '/app/finance/private/update?incremental=' + incremental,
                 type: 'POST',
                 data: JSON.stringify(dataToSend),
                 contentType: 'application/json',
