@@ -1,23 +1,20 @@
-import { DomBuilder } from "../DomBuilder.js";
-import { ComponentPanel } from "../ComponentPanel.js";
-import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
+import { DomBuilder } from "./DomBuilder.js";
+import { ComponentPanel } from "./ComponentPanel.js";
+import { ServerPrivateAPI } from "../ServerPrivateAPI.js";
 
 /**
  *
- * @version 2023-11-08
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ComponentPanelPersistenceAPI extends ComponentPanel {
 
-    /** @type Context */
-    #context;
-    /** @type DataManager */
-    #dataManager;
+    /** @type Controller */
+    #controller;
 
-    constructor(context, dataManager) {
+    constructor(controller) {
         super();
-        this.#context = context;
-        this.#dataManager = dataManager;
+        this.#controller = controller;
     }
 
     getTabId() {
@@ -52,15 +49,15 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
     }
 
     updateServerData(incrementalUpdate) {
-        ServerPrivateAPI.updateServerData(this.#context, incrementalUpdate).then(d => {
+        ServerPrivateAPI.updateServerData(incrementalUpdate).then(d => {
             let dialog = new DomBuilder.BootstrapDialog();
             dialog.setHeaderContent('Info');
             dialog.setBodyContent(DomBuilder.par(null, "Server data updated"));
             dialog.addCloseButton('Close');
-            dialog.show(this.#context.dialogAnchor);
+            dialog.show(this.#controller.getDialogAnchor());
 
             // load changes
-            this.#dataManager.load();
+            this.#controller.getDataManager().load();
 
         }).catch(e => {
             let msg = e.statusText ? e.statusText : e;
@@ -73,13 +70,13 @@ export class ComponentPanelPersistenceAPI extends ComponentPanel {
                 DomBuilder.element('code', null, msg)
             ]);
             dialog.addCloseButton('Close');
-            dialog.show(this.#context.dialogAnchor);
+            dialog.show(this.#controller.getDialogAnchor());
         });
     }
 
     #createExportButton() {
         return DomBuilder.button('Export', { class: 'btn btn-secondary' }, e => {
-            this.#dataManager.exportAll();
+            this.#controller.getDataManager().exportAll();
         })
     }
 }

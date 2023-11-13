@@ -1,5 +1,5 @@
-import { Dataset } from "../Dataset.js";
-import { DataProvider } from "../DataProvider.js";
+import { Dataset } from "./Dataset.js";
+import { DataProvider } from "./DataProvider.js";
 
 /**
  *

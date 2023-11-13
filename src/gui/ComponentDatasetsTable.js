@@ -1,4 +1,4 @@
-import {Utils} from "./Utils";
+import {Utils} from "../Utils";
 import {DomBuilder} from "./DomBuilder";
 import $ from "jquery";
 
@@ -14,7 +14,7 @@ export class ComponentDatasetsTable {
 
     #tableBody = $(`<tbody></tbody>`);
 
-    constructor(context, onDelete, onEdit) {
+    constructor(controller, onDelete, onEdit) {
         this.#onDelete = onDelete;
         this.#onEdit = onEdit;
     }

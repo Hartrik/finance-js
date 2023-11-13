@@ -1,6 +1,6 @@
 import {DomBuilder} from "./DomBuilder.js";
-import {Dataset} from "./Dataset.js";
-import {Parsers} from "./Parsers.js";
+import {Dataset} from "../Dataset.js";
+import {Parsers} from "../Parsers.js";
 import {DragAndDropUtil} from "./DragAndDropUtil";
 import {ComponentPanel} from "./ComponentPanel.js";
 import {ComponentDatasetsTable} from "./ComponentDatasetsTable";
@@ -9,15 +9,13 @@ import {ComponentDatasetsChart} from "./ComponentDatasetsChart";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ComponentPanelDatasets extends ComponentPanel {
 
-    /** @type Context */
-    #context;
-    /** @type DataManager */
-    #dataManager;
+    /** @type Controller */
+    #controller;
 
     /** @type {Map<string,Dataset>} */
     #datasets = null;
@@ -26,16 +24,15 @@ export class ComponentPanelDatasets extends ComponentPanel {
     /** @type {ComponentDatasetsChart} */
     #datasetsChart;
 
-    constructor(context, dataManager) {
+    constructor(controller) {
         super();
-        this.#context = context;
-        this.#dataManager = dataManager;
-        this.#datasetsTable = new ComponentDatasetsTable(context,
+        this.#controller = controller;
+        this.#datasetsTable = new ComponentDatasetsTable(controller,
                 (dataset) => this.#showDeleteDialog(dataset),
                 (dataset) => this.#showEditDialog(dataset));
         this.#datasetsChart = new ComponentDatasetsChart();
 
-        this.#dataManager.addOnDatasetsLoaded(datasets => {
+        this.#controller.getDataManager().addOnDatasetsLoaded(datasets => {
             let sorted = new Map([...datasets.entries()].sort((a, b) => {
                 return b[1].transactions.length - a[1].transactions.length;
             }));
@@ -109,7 +106,7 @@ export class ComponentPanelDatasets extends ComponentPanel {
         dialog.setBodyContent(DomBuilder.par(null, "Are you sure you want to delete this dataset?"));
         dialog.addSubmitButton('Confirm', () => this.#onDatasetDeleted(dataset));
         dialog.addCloseButton('Close');
-        dialog.show(this.#context.dialogAnchor);
+        dialog.show(this.#controller.getDialogAnchor());
     }
 
     #showEditDialog(dataset) {
@@ -125,7 +122,7 @@ export class ComponentPanelDatasets extends ComponentPanel {
             formComponent.setRawData(dataset.name, dataset.data, dataset.dataType);
         }
         dialog.setSizeExtraLarge();
-        dialog.show(this.#context.dialogAnchor);
+        dialog.show(this.#controller.getDialogAnchor());
     }
 
     #onDatasetChanged(old, dataset) {
@@ -133,12 +130,12 @@ export class ComponentPanelDatasets extends ComponentPanel {
             this.#datasets.delete(old.name);
         }
         this.#datasets.set(dataset.name, dataset);
-        this.#dataManager.updateDatasets(this.#datasets, true, true);
+        this.#controller.getDataManager().updateDatasets(this.#datasets, true, true);
     }
 
     #onDatasetDeleted(dataset) {
         if (this.#datasets.delete(dataset.name)) {
-            this.#dataManager.updateDatasets(this.#datasets, true, true);
+            this.#controller.getDataManager().updateDatasets(this.#datasets, true, true);
         }
     }
 

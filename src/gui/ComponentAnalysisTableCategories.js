@@ -1,8 +1,8 @@
-import { DialogDetails } from  "./DialogDetails.js"
-import { DialogStats } from  "./DialogStats.js"
-import { Utils } from "./Utils.js"
+import { DialogDetails } from "./DialogDetails.js"
+import { DialogStats } from "./DialogStats.js"
+import { Utils } from "../Utils.js"
 import { DomBuilder } from "./DomBuilder";
-import { Filters } from "./Filters";
+import { Filters } from "../Filters";
 
 /**
  *
@@ -11,7 +11,7 @@ import { Filters } from "./Filters";
  */
 export class ComponentAnalysisTableCategories {
 
-    #context;
+    #controller;
 
     /** @typedef Map<string,GroupedTransactions> */
     #groupedTransactions;
@@ -20,8 +20,8 @@ export class ComponentAnalysisTableCategories {
 
     #tableBuilder = new DomBuilder.BootstrapTable();
 
-    constructor(context, groupedTransactions, allFilters, selectedFilter) {
-        this.#context = context;
+    constructor(controller, groupedTransactions, allFilters, selectedFilter) {
+        this.#controller = controller;
         this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;
@@ -91,11 +91,11 @@ export class ComponentAnalysisTableCategories {
             let path = (filter.filterFunc === undefined) ? '' : filter.name + ' / ';
             row.append(DomBuilder.element('td', { class: 'options-cell' }, [
                 DomBuilder.link('', { class: 'fa fa-eye' }, () => {
-                    let dialog = new DialogDetails(this.#context, path + group.key, group.transactions, filter, filters);
+                    let dialog = new DialogDetails(this.#controller, path + group.key, group.transactions, filter, filters);
                     dialog.show();
                 }),
                 DomBuilder.link('', { class: 'fa fa-th' }, () => {
-                    let dialog = new DialogStats(this.#context, path + group.key, group.transactions, filters);
+                    let dialog = new DialogStats(this.#controller, path + group.key, group.transactions, filters);
                     dialog.show();
                 })
             ]));

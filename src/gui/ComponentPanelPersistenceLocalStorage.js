@@ -1,22 +1,19 @@
-import { DomBuilder } from "../DomBuilder.js";
-import { ComponentPanel } from "../ComponentPanel.js";
+import { DomBuilder } from "./DomBuilder.js";
+import { ComponentPanel } from "./ComponentPanel.js";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-11-13
  * @author Patrik Harag
  */
-export class ComponentPanelPersistenceLS extends ComponentPanel {
+export class ComponentPanelPersistenceLocalStorage extends ComponentPanel {
 
-    /** @type Context */
-    #context;
-    /** @type DataManager */
-    #dataManager;
+    /** @type Controller */
+    #controller;
 
-    constructor(context, dataManager) {
+    constructor(controller) {
         super();
-        this.#context = context;
-        this.#dataManager = dataManager;
+        this.#controller = controller;
     }
 
     getTabId() {
@@ -36,11 +33,11 @@ export class ComponentPanelPersistenceLS extends ComponentPanel {
                 DomBuilder.par(null, 'Filters and datasets can be stored in browser storage (using the HTML Web Storage API). ' +
                     'Saved data will only be stored on this device and only until the browsing history is deleted.')
             ]),
-            DomBuilder.Bootstrap.switchButton('Save', this.#dataManager.isSavingEnabled(), checked => {
-                this.#dataManager.enableSaving(checked);
+            DomBuilder.Bootstrap.switchButton('Save', this.#controller.getDataManager().isSavingEnabled(), checked => {
+                this.#controller.getDataManager().enableSaving(checked);
             }),
             DomBuilder.button('Export', { class: 'btn btn-secondary' }, e => {
-                this.#dataManager.exportAll();
+                this.#controller.getDataManager().exportAll();
             })
         ]);
     }

@@ -1,7 +1,7 @@
 import { DomBuilder } from "./DomBuilder";
 import Chart from 'chart.js/auto';
-import {Filters} from "./Filters";
-import {Utils} from "./Utils";
+import {Filters} from "../Filters";
+import {Utils} from "../Utils";
 
 /**
  *
@@ -21,7 +21,7 @@ export class ComponentAnalysisChartCategories {
     ];
 
 
-    #context;
+    #controller;
 
     #groupedTransactions;
     #selectedFilter;
@@ -29,8 +29,8 @@ export class ComponentAnalysisChartCategories {
 
     #container = DomBuilder.div({ class: 'chart-panel' });
 
-    constructor(context, groupedTransactions, allFilters, selectedFilter) {
-        this.#context = context;
+    constructor(controller, groupedTransactions, allFilters, selectedFilter) {
+        this.#controller = controller;
         this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;

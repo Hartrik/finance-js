@@ -1,17 +1,16 @@
 import {Filters} from "./Filters.js";
 import {Dataset} from "./Dataset.js";
-import {DomBuilder} from "./DomBuilder.js";
 import FileSaver from 'file-saver';
 
 /**
  *
- * @version 2023-03-31
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class DataManager {
 
-    /** @type Context */
-    #context;
+    /** @type NotificationProvider */
+    #notificationProvider;
     /** @type DataProvider */
     #dataProvider;
 
@@ -30,11 +29,11 @@ export class DataManager {
     #urlDatasetsEnabled;
     #savingEnabled;
 
-    constructor(context, dataProvider, urlDatasetsEnabled) {
-        this.#context = context;
+    constructor(dataProvider, urlDatasetsEnabled, notificationProvider) {
         this.#dataProvider = dataProvider;
         this.#urlDatasetsEnabled = urlDatasetsEnabled;
         this.#savingEnabled = (this.#dataProvider.hasStoredDatasets() || this.#dataProvider.hasStoredFilters());
+        this.#notificationProvider = notificationProvider;
     }
 
     load() {
@@ -227,26 +226,10 @@ export class DataManager {
     }
 
     #handleInfo(title, description) {
-        console.log(title + ': ' + description);
-
-        let dialog = new DomBuilder.BootstrapDialog();
-        dialog.setHeaderContent(title);
-        dialog.setBodyContent(DomBuilder.par(null, description));
-        dialog.addCloseButton('Close');
-        dialog.show(this.#context.dialogAnchor);
+        this.#notificationProvider.handleInfo(title, description);
     }
 
     #handleError(title, e) {
-        const msg = e.statusText ? e.statusText : e;
-        console.log(title + ': ' + msg);
-
-        let dialog = new DomBuilder.BootstrapDialog();
-        dialog.setHeaderContent("Error");
-        dialog.setBodyContent([
-            DomBuilder.par(null, title + ': '),
-            DomBuilder.element('code', null, msg)
-        ]);
-        dialog.addCloseButton('Close');
-        dialog.show(this.#context.dialogAnchor);
+        return this.#notificationProvider.handleError(title, e);
     }
 }

@@ -1,35 +1,35 @@
-import { Transactions } from "./Transactions.js"
-import { Utils } from "./Utils.js"
+import { Transactions } from "../Transactions.js"
+import { Utils } from "../Utils.js"
 import { DomBuilder } from "./DomBuilder";
 import $ from "jquery";
 
 /**
- * @version 2023-04-01
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class DialogDetails {
 
-    context;
-    transactions;
-    groupName;
-    filter;
-    filters;
+    #controller;
+    #transactions;
+    #groupName;
+    #filter;
+    #filters;
 
-    constructor(context, groupName, transactions, activeFilter, filters) {
-        this.context = context;
-        this.groupName = groupName;
-        this.transactions = transactions;
-        this.filter = activeFilter;
-        this.filters = filters;
+    constructor(controller, groupName, transactions, activeFilter, filters) {
+        this.#controller = controller;
+        this.#groupName = groupName;
+        this.#transactions = transactions;
+        this.#filter = activeFilter;
+        this.#filters = filters;
     }
 
     show() {
         let dialog = new DomBuilder.BootstrapDialog();
-        dialog.setHeaderContent(this.groupName);
+        dialog.setHeaderContent(this.#groupName);
         dialog.setBodyContent(this._buildBody());
         dialog.addCloseButton('Close');
         dialog.setSizeLarge();
-        dialog.show(this.context.dialogAnchor);
+        dialog.show(this.#controller.getDialogAnchor());
     }
 
     _buildBody() {
@@ -38,7 +38,7 @@ export class DialogDetails {
             .append($(`<table class="table table-striped"></table>`)
                 .append(tableBody = $(`<tbody></tbody>`)))
 
-        this.transactions.sort(Transactions.comparator).forEach(transaction => {
+        this.#transactions.sort(Transactions.comparator).forEach(transaction => {
             let row = $(`<tr></tr>`);
             row.append($(`<td><span style="white-space: nowrap;">${Utils.esc(transaction.date)}</span></td>`));
             let descriptionCell = $(`<td><span>${Utils.esc(transaction.description)}</span></td>`);
@@ -46,17 +46,17 @@ export class DialogDetails {
             row.append($(`<td class="value-cell ${transaction.value < 0 ? 'negative' : 'positive'}">${Utils.esc(Utils.formatValue(transaction.value))}</td>`));
             tableBody.append(row);
 
-            // filter labels
-            for (const f of this.filters.values()) {
+            // #filter labels
+            for (const f of this.#filters.values()) {
                 if (f.hideInTable != null && f.hideInTable) {
                     continue;
                 }
                 if (f.subFilters != null) {
-                    // skip synthetic filters
+                    // skip synthetic #filters
                     continue;
                 }
-                if (this.filter === f) {
-                    // same as selected filter
+                if (this.#filter === f) {
+                    // same as selected #filter
                     continue;
                 }
                 if (f.filterFunc != null && f.filterFunc(transaction)) {

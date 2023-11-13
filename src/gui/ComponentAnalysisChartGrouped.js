@@ -8,7 +8,7 @@ import Chart from 'chart.js/auto';
  */
 export class ComponentAnalysisChartGrouped {
 
-    #context;
+    #controller;
 
     #groupedTransactions;
     #selectedFilter;
@@ -16,8 +16,8 @@ export class ComponentAnalysisChartGrouped {
 
     #container = DomBuilder.div({ class: 'chart-panel' });
 
-    constructor(context, groupedTransactions, allFilters, selectedFilter) {
-        this.#context = context;
+    constructor(controller, groupedTransactions, allFilters, selectedFilter) {
+        this.#controller = controller;
         this.#groupedTransactions = groupedTransactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;

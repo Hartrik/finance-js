@@ -1,19 +1,13 @@
-import { Dataset } from "../Dataset.js";
-import { DataProvider } from "../DataProvider.js";
+import { Dataset } from "./Dataset.js";
+import { DataProvider } from "./DataProvider.js";
 import { ServerPrivateAPI } from "./ServerPrivateAPI.js";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class DataProviderAPI extends DataProvider {
-    #context;
-
-    constructor(context) {
-        super();
-        this.#context = context;
-    }
 
     // filters
 
@@ -35,7 +29,7 @@ export class DataProviderAPI extends DataProvider {
         let dataToSend = {
             filters: rawFilters
         };
-        return ServerPrivateAPI.postSettings(this.#context, dataToSend);
+        return ServerPrivateAPI.postSettings(dataToSend);
     }
 
     discardFilters() {
@@ -74,7 +68,7 @@ export class DataProviderAPI extends DataProvider {
         let dataToSend = {
             datasets: Dataset.serializeDatasets(datasets)
         };
-        return ServerPrivateAPI.postData(this.#context, dataToSend);
+        return ServerPrivateAPI.postData(dataToSend);
     }
 
     discardDatasets() {

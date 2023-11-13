@@ -1,35 +1,31 @@
 import { ComponentPanel } from "./ComponentPanel.js";
 import { DomBuilder } from "./DomBuilder.js";
-import { Filters } from  "./Filters.js"
+import { Filters } from "../Filters.js"
 import { EditorView, basicSetup } from "codemirror"
 import { json } from "@codemirror/lang-json"
 import $ from "jquery";
 
 /**
  *
- * @version 2023-03-30
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ComponentPanelFilters extends ComponentPanel {
 
-    /** @type Context */
-    #context;
-    /** @type DataManager */
-    #dataManager;
+    /** @type Controller */
+    #controller;
 
     #editor;
 
     /**
      *
-     * @param context Context
-     * @param dataManager DataManager
+     * @param controller Controller
      */
-    constructor(context, dataManager) {
+    constructor(controller) {
         super();
-        this.#context = context;
-        this.#dataManager = dataManager;
+        this.#controller = controller;
 
-        this.#dataManager.addOnRawFiltersFetched(json => {
+        controller.getDataManager().addOnRawFiltersFetched(json => {
             this.#setRawData(json);
         });
     }
@@ -56,7 +52,7 @@ export class ComponentPanelFilters extends ComponentPanel {
             DomBuilder.div(null, [
                 this.#editor.dom,
                 DomBuilder.button('Update', { class: 'btn btn-primary' }, e => {
-                    this.#dataManager.updateFilters(this.#getRawData(), true, true);
+                    this.#controller.getDataManager().updateFilters(this.#getRawData(), true, true);
                 })
             ])
         ]);

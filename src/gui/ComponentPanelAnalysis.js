@@ -9,16 +9,16 @@ import {ComponentOptionsCategories} from "./ComponentOptionsCategories";
 import {ComponentOptionsCeil} from "./ComponentOptionsCeil";
 import {ComponentOptionsFilter} from "./ComponentOptionsFilter";
 import {DomBuilder} from "./DomBuilder.js";
-import {Analytics} from "./Analytics";
+import {Analytics} from "../Analytics";
 
 /**
  *
- * @version 2023-04-04
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ComponentPanelAnalysis extends ComponentPanel {
 
-    #context;
+    #controller;
 
     #transactions = null;
     #filters = null;
@@ -29,9 +29,9 @@ export class ComponentPanelAnalysis extends ComponentPanel {
     #componentFilterOptions;
     #contentNode = DomBuilder.div();
 
-    constructor(context, dataManager, enableCategories) {
+    constructor(controller, enableCategories) {
         super();
-        this.#context = context;
+        this.#controller = controller;
         this.#componentGroupingOptions = new ComponentOptionsGrouping(() => {
             this.#componentCategoriesOptions.setDisabled(this.#componentGroupingOptions.getGrouping() === null);
             this.refreshTable();
@@ -40,12 +40,12 @@ export class ComponentPanelAnalysis extends ComponentPanel {
         this.#componentCeilOptions = new ComponentOptionsCeil(() => this.#refreshCeiling());
         this.#componentFilterOptions = new ComponentOptionsFilter(() => this.refreshTable());
 
-        dataManager.addOnFiltersUpdated(filters => {
+        controller.getDataManager().addOnFiltersUpdated(filters => {
             this.#componentFilterOptions.setFilters(filters);
             this.#filters = filters;
             this.refreshTable();
         });
-        dataManager.addOnDatasetsLoaded(datasets => {
+        controller.getDataManager().addOnDatasetsLoaded(datasets => {
             let allTransactions = [];
             datasets.forEach(d => {
                 if (d.transactions) {
@@ -94,8 +94,8 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
                 let showCategories = this.#componentCategoriesOptions.isSelected();
                 let tableComponent = (showCategories)
-                        ? new ComponentAnalysisTableCategories(this.#context, groupedTransactions, allFilters, selectedFilter)
-                        : new ComponentAnalysisTableGrouped(this.#context, groupedTransactions, allFilters, selectedFilter);
+                        ? new ComponentAnalysisTableCategories(this.#controller, groupedTransactions, allFilters, selectedFilter)
+                        : new ComponentAnalysisTableGrouped(this.#controller, groupedTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(tableComponent.createNode());
 
                 this.#contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [
@@ -103,16 +103,16 @@ export class ComponentPanelAnalysis extends ComponentPanel {
                 ]));
 
                 if (showCategories) {
-                    let chartComponent = new ComponentAnalysisChartCategories(this.#context, groupedTransactions, allFilters, selectedFilter);
+                    let chartComponent = new ComponentAnalysisChartCategories(this.#controller, groupedTransactions, allFilters, selectedFilter);
                     this.#contentNode.append(chartComponent.createNode());
                     chartComponent.refresh();
                 }
 
-                let chartComponent = new ComponentAnalysisChartGrouped(this.#context, groupedTransactions, allFilters, selectedFilter);
+                let chartComponent = new ComponentAnalysisChartGrouped(this.#controller, groupedTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(chartComponent.createNode());
                 chartComponent.refresh();
             } else {
-                let tableComponent = new ComponentAnalysisTable(this.#context, filteredTransactions, allFilters, selectedFilter);
+                let tableComponent = new ComponentAnalysisTable(this.#controller, filteredTransactions, allFilters, selectedFilter);
                 this.#contentNode.append(tableComponent.createNode());
 
                 this.#contentNode.append(DomBuilder.div({ class: 'summary-panel' }, [

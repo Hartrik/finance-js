@@ -1,6 +1,6 @@
 import {basicSetup, EditorView} from "codemirror";
-import {Parsers} from "./Parsers";
-import {Dataset} from "./Dataset";
+import {Parsers} from "../Parsers";
+import {Dataset} from "../Dataset";
 import $ from "jquery";
 
 /**

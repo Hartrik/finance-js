@@ -3,10 +3,13 @@ import $ from "jquery";
 
 /**
  *
- * @version 2023-11-08
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ServerPrivateAPI {
+
+    static csrfParameterName = null;
+    static csrfToken = null;
 
     /**
      *
@@ -28,9 +31,11 @@ export class ServerPrivateAPI {
      *
      * @return Promise
      */
-    static postData(context, dataToSend) {
+    static postData(dataToSend) {
         return new Promise((resolve, reject) => {
-            dataToSend[context.csrfParameterName] = context.csrfToken;
+            if (ServerPrivateAPI.csrfParameterName !== null) {
+                dataToSend[ServerPrivateAPI.csrfParameterName] = ServerPrivateAPI.csrfToken;
+            }
 
             $.ajax({
                 url: '/app/finance/private/data',
@@ -64,9 +69,11 @@ export class ServerPrivateAPI {
      *
      * @return Promise
      */
-    static postSettings(context, dataToSend) {
+    static postSettings(dataToSend) {
         return new Promise((resolve, reject) => {
-            dataToSend[context.csrfParameterName] = context.csrfToken;
+            if (ServerPrivateAPI.csrfParameterName !== null) {
+                dataToSend[ServerPrivateAPI.csrfParameterName] = ServerPrivateAPI.csrfToken;
+            }
 
             $.ajax({
                 url: '/app/finance/private/settings',
@@ -84,10 +91,12 @@ export class ServerPrivateAPI {
      *
      * @return Promise
      */
-    static updateServerData(context, incremental = false) {
+    static updateServerData(incremental = false) {
         return new Promise((resolve, reject) => {
             let dataToSend = {};
-            dataToSend[context.csrfParameterName] = context.csrfToken;
+            if (ServerPrivateAPI.csrfParameterName !== null) {
+                dataToSend[ServerPrivateAPI.csrfParameterName] = ServerPrivateAPI.csrfToken;
+            }
 
             $.ajax({
                 url: '/app/finance/private/update?incremental=' + incremental,

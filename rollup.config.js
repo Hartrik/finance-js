@@ -6,25 +6,9 @@ import pkg from './package.json';
 
 export default [
 
-    // parsers lib
+    // app
     {
-        input: 'src/dist-lib-parsers/main.js',
-        output: {
-            name: 'Parsers',
-            file: pkg.lib_parsers,
-            format: 'umd'
-        },
-        plugins: []
-    },
-
-    // browser-friendly UMD build - for public use
-    {
-        input: 'src/dist-public/main.js',
-        output: {
-            name: 'FinanceJS',
-            file: pkg.browser_public,
-            format: 'umd'
-        },
+        input: 'src/app-main/main.js',
         plugins: [
             resolve(), // so Rollup can find libraries
             commonjs(), // so Rollup can convert libraries to an ES modules
@@ -32,40 +16,43 @@ export default [
                 include: "examples/*.*",
                 exclude: []
             })
+        ],
+        output: [
+            {
+                // browser-friendly UMD build
+                name: 'FinanceJS',
+                file: 'dist/finance-js.umd.js',
+                banner: pkg.copyright,
+                format: 'umd',
+                sourcemap: true,
+            },
+            {
+                // browser-friendly UMD build, MINIMIZED
+                name: 'FinanceJS',
+                file: 'dist/finance-js.umd.min.js',
+                format: 'umd',
+                sourcemap: true,
+                plugins: [
+                    terser({
+                        sourceMap: true,
+                        format: {
+                            preamble: pkg.copyright,
+                            comments: false
+                        }
+                    })
+                ]
+            }
         ]
     },
 
-    // browser-friendly UMD build - for public use - MINIMIZED
+    // parsers lib
     {
-        input: 'src/dist-public/main.js',
+        input: 'src/app-lib-parsers/main.js',
         output: {
-            name: 'FinanceJS',
-            file: pkg.browser_public_min,
+            name: 'Parsers',
+            file: 'dist/lib-parsers.umd.js',
             format: 'umd'
         },
-        plugins: [
-            resolve(), // so Rollup can find libraries
-            commonjs(), // so Rollup can convert libraries to an ES modules
-            string({
-                include: "examples/*.*",
-                exclude: []
-            }),
-
-            terser()
-        ]
-    },
-
-    // browser-friendly UMD build - for private use (logged users)
-    {
-        input: 'src/dist-private/main.js',
-        output: {
-            name: 'FinanceJS',
-            file: pkg.browser_private,
-            format: 'umd'
-        },
-        plugins: [
-            resolve(), // so Rollup can find libraries
-            commonjs() // so Rollup can convert libraries to an ES modules
-        ]
+        plugins: []
     }
 ];

@@ -21,12 +21,12 @@
   </style>
 
   <link href="style.css" rel="stylesheet" type="text/css" />
-  <script src="dist/finance-js.umd.js"></script>
+  <script src="dist/finance-js.umd.min.js"></script>
 
   <script>
       document.addEventListener('DOMContentLoaded', () => {
           let node = FinanceJS.builder()
-              .setCsrf('_csrf', 'e8010a06-abc5-4634-8c9f-0235c12e3aad')
+              .setPersistenceLocalStorage()
               .build();
 
           document.getElementById('app-wrapper').appendChild(node);

@@ -1,5 +1,5 @@
-import { Transactions } from "./Transactions.js"
-import { Utils } from "./Utils.js"
+import { Transactions } from "../Transactions.js"
+import { Utils } from "../Utils.js"
 import { DomBuilder } from "./DomBuilder";
 
 /**
@@ -9,7 +9,7 @@ import { DomBuilder } from "./DomBuilder";
  */
 export class ComponentAnalysisTable {
 
-    #context;
+    #controller;
 
     #transactions;
     #selectedFilter;
@@ -17,8 +17,8 @@ export class ComponentAnalysisTable {
 
     #tableBuilder = new DomBuilder.BootstrapTable();
 
-    constructor(context, transactions, allFilters, selectedFilter) {
-        this.#context = context;
+    constructor(controller, transactions, allFilters, selectedFilter) {
+        this.#controller = controller;
         this.#transactions = transactions;
         this.#allFilters = allFilters;
         this.#selectedFilter = selectedFilter;

@@ -1,4 +1,4 @@
-import {DomBuilder} from "./DomBuilder";
+import {DomBuilder} from "./gui/DomBuilder";
 
 /**
  * @version 2023-04-04
