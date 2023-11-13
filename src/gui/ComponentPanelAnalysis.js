@@ -47,11 +47,23 @@ export class ComponentPanelAnalysis extends ComponentPanel {
         });
         controller.getDataManager().addOnDatasetsLoaded(datasets => {
             let allTransactions = [];
+            // concat
             datasets.forEach(d => {
                 if (d.transactions) {
                     allTransactions = allTransactions.concat(d.transactions);
                 }
-            })
+            });
+
+            // find min date and max date and adjust time filter
+            if (allTransactions.length > 0) {
+                let firstTransaction = allTransactions.reduce((a, b) => a.date < b.date ? a : b);
+                let lastTransaction = allTransactions.reduce((a, b) => a.date > b.date ? a : b);
+                this.#componentFilterOptions.setTimeSpan(firstTransaction.date, lastTransaction.date);
+            } else {
+                this.#componentFilterOptions.setTimeSpan(null, null);
+            }
+
+            // refresh table
             this.#transactions = allTransactions;
             this.refreshTable();
         });
@@ -83,7 +95,7 @@ export class ComponentPanelAnalysis extends ComponentPanel {
 
         if (this.#transactions !== null && this.#filters !== null) {
             let grouping = this.#componentGroupingOptions.getGrouping();
-            let selectedFilter = this.#componentFilterOptions.getFilter();
+            let selectedFilter = this.#componentFilterOptions.getCombinedFilter();
             let allFilters = this.#componentFilterOptions.getAllFilters();
 
             let filteredTransactions = (selectedFilter.filterFunc != null)

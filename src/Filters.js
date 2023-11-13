@@ -11,7 +11,7 @@ import { Utils } from "./Utils.js"
  * Functions related to filters.
  * Filter query language is inspired by MongoDB query language.
  *
- * @version 2023-04-04
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class Filters {
@@ -226,7 +226,7 @@ export class Filters {
         }
     }
 
-    static concatWithSearch(filter, searchText) {
+    static createSearchFilter(searchText) {
         searchText = searchText.trim();
         let searchFilter;
         if (searchText.startsWith('{') && searchText.endsWith('}')) {
@@ -242,11 +242,32 @@ export class Filters {
         }
 
         return {
-            'name': filter.name + ' & search',
-            'subFilters': [ filter ],
+            'name': '"' + searchText + '"',
+            'filterFunc': searchFilter
+        };
+    }
+
+    static createYearFilter(year) {
+        year = '' + year;  // make sure it is a string
+
+        let searchFilter = Filters.compile({
+            "date": {
+                "$contains": year
+            }
+        });
+
+        return {
+            'name': year,
+            'filterFunc': searchFilter
+        };
+    }
+
+    static concat(filter1, filter2) {
+        return {
+            'name': filter1.name + ' & ' + filter2.name,
             'filterFunc': function (transaction) {
-                if (filter.filterFunc == null || filter.filterFunc(transaction)) {
-                    return searchFilter(transaction);
+                if (filter1.filterFunc == null || filter1.filterFunc(transaction)) {
+                    return (filter2.filterFunc == null || filter2.filterFunc(transaction));
                 }
                 return false;
             }

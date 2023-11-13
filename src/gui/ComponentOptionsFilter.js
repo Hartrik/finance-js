@@ -3,7 +3,7 @@ import $ from "jquery";
 
 /**
  *
- * @version 2023-04-02
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class ComponentOptionsFilter {
@@ -12,13 +12,15 @@ export class ComponentOptionsFilter {
 
     #filters;
 
-    #inputSelect;
+    #inputTimeSelect;
+    #inputFilterSelect;
     #inputSearch;
-    #handlers;
+
+    #filterHandlers;
 
     constructor(refreshFunction) {
         this.#refreshFunction = refreshFunction;
-        this.#handlers = [];
+        this.#filterHandlers = [];
     }
 
     _createSelect() {
@@ -53,41 +55,60 @@ export class ComponentOptionsFilter {
     }
 
     createNode() {
-        this.#inputSelect = this._createSelect();
+        this.#inputTimeSelect = this._createSelect();
+        this.#inputFilterSelect = this._createSelect();
         this.#inputSearch = this._createSearchBox();
         return $(`<div class="filter-component"></div>`)
-            .append(this.#inputSelect)
+            .append(this.#inputTimeSelect)
+            .append(this.#inputFilterSelect)
             .append(this.#inputSearch);
     }
 
     setFilters(filters) {
         this.#filters = filters;
-        this.#inputSelect.empty();
-        this.#handlers = [];
+        this.#inputFilterSelect.empty();
+        this.#filterHandlers = [];
 
         filters.forEach((filter, name) => {
-            this.#addHandler(this.#inputSelect, name, filter)
+            this.#inputFilterSelect.append($(`<option></option>`).text(name).val(this.#filterHandlers.length));
+            this.#filterHandlers.push(filter);
         });
     }
 
-    #addHandler(select, name, filter) {
-        select.append($(`<option></option>`).text(name).val(this.#handlers.length));
-        this.#handlers.push(filter);
+    setTimeSpan(dateFrom, dateTo) {
+        this.#inputTimeSelect.empty();
+        this.#inputTimeSelect.append($(`<option></option>`).text('<anytime>').val(null));
+
+        if (dateFrom === null || dateTo === null) {
+            return;
+        }
+
+        const yearFrom = Number.parseInt(dateFrom.substring(0, 4));
+        const yearTo = Number.parseInt(dateTo.substring(0, 4));
+
+        for (let year = yearFrom; year <= yearTo; year++) {
+            this.#inputTimeSelect.append($(`<option></option>`).text('' + year).val(year));
+        }
     }
 
     getAllFilters() {
         return this.#filters;
     }
 
-    getFilter() {
-        let selected = this.#inputSelect.val();
-        let filter = this.#handlers[selected];
+    getCombinedFilter() {
+        let selected = this.#inputFilterSelect.val();
+        let filter = this.#filterHandlers[selected];
+
+        let year = this.#inputTimeSelect.val();
+        if (year) {
+            filter = Filters.concat(Filters.createYearFilter(year), filter);
+        }
 
         let search = this.#inputSearch.val();
-        if (search === '') {
-            return filter;
-        } else {
-            return Filters.concatWithSearch(filter, search);
+        if (search !== '') {
+            filter = Filters.concat(filter, Filters.createSearchFilter(search));
         }
+
+        return filter;
     }
 }
