@@ -1,4 +1,3 @@
-import { Utils } from "./Utils.js"
 
 /**
  * @typedef {Object} GroupedTransactions
@@ -97,66 +96,6 @@ export class Grouping {
  * @version 2022-05-22
  * @author Patrik Harag
  */
-class WeekGrouping extends Grouping {
-
-    // https://stackoverflow.com/questions/6117814/get-week-of-year-in-javascript-like-in-php
-
-    /* For a given date, get the ISO week number
-     *
-     * Based on information at:
-     *
-     *    http://www.merlyn.demon.co.uk/weekcalc.htm#WNR
-     *
-     * Algorithm is to find nearest thursday, it's year
-     * is the year of the week number. Then get weeks
-     * between that date and the first day of that year.
-     *
-     * Note that dates in one year can be weeks of previous
-     * or next year, overlap is up to 3 days.
-     *
-     * e.g. 2014/12/29 is Monday in week  1 of 2015
-     *      2012/1/1   is Sunday in week 52 of 2011
-     */
-    static weekNumber(d) {
-        // Copy date so don't modify original
-        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        // Set to nearest Thursday: current date + 4 - current day number
-        // Make Sunday's day number 7
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-        // Get first day of year
-        let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        // Calculate full weeks to nearest Thursday
-        let weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-        // Return array of year and week number
-        return "" + d.getUTCFullYear() + "-W" + (weekNo < 10 ? "0" : "") + weekNo
-    }
-
-    static fromIso8601(strDate) {
-        return new Date(Date.parse(strDate));
-    }
-
-
-    _keyFunc(transaction) {
-        return WeekGrouping.weekNumber(WeekGrouping.fromIso8601(transaction.date))
-    }
-
-    _follows(key) {
-        let year = Number.parseInt(key.substr(0, 4));
-        let week = Number.parseInt(key.substr(6, 8));
-        if (week >= 52) {  // ignore occasional 53. week here
-            week = 1;
-            year++;
-        } else {
-            week++;
-        }
-        return `${year}-W${week < 10 ? '0' + week : week}`;
-    }
-}
-
-/**
- * @version 2022-05-22
- * @author Patrik Harag
- */
 class MonthGrouping extends Grouping {
     _keyFunc(transaction) {
         return transaction.date.substr(0, 7);
@@ -202,12 +141,11 @@ class SumGrouping extends Grouping {
 }
 
 /**
- * @version 2022-05-22
+ * @version 2023-11-13
  * @author Patrik Harag
  */
 export class Groups {
     static NO_GROUPING = null;
-    static GROUP_BY_WEEK = new WeekGrouping();
     static GROUP_BY_MONTH = new MonthGrouping();
     static GROUP_BY_YEAR = new YearGrouping();
     static GROUP_ALL = new SumGrouping();
