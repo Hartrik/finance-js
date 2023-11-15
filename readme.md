@@ -16,8 +16,10 @@ Online: https://harag.cz/app/finance
 - 2022-11-30: Parser: Sodexo JSON
 - 2023-03-27: The codebase moved into *this* separate Git repository and migrated to Rollup.js
 - 2023-03-28: Text areas replaced by the CodeMirror source editor
-- 2023-04-05: Architecture redesign & user interface improvements; New Features: *multi-transactions*, *categories table*, *ceiling*
+- 2023-04-05: Architecture redesign & user interface improvements; New features: *multi-transactions*, *categories table*, *ceiling*
 - 2023-04-15: Parser: Raiffeisen CSV
+- 2023-10-27: Migration to Bootstrap 5
+- 2023-11-13: New feature: *year filter*
 
 ## Development
 
