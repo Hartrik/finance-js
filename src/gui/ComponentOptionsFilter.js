@@ -86,7 +86,7 @@ export class ComponentOptionsFilter {
         const yearFrom = Number.parseInt(dateFrom.substring(0, 4));
         const yearTo = Number.parseInt(dateTo.substring(0, 4));
 
-        for (let year = yearFrom; year <= yearTo; year++) {
+        for (let year = yearTo; year >= yearFrom; year--) {
             this.#inputTimeSelect.append($(`<option></option>`).text('' + year).val(year));
         }
     }
