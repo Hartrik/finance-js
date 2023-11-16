@@ -1,6 +1,6 @@
 import {DomBuilder} from "./DomBuilder.js";
 import {Dataset} from "../Dataset.js";
-import {Parsers} from "../Parsers.js";
+import {Parsers} from "../parsers/Parsers.js";
 import {DragAndDropUtil} from "./DragAndDropUtil";
 import {ComponentPanel} from "./ComponentPanel.js";
 import {ComponentDatasetsTable} from "./ComponentDatasetsTable";
@@ -70,9 +70,8 @@ export class ComponentPanelDatasets extends ComponentPanel {
 
     #createHelp() {
         let sources = DomBuilder.element("ul");
-        for (let k in Parsers.AVAILABLE) {
-            let parser = Parsers.AVAILABLE[k];
-            sources.append(DomBuilder.element("li", null, parser.name));
+        for (let [key, parser] of Parsers.AVAILABLE) {
+            sources.append(DomBuilder.element("li", null, parser.getDisplayName()));
         }
 
         return DomBuilder.Bootstrap.alertInfo([
@@ -91,9 +90,9 @@ export class ComponentPanelDatasets extends ComponentPanel {
 
         // select data type automatically
         let ext = fileName.split('.').pop();  // this doesn't need to be precise
-        let parserKeys = Parsers.resolveParserByExtension(ext)
-        if (parserKeys.length > 0) {
-            dataType = parserKeys[0];
+        let parsers = Parsers.resolveParserByExtension(ext);
+        if (parsers.length > 0) {
+            dataType = parsers[0].getKey();
         }
 
         let dataset = new Dataset(fileName, dataType, content);

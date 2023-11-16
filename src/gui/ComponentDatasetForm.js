@@ -1,5 +1,5 @@
 import {basicSetup, EditorView} from "codemirror";
-import {Parsers} from "../Parsers";
+import {Parsers} from "../parsers/Parsers";
 import {Dataset} from "../Dataset";
 import $ from "jquery";
 
@@ -22,9 +22,8 @@ export class ComponentDatasetForm {
         this.#inputFieldName = $(`<input class="form-control" id="dataFieldName">`);
 
         this.#inputTypeSelect = $(`<select class="form-control" id="dataTypeSelect"></select>`);
-        for (let key in Parsers.AVAILABLE) {
-            let parser = Parsers.AVAILABLE[key];
-            this.#inputTypeSelect.append($(`<option value="${key}">${parser.name}</option>`))
+        for (let [key, parser] of Parsers.AVAILABLE) {
+            this.#inputTypeSelect.append($(`<option value="${key}">${parser.getDisplayName()}</option>`))
         }
 
         return $(`<div class="dataset-form"></div>`)

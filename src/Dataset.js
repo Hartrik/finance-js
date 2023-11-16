@@ -1,4 +1,4 @@
-import { Parsers } from "./Parsers.js";
+import { Parsers } from "./parsers/Parsers.js";
 import $ from "jquery";
 
 /**

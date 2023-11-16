@@ -1,5 +1,3 @@
 
-export { CSVReader } from "../CSVReader.js";
-import { Parsers } from "../Parsers.js";
-
-export const AVAILABLE = Parsers.AVAILABLE;
+export { CSVReader } from "../parsers/CSVReader.js";
+export { Parsers } from "../parsers/Parsers.js";
