@@ -2,9 +2,11 @@
 This is a simple web application for personal financial analysis.
 It is intended to be used with a data from internet banking (an exported bank statements)
 or with a manually created ones (a list of cash expenses).
-Everything is processed in the browser – no data is sent to the server.
 
-Online: https://harag.cz/app/finance
+Implemented storage options: REST API backend / Local Storage API.
+
+**Online: https://harag.cz/app/finance**
+- Local Storage only: Everything is processed (and optionally stored) in the browser – no data is sent to the server.
 
 ## Milestones
 - 2021-10-31: The first commit
