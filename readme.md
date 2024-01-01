@@ -22,6 +22,7 @@ Implemented storage options: REST API backend / Local Storage API.
 - 2023-04-15: Parser: Raiffeisen CSV
 - 2023-10-27: Migration to Bootstrap 5
 - 2023-11-13: New feature: *year filter*
+- 2024-01-01: Parser: UniCredit CSV
 
 ## Development
 

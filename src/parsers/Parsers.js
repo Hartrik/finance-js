@@ -6,10 +6,11 @@ import { ParserEqua } from "./ParserEqua";
 import { ParserRaiffeisen } from "./ParserRaiffeisen";
 import { ParserSodexo } from "./ParserSodexo";
 import { ParserOFX } from "./ParserOFX";
+import { ParserUniCredit } from "./ParserUniCredit";
 
 /**
  *
- * @version 2023-11-16
+ * @version 2024-01-01
  * @author Patrik Harag
  */
 export class Parsers {
@@ -24,6 +25,7 @@ export class Parsers {
         new ParserMoneta(),
         new ParserEqua(),
         new ParserRaiffeisen(),
+        new ParserUniCredit(),
         new ParserSodexo(),
         new ParserOFX(),
     ].map(p => [p.getKey(), p]));

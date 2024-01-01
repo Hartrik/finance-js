@@ -76,8 +76,15 @@ export class CSVReader {
                     break;
                 case '\n':
                 case '\r':
-                    this._position++;
-                    break PROCESSING;
+                    if (inString && quotationMark !== null) {
+                        // multiline string
+                        buffer += c;
+                        this._position++;
+                        break;
+                    } else {
+                        this._position++;
+                        break PROCESSING;
+                    }
                 case '\t':
                 case ' ':
                     if (inString) {
