@@ -81,7 +81,13 @@ export class ComponentPanelDatasets extends ComponentPanel {
                     " savings account statements, manually created list of cash expenses, etc."
             ]),
             "Supported sources:",
-            sources
+            sources,
+
+            DomBuilder.par(null, [
+                DomBuilder.element("strong", null, "Multi-transactions"),
+                " is a mechanism that allows splitting an existing transaction using special markup in the description (note): ",
+                DomBuilder.element("code", { style: "white-space: nowrap;" }, "General text ;;; 100 ; Payment 1 ;;; 200 ; Payment 2")
+            ]),
         ]);
     }
 

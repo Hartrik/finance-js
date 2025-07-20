@@ -44,6 +44,9 @@ export class Dataset {
      * @return {Promise<array>}
      */
     loadTransactions(enableUrlDatasets) {
+        let multiTransactionNumber = 0;
+        let multiTransactionNumberProduced = () => multiTransactionNumber++;
+
         if (enableUrlDatasets && Dataset.#isValidHttpUrl(this.data)) {
             // asynchronously fetch raw data from url and parse
             return new Promise((resolve, reject) => {
@@ -53,7 +56,7 @@ export class Dataset {
                     dataType: 'text',
                     success: (result) => {
                         try {
-                            this.transactions = this.#parse(result);
+                            this.transactions = this.#parse(result, multiTransactionNumberProduced);
                         } catch (e) {
                             this.exception = e;
                             this.transactions = [];
@@ -69,7 +72,7 @@ export class Dataset {
             // parse only
             return new Promise((resolve, reject) => {
                 try {
-                    this.transactions = this.#parse(this.data);
+                    this.transactions = this.#parse(this.data, multiTransactionNumberProduced);
                 } catch (e) {
                     this.exception = e;
                     this.transactions = [];
@@ -81,7 +84,7 @@ export class Dataset {
         }
     }
 
-    #parse(data) {
+    #parse(data, multiTransactionNumberProduced) {
         let parser = Parsers.resolveParserByKey(this.dataType);
         let transactions = parser.parse(data);
 
@@ -92,7 +95,8 @@ export class Dataset {
 
             if (transaction.description.includes(';;;')) {
                 // process multi-transaction
-                copy.push(...this.#splitMultiTransaction(transaction));
+                let multiTransactionNumber = multiTransactionNumberProduced();
+                copy.push(...this.#splitMultiTransaction(transaction, multiTransactionNumber));
             } else {
                 copy.push(transaction);
             }
@@ -100,24 +104,38 @@ export class Dataset {
         return copy;
     }
 
-    #splitMultiTransaction(transaction) {
-        // 100 - platba za zboží ;;; 200 - uplatek
-
+    #splitMultiTransaction(transaction, multiTransactionNumber) {
         let result = [];
-        for (let part of transaction.description.split(';;;')) {
+
+        // General text ;;; 100 ; Payment 1 ;;; 200 ; Payment 2
+
+        let parts = transaction.description.split(';;;');
+
+        // normalize general text
+        let generalText = parts.shift();
+        generalText = generalText.trim();
+        if (generalText !== '') {
+            generalText += '; ';
+        } else {
+            generalText = '';
+        }
+
+        // process parts
+        for (let part of parts) {
             part = part.trim();
             if (part) {
-                let separatorPos = part.indexOf('-');
+                let separatorPos = part.indexOf(';');
                 if (separatorPos && separatorPos + 1 < part.length) {
                     const numberPart = part.substring(0, separatorPos).trim();
                     const descriptionPart = part.substring(separatorPos + 1).trim();
                     let subTransaction = Object.assign({}, transaction);
-                    subTransaction.description = descriptionPart;
-                    subTransaction.value = Number.parseFloat(numberPart);
+                    subTransaction.description = generalText + descriptionPart + ' [M-' + multiTransactionNumber + ']';
+                    subTransaction.value = parseFloat(numberPart);
                     subTransaction.origin = transaction;
                     result.push(subTransaction);
                 } else {
-                    return transaction;  // wrong format
+                    console.log('; not found in: ' + part)
+                    throw 'Multi-transaction failed: ' + JSON.stringify(transaction);
                 }
             }
         }
@@ -125,7 +143,7 @@ export class Dataset {
         // test
         let sum = result.reduce((sum, t) => sum + t.value, 0);
         if (sum !== transaction.value) {
-            throw 'Multi transaction checksum failed: ' + JSON.stringify(transaction);
+            throw `Multi-transaction checksum failed (${sum}): ${ JSON.stringify(transaction) }`;
         }
 
         return result;
