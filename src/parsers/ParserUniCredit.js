@@ -39,7 +39,6 @@ export class ParserUniCredit extends Parser {
                 if (line[0] === 'Account Number') {
                     // end of header
                     header = false;
-                    console.log(line);
                 }
                 continue;
             }
@@ -48,8 +47,6 @@ export class ParserUniCredit extends Parser {
                 // ignore unprocessed payments
                 continue;
             }
-
-            console.log(line);
 
             let date = line[4];  // Value Date
             let value = parseFloat(line[1].replace(',', '.').replace(' ', ''));  // Amount
